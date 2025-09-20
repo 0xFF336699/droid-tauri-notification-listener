@@ -27,6 +27,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [endpoint, setEndpoint] = useState("");
+  const [port, setPort] = useState(8080);
   const [token, setToken] = useState("");
 
   const selectedIds = useMemo(() => Object.keys(selected).filter((k) => selected[k]), [selected]);
@@ -73,8 +74,9 @@ function App() {
       try {
         const s = localStorage.getItem("socket-settings");
         if (s) {
-          const cfg = JSON.parse(s) as { endpoint?: string; token?: string };
+          const cfg = JSON.parse(s) as { endpoint?: string; port?: number; token?: string };
           setEndpoint(cfg.endpoint ?? "");
+          setPort(cfg.port ?? 8080);
           setToken(cfg.token ?? "");
         }
       } catch {}
@@ -266,6 +268,17 @@ function App() {
                 />
               </label>
               <label>
+                Port
+                <input
+                  type="number"
+                  value={port}
+                  onChange={(e) => setPort(Number(e.currentTarget.value))}
+                  placeholder="端口号"
+                  min={1}
+                  max={65535}
+                />
+              </label>
+              <label>
                 Token
                 <input
                   value={token}
@@ -277,7 +290,7 @@ function App() {
                 <button onClick={() => setShowSettings(false)}>取消</button>
                 <button
                   onClick={() => {
-                    const cfg = { endpoint, token };
+                    const cfg = { endpoint, port, token };
                     localStorage.setItem("socket-settings", JSON.stringify(cfg));
                     log("settings saved", { data: cfg });
                     setShowSettings(false);
