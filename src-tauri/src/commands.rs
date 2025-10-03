@@ -125,3 +125,21 @@ pub fn add_dummy(state: State<AppState>, options: Option<AddDummyOptions>) -> bo
     println!("[cmd] add_dummy -> {} items", count);
     true
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ConnectToServerOptions {
+    pub host: String,
+    pub token: Option<String>,
+}
+
+#[tauri::command]
+pub fn connect_to_server(_state: State<AppState>, options: ConnectToServerOptions) -> bool {
+    println!("[cmd] connect_to_server -> host={}, token={}",
+        options.host,
+        options.token.as_ref().map(|_| "***").unwrap_or("none"));
+
+    // TODO: 实现真正的连接逻辑
+    // 目前先返回成功，模拟连接成功
+    println!("[cmd] connect_to_server -> 连接成功（模拟）");
+    true
+}

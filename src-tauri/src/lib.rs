@@ -147,6 +147,7 @@ pub fn run() {
             crate::commands::delete_all,
             set_tray_tooltip,
             crate::commands::add_dummy,
+            crate::commands::connect_to_server,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

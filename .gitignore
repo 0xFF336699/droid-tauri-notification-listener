@@ -22,3 +22,7 @@ target
 
 /node_modules
 /.vscode
+nul
+**/nul
+
+/conversations

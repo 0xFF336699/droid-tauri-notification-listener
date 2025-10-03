@@ -3,6 +3,8 @@ import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import { useSocketConnection } from "./useSocketConnection";
+import SocketSettings from "./SocketSettings";
 
 type Notification = {
   id: string;
@@ -25,10 +27,14 @@ function App() {
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSettings, setShowSettings] = useState(false);
-  const [endpoint, setEndpoint] = useState("");
-  const [port, setPort] = useState(8080);
-  const [token, setToken] = useState("");
+
+  // 使用Socket连接管理
+  const {
+    connectionState,
+    showSettings,
+    setShowSettings,
+    connect
+  } = useSocketConnection();
 
   const selectedIds = useMemo(() => Object.keys(selected).filter((k) => selected[k]), [selected]);
 
@@ -67,26 +73,32 @@ function App() {
 
   useEffect(() => {
     refreshAll();
-    // 监听后端发来的“打开设置”事件
+
+    // 监听后端发来的"打开设置"事件
     const unlistenPromise = listen("open-settings", () => {
       log("event: open-settings");
-      // 从本地读取已有配置
-      try {
-        const s = localStorage.getItem("socket-settings");
-        if (s) {
-          const cfg = JSON.parse(s) as { endpoint?: string; port?: number; token?: string };
-          setEndpoint(cfg.endpoint ?? "");
-          setPort(cfg.port ?? 8080);
-          setToken(cfg.token ?? "");
-        }
-      } catch {}
-      // 确保状态更新在下一次渲染周期中生效
-      setTimeout(() => setShowSettings(true), 0);
+      setShowSettings(true);
     });
+
     return () => {
       unlistenPromise.then((un) => un());
     };
   }, []);
+
+  // Socket连接成功回调
+  const handleSocketConnected = async (config: any) => {
+    try {
+      const success = await connect(config);
+      if (success) {
+        setShowSettings(false);
+        log("Socket连接成功", { data: config });
+      } else {
+        log("Socket连接失败");
+      }
+    } catch (error) {
+      log("Socket连接出错", { data: error });
+    }
+  };
 
   function toggleSelect(id: string) {
     setSelected((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -127,6 +139,18 @@ function App() {
     }
   }
 
+  // 如果显示设置页面，渲染设置界面
+  if (showSettings) {
+    return (
+      <main className="container">
+        <SocketSettings
+          onConnected={handleSocketConnected}
+        />
+      </main>
+    );
+  }
+
+  // 主界面 - 只有在有连接时才显示
   return (
     <main className="container">
       {/* 自定义标题栏：可拖拽区域 */}
@@ -147,6 +171,13 @@ function App() {
         <div style={{ fontWeight: 600 }}>通知中心</div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button
+            onClick={() => setShowSettings(true)}
+            title="设置连接"
+            style={{ background: 'none', border: 'none', padding: '4px 8px', cursor: 'pointer' }}
+          >
+            ⚙️
+          </button>
+          <button
             onClick={async () => {
               try {
                 const appWindow = getCurrentWindow();
@@ -162,6 +193,34 @@ function App() {
           </button>
         </div>
       </div>
+
+      {/* 连接状态指示器 */}
+      <div style={{
+        padding: "8px 16px",
+        backgroundColor: connectionState.status === 'connected' ? '#e8f5e8' :
+                        connectionState.status === 'error' ? '#ffebee' : '#f5f5f5',
+        borderBottom: "1px solid #ddd",
+        fontSize: "14px"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            backgroundColor:
+              connectionState.status === 'connected' ? '#4caf50' :
+              connectionState.status === 'connecting' ? '#ff9800' :
+              connectionState.status === 'error' ? '#f44336' : '#9e9e9e'
+          }}></span>
+          <span>
+            {connectionState.status === 'connected' && '已连接'}
+            {connectionState.status === 'connecting' && '连接中...'}
+            {connectionState.status === 'error' && `连接错误: ${connectionState.error}`}
+            {connectionState.status === 'disconnected' && '未连接'}
+          </span>
+        </div>
+      </div>
+
       <h2>通知列表</h2>
       <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
         <div>
@@ -238,71 +297,6 @@ function App() {
           );
         })}
       </div>
-
-      {showSettings && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.35)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onClick={() => setShowSettings(false)}
-        >
-          <div
-            style={{ background: "#fff", padding: 16, borderRadius: 8, minWidth: 360 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3>连接设置</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <label>
-                Endpoint
-                <textarea
-                  value={endpoint}
-                  onChange={(e) => setEndpoint(e.currentTarget.value)}
-                  placeholder="例如 ws://127.0.0.1:18080 或 wss://example.com"
-                  rows={3}
-                  style={{ resize: "vertical", width: "100%" }}
-                />
-              </label>
-              <label>
-                Port
-                <input
-                  type="number"
-                  value={port}
-                  onChange={(e) => setPort(Number(e.currentTarget.value))}
-                  placeholder="端口号"
-                  min={1}
-                  max={65535}
-                />
-              </label>
-              <label>
-                Token
-                <input
-                  value={token}
-                  onChange={(e) => setToken(e.currentTarget.value)}
-                  placeholder="可选"
-                />
-              </label>
-              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 8 }}>
-                <button onClick={() => setShowSettings(false)}>取消</button>
-                <button
-                  onClick={() => {
-                    const cfg = { endpoint, port, token };
-                    localStorage.setItem("socket-settings", JSON.stringify(cfg));
-                    log("settings saved", { data: cfg });
-                    setShowSettings(false);
-                  }}
-                >
-                  保存
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }

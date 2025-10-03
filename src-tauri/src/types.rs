@@ -25,6 +25,5 @@ pub struct Event {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ConnectOptions {
     pub host: Option<String>,
-    pub port: Option<u16>,
     pub token: Option<String>,
 }
