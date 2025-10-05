@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/work/android/libs/fanfanlo/lib/src/main/java/com/fanfanlo/lib/notification/**)",
+      "Bash(cargo check --manifest-path src-tauri/Cargo.toml)",
+      "Bash(npm install qrcode @types/qrcode)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

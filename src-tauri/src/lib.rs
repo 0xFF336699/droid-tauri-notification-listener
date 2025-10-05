@@ -1,6 +1,9 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod types;
 mod commands;
+mod network_utils;
+mod temp_server;
+mod android_client;
 use std::time::{Instant, Duration};
 use lazy_static::lazy_static;
 use std::sync::Mutex;
@@ -148,6 +151,16 @@ pub fn run() {
             set_tray_tooltip,
             crate::commands::add_dummy,
             crate::commands::connect_to_server,
+            // 新增命令
+            crate::commands::check_port_available,
+            crate::commands::find_available_port,
+            crate::commands::get_local_ip,
+            crate::commands::start_temp_server,
+            crate::commands::wait_for_pairing,
+            crate::commands::stop_temp_server,
+            crate::commands::get_temp_server_status,
+            crate::commands::connect_to_android,
+            crate::commands::disconnect_android,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

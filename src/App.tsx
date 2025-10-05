@@ -3,8 +3,9 @@ import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
-import { useSocketConnection } from "./useSocketConnection";
-import SocketSettings from "./SocketSettings";
+import AddConnectionDialog from "./components/AddConnectionDialog";
+import ConnectionManager from "./components/ConnectionManager";
+import { ConnectionStorage } from "./types/connectionStorage";
 
 type Notification = {
   id: string;
@@ -28,13 +29,14 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 使用Socket连接管理
-  const {
-    connectionState,
-    showSettings,
-    setShowSettings,
-    connect
-  } = useSocketConnection();
+  // 添加连接管理相关状态
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+
+  // 迁移旧配置
+  useEffect(() => {
+    ConnectionStorage.migrateFromOldConfig();
+  }, []);
 
   const selectedIds = useMemo(() => Object.keys(selected).filter((k) => selected[k]), [selected]);
 
@@ -85,19 +87,11 @@ function App() {
     };
   }, []);
 
-  // Socket连接成功回调
-  const handleSocketConnected = async (config: any) => {
-    try {
-      const success = await connect(config);
-      if (success) {
-        setShowSettings(false);
-        log("Socket连接成功", { data: config });
-      } else {
-        log("Socket连接失败");
-      }
-    } catch (error) {
-      log("Socket连接出错", { data: error });
-    }
+  // 连接添加成功回调
+  const handleConnectionAdded = (connectionId: string) => {
+    log("连接已添加", { data: connectionId });
+    setShowAddDialog(false);
+    // 可以在这里触发连接到新添加的设备
   };
 
   function toggleSelect(id: string) {
@@ -139,13 +133,51 @@ function App() {
     }
   }
 
-  // 如果显示设置页面，渲染设置界面
+  // 如果显示设置页面，渲染连接管理界面
   if (showSettings) {
     return (
       <main className="container">
-        <SocketSettings
-          onConnected={handleSocketConnected}
-        />
+        <div style={{ padding: '20px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '20px'
+          }}>
+            <h2>连接设置</h2>
+            <button
+              onClick={() => setShowSettings(false)}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#6c757d',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              返回
+            </button>
+          </div>
+
+          <button
+            onClick={() => setShowAddDialog(true)}
+            style={{
+              marginBottom: '20px',
+              padding: '10px 20px',
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+          >
+            + 添加连接
+          </button>
+
+          <ConnectionManager />
+        </div>
       </main>
     );
   }
@@ -171,6 +203,13 @@ function App() {
         <div style={{ fontWeight: 600 }}>通知中心</div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button
+            onClick={() => setShowAddDialog(true)}
+            title="添加连接"
+            style={{ background: 'none', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '20px' }}
+          >
+            ➕
+          </button>
+          <button
             onClick={() => setShowSettings(true)}
             title="设置连接"
             style={{ background: 'none', border: 'none', padding: '4px 8px', cursor: 'pointer' }}
@@ -191,33 +230,6 @@ function App() {
           >
             ─
           </button>
-        </div>
-      </div>
-
-      {/* 连接状态指示器 */}
-      <div style={{
-        padding: "8px 16px",
-        backgroundColor: connectionState.status === 'connected' ? '#e8f5e8' :
-                        connectionState.status === 'error' ? '#ffebee' : '#f5f5f5',
-        borderBottom: "1px solid #ddd",
-        fontSize: "14px"
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{
-            width: "8px",
-            height: "8px",
-            borderRadius: "50%",
-            backgroundColor:
-              connectionState.status === 'connected' ? '#4caf50' :
-              connectionState.status === 'connecting' ? '#ff9800' :
-              connectionState.status === 'error' ? '#f44336' : '#9e9e9e'
-          }}></span>
-          <span>
-            {connectionState.status === 'connected' && '已连接'}
-            {connectionState.status === 'connecting' && '连接中...'}
-            {connectionState.status === 'error' && `连接错误: ${connectionState.error}`}
-            {connectionState.status === 'disconnected' && '未连接'}
-          </span>
         </div>
       </div>
 
@@ -297,6 +309,14 @@ function App() {
           );
         })}
       </div>
+
+      {/* 添加连接对话框 */}
+      {showAddDialog && (
+        <AddConnectionDialog
+          onConnectionAdded={handleConnectionAdded}
+          onClose={() => setShowAddDialog(false)}
+        />
+      )}
     </main>
   );
 }
