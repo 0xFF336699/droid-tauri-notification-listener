@@ -25,6 +25,7 @@
             "core:window:allow-hide",
             "core:window:allow-set-focus",
             "core:window:allow-set-always-on-top",
+            "core:window:allow-start-dragging",
             "core:event:allow-listen",
             "core:event:allow-emit",
             "core:event:allow-unlisten"
@@ -44,7 +45,8 @@
         "minimizable": true,
         "maximizable": true,
         "closable": true,
-        "resizable": true
+        "resizable": true,
+        "dragDropEnabled": false
       }
     ]
   },

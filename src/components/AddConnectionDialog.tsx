@@ -22,13 +22,13 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
     };
   }, []);
 
-  // 关闭按钮处理 - 先清理再关闭
-  const handleClose = async () => {
-    try {
-      await invoke('stop_temp_server');
-    } catch (err) {
+  // 关闭按钮处理 - 异步停止服务器，不等待完成
+  const handleClose = () => {
+    // 异步停止服务器，不等待
+    invoke('stop_temp_server').catch(() => {
       // 忽略错误
-    }
+    });
+    // 立即关闭弹窗
     onClose();
   };
 

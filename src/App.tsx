@@ -137,6 +137,52 @@ function App() {
   if (showSettings) {
     return (
       <main className="container">
+        {/* 可拖动标题栏 */}
+        <div
+          data-tauri-drag-region
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "8px 12px",
+            background: "linear-gradient(to right, #667eea 0%, #764ba2 100%)",
+            color: "white",
+            borderBottom: "1px solid #5568d3",
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+            cursor: "move",
+            userSelect: "none",
+          }}
+        >
+          <div style={{ fontWeight: 600, fontSize: "14px" }}>⚙️ 连接设置</div>
+          <button
+            onClick={async () => {
+              try {
+                const appWindow = getCurrentWindow();
+                await appWindow.minimize();
+              } catch (error) {
+                console.error('最小化窗口失败:', error);
+              }
+            }}
+            title="最小化"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: 'none',
+              padding: '4px 8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              borderRadius: '4px',
+              color: 'white',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+          >
+            ─
+          </button>
+        </div>
+
         <div style={{ padding: '20px' }}>
           <div style={{
             display: 'flex',
@@ -192,27 +238,52 @@ function App() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "6px 10px",
-          background: "#f2f3f5",
-          borderBottom: "1px solid #e5e7eb",
+          padding: "8px 12px",
+          background: "linear-gradient(to right, #667eea 0%, #764ba2 100%)",
+          color: "white",
+          borderBottom: "1px solid #5568d3",
           position: "sticky",
           top: 0,
           zIndex: 10,
+          cursor: "move",
+          userSelect: "none",
         }}
       >
-        <div style={{ fontWeight: 600 }}>通知中心</div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div style={{ fontWeight: 600, fontSize: "14px" }}>📱 通知中心</div>
+        <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
           <button
             onClick={() => setShowAddDialog(true)}
             title="添加连接"
-            style={{ background: 'none', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '20px' }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: 'none',
+              padding: '4px 8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              borderRadius: '4px',
+              color: 'white',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
           >
             ➕
           </button>
           <button
             onClick={() => setShowSettings(true)}
             title="设置连接"
-            style={{ background: 'none', border: 'none', padding: '4px 8px', cursor: 'pointer' }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: 'none',
+              padding: '4px 8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              borderRadius: '4px',
+              color: 'white',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
           >
             ⚙️
           </button>
@@ -226,7 +297,18 @@ function App() {
               }
             }}
             title="最小化"
-            style={{ background: 'none', border: 'none', padding: '4px 8px', cursor: 'pointer' }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: 'none',
+              padding: '4px 8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              borderRadius: '4px',
+              color: 'white',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
           >
             ─
           </button>
