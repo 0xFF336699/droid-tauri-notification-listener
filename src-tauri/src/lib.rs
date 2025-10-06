@@ -3,6 +3,7 @@ mod types;
 mod commands;
 mod network_utils;
 mod temp_server;
+mod simple_server;
 mod android_client;
 use std::time::{Instant, Duration};
 use lazy_static::lazy_static;
@@ -150,17 +151,22 @@ pub fn run() {
             crate::commands::delete_all,
             set_tray_tooltip,
             crate::commands::add_dummy,
-            crate::commands::connect_to_server,
-            // 新增命令
+            // 网络相关命令
+            crate::commands::test_connect_to_server,
             crate::commands::check_port_available,
             crate::commands::find_available_port,
             crate::commands::get_local_ip,
+            crate::commands::get_device_uuid,
+            crate::commands::get_os_type,
+            crate::commands::get_os_version,
+            crate::commands::get_hostname,
             crate::commands::start_temp_server,
-            crate::commands::wait_for_pairing,
             crate::commands::stop_temp_server,
             crate::commands::get_temp_server_status,
             crate::commands::connect_to_android,
             crate::commands::disconnect_android,
+            crate::commands::test_socket_server,
+            crate::commands::test_http_pairing,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

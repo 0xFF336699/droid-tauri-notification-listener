@@ -251,6 +251,35 @@ function App() {
       >
         <div style={{ fontWeight: 600, fontSize: "14px" }}>📱 通知中心</div>
         <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+          {/* Socket 测试按钮 */}
+          <button
+            onClick={async () => {
+              try {
+                await invoke('test_socket');
+                console.log('Socket 测试已启动');
+              } catch (error) {
+                console.error('Socket 测试失败:', error);
+              }
+            }}
+            title="测试 Socket 连接"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: 'none',
+              padding: '4px 8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              borderRadius: '4px',
+              color: 'white',
+              transition: 'background 0.2s',
+              marginRight: '4px'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+          >
+            🧪
+          </button>
+          
+          {/* 添加连接按钮 */}
           <button
             onClick={() => setShowAddDialog(true)}
             title="添加连接"
@@ -262,7 +291,8 @@ function App() {
               fontSize: '16px',
               borderRadius: '4px',
               color: 'white',
-              transition: 'background 0.2s'
+              transition: 'background 0.2s',
+              marginRight: '4px'
             }}
             onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}

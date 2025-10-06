@@ -3,6 +3,8 @@ import { invoke } from '@tauri-apps/api/core';
 import QRCode from 'qrcode';
 import { Connection } from '../types/connection';
 import { ConnectionStorage } from '../types/connectionStorage';
+import { QRCodeData } from '../types/device';
+import { getDeviceInfo } from '../utils/deviceUtils';
 
 interface QRCodeModeProps {
   onConnectionAdded: (connectionId: string) => void;
@@ -36,11 +38,11 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
   });
   const [state, setState] = useState<QRCodeModeState>({ type: 'idle' });
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pairingAbortRef = useRef<boolean>(false);
-  const waitingCallInProgressRef = useRef<boolean>(false);
+  const autoStartInProgressRef = useRef<boolean>(false); // 防止重复自动启动
 
   // 组件挂载时查询后端状态
   useEffect(() => {
+    console.log('[QRCodeMode] Component mounted, syncing with backend');
     syncWithBackend();
   }, []);
 
@@ -58,8 +60,11 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
 
   // 与后端同步状态
   const syncWithBackend = async () => {
+    console.log('[QRCodeMode] syncWithBackend called');
     try {
+      console.log('[QRCodeMode] Invoking get_temp_server_status...');
       const status = await invoke<ServerStatus | null>('get_temp_server_status');
+      console.log('[QRCodeMode] Server status:', status);
 
       if (!status || !status.running) {
         // 后端没有运行的服务器，自动启动
@@ -68,23 +73,39 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
         return;
       }
 
+      console.log('[QRCodeMode] Server is running, waiting_for_pairing:', status.waiting_for_pairing);
       if (status.waiting_for_pairing) {
         // 后端正在等待配对，恢复UI状态
         console.log('[QRCodeMode] Backend is waiting for pairing, restoring UI');
+
+        // 获取设备信息并重建二维码数据
+        console.log('[QRCodeMode] Getting device info...');
+        const deviceInfo = await getDeviceInfo();
+        console.log('[QRCodeMode] Getting local IP...');
         const localIp = await invoke<string>('get_local_ip');
         const url = `${localIp}:${status.port}`;
+        console.log('[QRCodeMode] URL:', url);
+
+        const qrcodeData: QRCodeData = {
+          url,
+          device: deviceInfo
+        };
+        const qrcodeString = JSON.stringify(qrcodeData);
+        console.log('[QRCodeMode] QR code data ready');
 
         setPort(status.port);
         setState({
           type: 'waiting_pairing',
           port: status.port,
-          qrcodeUrl: url
+          qrcodeUrl: qrcodeString
         });
 
         // 调用 waitForPairing 以接收结果，但 ref 会防止重复调用
+        console.log('[QRCodeMode] Starting waitForPairing...');
         waitForPairing();
       } else {
         // 服务器在运行但不在等待配对，可能是旧状态，进入idle
+        console.log('[QRCodeMode] Server running but not waiting, setting idle');
         setState({ type: 'idle' });
       }
     } catch (err) {
@@ -95,34 +116,61 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
 
   // 自动启动服务器
   const autoStartServer = async () => {
+    console.log('[QRCodeMode] autoStartServer called, current state:', state.type);
+
+    // 防止重复启动
+    if (autoStartInProgressRef.current) {
+      console.log('[QRCodeMode] autoStartServer already in progress, skipping');
+      return;
+    }
+
+    autoStartInProgressRef.current = true;
+    console.log('[QRCodeMode] Setting state to starting');
     setState({ type: 'starting' });
 
     try {
       // 先停止可能存在的旧服务器
       try {
+        console.log('[QRCodeMode] Stopping old server...');
         await invoke('stop_temp_server');
+        console.log('[QRCodeMode] Old server stopped');
       } catch (err) {
-        // 忽略
+        console.log('[QRCodeMode] No old server to stop:', err);
       }
 
       // 启动新服务器
+      console.log('[QRCodeMode] Starting new server on port:', port);
       const actualPort = await invoke<number>('start_temp_server', { port });
+      console.log('[QRCodeMode] Server started on port:', actualPort);
 
       // 保存端口到localStorage
+      console.log('[QRCodeMode] Saving port to localStorage');
       localStorage.setItem(STORAGE_KEY_PORT, actualPort.toString());
 
-      // 获取IP并生成二维码URL
+      // 获取设备信息和IP
+      console.log('[QRCodeMode] Getting device info...');
+      const deviceInfo = await getDeviceInfo();
+      console.log('[QRCodeMode] Getting local IP...');
       const localIp = await invoke<string>('get_local_ip');
       const url = `${localIp}:${actualPort}`;
+      console.log('[QRCodeMode] URL:', url);
 
+      // 构建二维码数据
+      const qrcodeData: QRCodeData = {
+        url,
+        device: deviceInfo
+      };
+      const qrcodeString = JSON.stringify(qrcodeData);
+      console.log('[QRCodeMode] QR code data:', qrcodeString);
+
+      console.log('[QRCodeMode] Setting state to waiting_pairing');
       setState({
         type: 'waiting_pairing',
         port: actualPort,
-        qrcodeUrl: url
+        qrcodeUrl: qrcodeString
       });
 
-      // 开始等待配对
-      waitForPairing();
+      console.log('[QRCodeMode] Server is now running and waiting for clients');
 
     } catch (err) {
       // 自动启动失败，进入error状态，让用户手动操作
@@ -131,6 +179,9 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
         type: 'error',
         message: `自动启动失败: ${err}. 请检查端口后手动启动。`
       });
+    } finally {
+      autoStartInProgressRef.current = false;
+      console.log('[QRCodeMode] autoStartServer finished');
     }
   };
 
@@ -157,18 +208,25 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
       // 保存端口到localStorage
       localStorage.setItem(STORAGE_KEY_PORT, actualPort.toString());
 
-      // 获取IP并生成二维码URL
+      // 获取设备信息和IP
+      const deviceInfo = await getDeviceInfo();
       const localIp = await invoke<string>('get_local_ip');
       const url = `${localIp}:${actualPort}`;
+
+      // 构建二维码数据
+      const qrcodeData: QRCodeData = {
+        url,
+        device: deviceInfo
+      };
+      const qrcodeString = JSON.stringify(qrcodeData);
 
       setState({
         type: 'waiting_pairing',
         port: actualPort,
-        qrcodeUrl: url
+        qrcodeUrl: qrcodeString
       });
 
-      // 开始等待配对
-      waitForPairing();
+      console.log('[QRCodeMode] Server started, waiting for clients');
 
     } catch (err) {
       setState({
@@ -178,68 +236,7 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
     }
   };
 
-  const waitForPairing = async () => {
-    // 防止重复调用
-    if (pairingAbortRef.current || waitingCallInProgressRef.current) {
-      console.log('[QRCodeMode] waitForPairing aborted or already in progress');
-      return;
-    }
-
-    waitingCallInProgressRef.current = true;
-
-    try {
-      // 等待180秒（3分钟）
-      const pairingData = await invoke<PairingData>('wait_for_pairing', {
-        timeoutSecs: 180
-      });
-
-      console.log('[QRCodeMode] Pairing data received:', pairingData);
-
-      setState({
-        type: 'pairing',
-        port: state.type === 'waiting_pairing' ? state.port : 10035,
-        qrcodeUrl: ''
-      });
-
-      // 停止临时服务器
-      await invoke('stop_temp_server');
-
-      // 创建新连接
-      const connection: Connection = {
-        id: `conn-${Date.now()}`,
-        name: `设备 ${pairingData.url}`,
-        host: pairingData.url,
-        token: pairingData.token,
-        enabled: true,
-        createdAt: Date.now()
-      };
-
-      // 保存连接
-      ConnectionStorage.add(connection);
-
-      // 连接到安卓设备
-      await invoke<string>('connect_to_android', {
-        connectionId: connection.id,
-        host: connection.host,
-        token: connection.token
-      });
-
-      // 通知父组件
-      setTimeout(() => {
-        onConnectionAdded(connection.id);
-      }, 500);
-
-    } catch (err) {
-      console.error('[QRCodeMode] Pairing failed:', err);
-      setState({
-        type: 'error',
-        message: err as string
-      });
-      await invoke('stop_temp_server').catch(() => {});
-    } finally {
-      waitingCallInProgressRef.current = false;
-    }
-  };
+  // HTTP 方案：不再需要轮询等待，安卓端会直接 HTTP POST 到后端
 
   const handleCheckPort = async () => {
     try {
@@ -260,13 +257,7 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
     }
   };
 
-  // 组件卸载时标记中止（但不停止服务器，让AddConnectionDialog的cleanup处理）
-  useEffect(() => {
-    return () => {
-      pairingAbortRef.current = true;
-      waitingCallInProgressRef.current = false;
-    };
-  }, []);
+  // HTTP 方案：组件卸载时不需要特殊处理（服务器由 AddConnectionDialog 管理）
 
   // === 渲染逻辑完全由状态机驱动 ===
 
