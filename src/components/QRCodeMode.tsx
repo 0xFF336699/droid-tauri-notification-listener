@@ -1,406 +1,239 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import QRCode from 'qrcode';
-import { Connection } from '../types/connection';
-import { ConnectionStorage } from '../types/connectionStorage';
 import { QRCodeData } from '../types/device';
 import { getDeviceInfo } from '../utils/deviceUtils';
+
+const LOG_TAG = '[QR-STABLE]';
+const SERVER_PORT = 10035; // 固定端口号
 
 interface QRCodeModeProps {
   onConnectionAdded: (connectionId: string) => void;
 }
 
-interface PairingData {
-  url: string;
-  token: string;
-}
+const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectionAdded }) => {
+  console.log(`${LOG_TAG} 组件渲染`);
 
-interface ServerStatus {
-  running: boolean;
-  port: number;
-  waiting_for_pairing: boolean;
-}
-
-// 状态机定义
-type QRCodeModeState =
-  | { type: 'idle' }
-  | { type: 'starting' }
-  | { type: 'waiting_pairing'; port: number; qrcodeUrl: string }
-  | { type: 'pairing'; port: number; qrcodeUrl: string }
-  | { type: 'error'; message: string };
-
-const STORAGE_KEY_PORT = 'qrcode_server_port';
-
-const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded }) => {
-  const [port, setPort] = useState<number>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_PORT);
-    return saved ? parseInt(saved, 10) : 10035;
-  });
-  const [state, setState] = useState<QRCodeModeState>({ type: 'idle' });
+  const [status, setStatus] = useState<'waiting' | 'starting' | 'ready' | 'error'>('waiting');
+  const [statusMessage, setStatusMessage] = useState<string>('准备启动服务器...');
+  const [qrcodeUrl, setQrcodeUrl] = useState<string>('');
+  const [serverPort, setServerPort] = useState<number>(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const autoStartInProgressRef = useRef<boolean>(false); // 防止重复自动启动
+  const isMountedRef = useRef<boolean>(true);
+  const startTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 组件挂载时查询后端状态
-  useEffect(() => {
-    console.log('[QRCodeMode] Component mounted, syncing with backend');
-    syncWithBackend();
+  // 强制停止服务器
+  const stopServer = useCallback(async () => {
+    console.log(`${LOG_TAG} 正在停止服务器...`);
+    setStatusMessage('正在停止服务器...');
+    
+    try {
+      await invoke('stop_temp_server');
+      console.log(`${LOG_TAG} 服务器已停止`);
+      return true;
+    } catch (error) {
+      console.error(`${LOG_TAG} 停止服务器时出错:`, error);
+      return false;
+    } finally {
+      if (isMountedRef.current) {
+        setStatus('waiting');
+      }
+    }
   }, []);
 
-  // 当状态变为 waiting_pairing 时，绘制二维码
+  // 启动服务器
+  const startServer = useCallback(async () => {
+    console.log(`${LOG_TAG} 开始启动服务器`);
+    
+    if (!isMountedRef.current) {
+      console.log(`${LOG_TAG} 组件已卸载，取消启动服务器`);
+      return;
+    }
+
+    setStatus('starting');
+    setStatusMessage('正在准备启动服务器...');
+
+    try {
+      // 1. 停止现有服务器
+      console.log(`${LOG_TAG} 步骤 1/4: 停止现有服务器`);
+      setStatusMessage('正在停止现有服务器...');
+      await stopServer();
+
+      if (!isMountedRef.current) return;
+
+      // 2. 启动新服务器
+      console.log(`${LOG_TAG} 步骤 2/4: 启动服务器`);
+      setStatusMessage(`正在启动服务器 (端口 ${SERVER_PORT})...`);
+      
+      const port = await invoke<number>('start_temp_server', { port: SERVER_PORT });
+      console.log(`${LOG_TAG} 服务器已启动，端口:`, port);
+      setServerPort(port);
+
+      if (!isMountedRef.current) return;
+
+      // 3. 获取设备信息
+      console.log(`${LOG_TAG} 步骤 3/4: 获取设备信息`);
+      setStatusMessage('正在获取设备信息...');
+      const deviceInfo = await getDeviceInfo();
+
+      if (!isMountedRef.current) return;
+
+      // 4. 生成二维码
+      console.log(`${LOG_TAG} 步骤 4/4: 生成二维码`);
+      setStatusMessage('正在生成二维码...');
+      
+      const qrData: QRCodeData = {
+        type: 'device_info',
+        data: {
+          ...deviceInfo,
+          port: port,
+          timestamp: Date.now()
+        }
+      };
+
+      const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData), {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#ffffff'
+        }
+      });
+
+      if (isMountedRef.current) {
+        setQrcodeUrl(qrCodeDataUrl);
+        setStatus('ready');
+        setStatusMessage('扫描二维码连接设备');
+      }
+
+    } catch (error) {
+      console.error(`${LOG_TAG} 启动服务器时出错:`, error);
+      if (isMountedRef.current) {
+        setStatus('error');
+        setStatusMessage(`启动失败: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+  }, [stopServer]);
+
+  // 组件挂载时启动服务器
   useEffect(() => {
-    if (state.type === 'waiting_pairing' && canvasRef.current) {
-      QRCode.toCanvas(canvasRef.current, state.qrcodeUrl, {
-        width: 256,
-        margin: 2
-      }).catch(err => {
-        console.error('[QRCodeMode] Failed to generate QR code:', err);
-      });
-    }
-  }, [state]);
+    console.log(`${LOG_TAG} 组件挂载`);
+    isMountedRef.current = true;
 
-  // 与后端同步状态
-  const syncWithBackend = async () => {
-    console.log('[QRCodeMode] syncWithBackend called');
-    try {
-      console.log('[QRCodeMode] Invoking get_temp_server_status...');
-      const status = await invoke<ServerStatus | null>('get_temp_server_status');
-      console.log('[QRCodeMode] Server status:', status);
+    // 添加防抖延迟
+    startTimerRef.current = setTimeout(() => {
+      if (isMountedRef.current) {
+        startServer().catch(console.error);
+      }
+    }, 1000);
 
-      if (!status || !status.running) {
-        // 后端没有运行的服务器，自动启动
-        console.log('[QRCodeMode] No server running, auto-starting...');
-        await autoStartServer();
-        return;
+    // 清理函数
+    return () => {
+      console.log(`${LOG_TAG} 组件卸载清理`);
+      isMountedRef.current = false;
+
+      // 清除定时器
+      if (startTimerRef.current) {
+        clearTimeout(startTimerRef.current);
+        startTimerRef.current = null;
       }
 
-      console.log('[QRCodeMode] Server is running, waiting_for_pairing:', status.waiting_for_pairing);
-      if (status.waiting_for_pairing) {
-        // 后端正在等待配对，恢复UI状态
-        console.log('[QRCodeMode] Backend is waiting for pairing, restoring UI');
+      // 停止服务器
+      stopServer().catch(console.error);
+    };
+  }, [startServer, stopServer]);
 
-        // 获取设备信息并重建二维码数据
-        console.log('[QRCodeMode] Getting device info...');
-        const deviceInfo = await getDeviceInfo();
-        console.log('[QRCodeMode] Getting local IP...');
-        const localIp = await invoke<string>('get_local_ip');
-        const url = `${localIp}:${status.port}`;
-        console.log('[QRCodeMode] URL:', url);
-
-        const qrcodeData: QRCodeData = {
-          url,
-          device: deviceInfo
-        };
-        const qrcodeString = JSON.stringify(qrcodeData);
-        console.log('[QRCodeMode] QR code data ready');
-
-        setPort(status.port);
-        setState({
-          type: 'waiting_pairing',
-          port: status.port,
-          qrcodeUrl: qrcodeString
-        });
-
-        // 调用 waitForPairing 以接收结果，但 ref 会防止重复调用
-        console.log('[QRCodeMode] Starting waitForPairing...');
-        waitForPairing();
-      } else {
-        // 服务器在运行但不在等待配对，可能是旧状态，进入idle
-        console.log('[QRCodeMode] Server running but not waiting, setting idle');
-        setState({ type: 'idle' });
-      }
-    } catch (err) {
-      console.error('[QRCodeMode] Failed to sync with backend:', err);
-      setState({ type: 'idle' });
-    }
-  };
-
-  // 自动启动服务器
-  const autoStartServer = async () => {
-    console.log('[QRCodeMode] autoStartServer called, current state:', state.type);
-
-    // 防止重复启动
-    if (autoStartInProgressRef.current) {
-      console.log('[QRCodeMode] autoStartServer already in progress, skipping');
-      return;
-    }
-
-    autoStartInProgressRef.current = true;
-    console.log('[QRCodeMode] Setting state to starting');
-    setState({ type: 'starting' });
-
-    try {
-      // 先停止可能存在的旧服务器
-      try {
-        console.log('[QRCodeMode] Stopping old server...');
-        await invoke('stop_temp_server');
-        console.log('[QRCodeMode] Old server stopped');
-      } catch (err) {
-        console.log('[QRCodeMode] No old server to stop:', err);
-      }
-
-      // 启动新服务器
-      console.log('[QRCodeMode] Starting new server on port:', port);
-      const actualPort = await invoke<number>('start_temp_server', { port });
-      console.log('[QRCodeMode] Server started on port:', actualPort);
-
-      // 保存端口到localStorage
-      console.log('[QRCodeMode] Saving port to localStorage');
-      localStorage.setItem(STORAGE_KEY_PORT, actualPort.toString());
-
-      // 获取设备信息和IP
-      console.log('[QRCodeMode] Getting device info...');
-      const deviceInfo = await getDeviceInfo();
-      console.log('[QRCodeMode] Getting local IP...');
-      const localIp = await invoke<string>('get_local_ip');
-      const url = `${localIp}:${actualPort}`;
-      console.log('[QRCodeMode] URL:', url);
-
-      // 构建二维码数据
-      const qrcodeData: QRCodeData = {
-        url,
-        device: deviceInfo
-      };
-      const qrcodeString = JSON.stringify(qrcodeData);
-      console.log('[QRCodeMode] QR code data:', qrcodeString);
-
-      console.log('[QRCodeMode] Setting state to waiting_pairing');
-      setState({
-        type: 'waiting_pairing',
-        port: actualPort,
-        qrcodeUrl: qrcodeString
-      });
-
-      console.log('[QRCodeMode] Server is now running and waiting for clients');
-
-    } catch (err) {
-      // 自动启动失败，进入error状态，让用户手动操作
-      console.error('[QRCodeMode] Auto-start failed:', err);
-      setState({
-        type: 'error',
-        message: `自动启动失败: ${err}. 请检查端口后手动启动。`
-      });
-    } finally {
-      autoStartInProgressRef.current = false;
-      console.log('[QRCodeMode] autoStartServer finished');
-    }
-  };
-
-  const handleStartServer = async () => {
-    // 防止在非idle状态下启动
-    if (state.type !== 'idle' && state.type !== 'error') {
-      console.log('[QRCodeMode] Server already running, ignoring start request');
-      return;
-    }
-
-    setState({ type: 'starting' });
-
-    try {
-      // 先停止可能存在的旧服务器
-      try {
-        await invoke('stop_temp_server');
-      } catch (err) {
-        // 忽略
-      }
-
-      // 启动新服务器
-      const actualPort = await invoke<number>('start_temp_server', { port });
-
-      // 保存端口到localStorage
-      localStorage.setItem(STORAGE_KEY_PORT, actualPort.toString());
-
-      // 获取设备信息和IP
-      const deviceInfo = await getDeviceInfo();
-      const localIp = await invoke<string>('get_local_ip');
-      const url = `${localIp}:${actualPort}`;
-
-      // 构建二维码数据
-      const qrcodeData: QRCodeData = {
-        url,
-        device: deviceInfo
-      };
-      const qrcodeString = JSON.stringify(qrcodeData);
-
-      setState({
-        type: 'waiting_pairing',
-        port: actualPort,
-        qrcodeUrl: qrcodeString
-      });
-
-      console.log('[QRCodeMode] Server started, waiting for clients');
-
-    } catch (err) {
-      setState({
-        type: 'error',
-        message: err as string
-      });
-    }
-  };
-
-  // HTTP 方案：不再需要轮询等待，安卓端会直接 HTTP POST 到后端
-
-  const handleCheckPort = async () => {
-    try {
-      const available = await invoke<boolean>('check_port_available', { port });
-      if (available) {
-        setState({ type: 'idle' });  // 清除之前的错误
-      } else {
-        setState({
-          type: 'error',
-          message: `端口 ${port} 被占用`
-        });
-      }
-    } catch (err) {
-      setState({
-        type: 'error',
-        message: err as string
-      });
-    }
-  };
-
-  // HTTP 方案：组件卸载时不需要特殊处理（服务器由 AddConnectionDialog 管理）
-
-  // === 渲染逻辑完全由状态机驱动 ===
-
-  if (state.type === 'waiting_pairing' || state.type === 'pairing') {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: '20px' }}>
-          <canvas ref={canvasRef} style={{ border: '2px solid #ddd', borderRadius: '8px' }} />
-        </div>
-
-        <div style={{
-          padding: '12px',
-          backgroundColor: '#f0f0f0',
-          borderRadius: '4px',
-          marginBottom: '15px'
-        }}>
-          <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>
-            扫描二维码或手动输入地址:
-          </div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold', fontFamily: 'monospace' }}>
-            {state.qrcodeUrl}
-          </div>
-        </div>
-
-        <div style={{
-          padding: '10px',
-          backgroundColor: '#e8f5e8',
-          border: '1px solid #c3e6c3',
-          borderRadius: '4px',
-          color: '#2d5',
-          marginBottom: '15px'
-        }}>
-          {state.type === 'pairing' ? '正在配对中...' : '等待安卓设备扫码连接...'}
-        </div>
-
-        <div style={{ fontSize: '13px', color: '#888', lineHeight: '1.6' }}>
-          请在安卓设备上扫描二维码<br />
-          扫码后设备将自动连接
-        </div>
-      </div>
-    );
-  }
-
-  // idle, starting, error 状态
+  // 渲染UI
   return (
-    <div>
-      <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-          端口号:
-        </label>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <input
-            type="number"
-            value={port}
-            onChange={(e) => setPort(Number(e.target.value))}
-            min={1024}
-            max={65535}
-            disabled={state.type === 'starting'}
-            style={{
-              flex: 1,
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px'
-            }}
+    <div className="qrcode-mode">
+      <h2>扫码连接</h2>
+      
+      <div className="status-message">
+        {statusMessage}
+      </div>
+
+      {status === 'ready' && qrcodeUrl && (
+        <div className="qrcode-container">
+          <img 
+            src={qrcodeUrl} 
+            alt="设备连接二维码" 
+            className="qrcode-image"
           />
-          <button
-            onClick={handleCheckPort}
-            disabled={state.type === 'starting'}
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#6c757d',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: state.type === 'starting' ? 'not-allowed' : 'pointer',
-              opacity: state.type === 'starting' ? 0.6 : 1
-            }}
+          <p className="connection-info">
+            请使用手机扫描二维码连接
+            <br />
+            服务器运行在端口: {serverPort}
+          </p>
+        </div>
+      )}
+
+      {status === 'error' && (
+        <div className="error-container">
+          <p>启动服务器时出错，请重试</p>
+          <button 
+            onClick={() => startServer()}
+            className="retry-button"
           >
-            检测
+            重试
           </button>
         </div>
-        <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-          默认端口: 10035
-        </div>
-      </div>
-
-      {state.type === 'error' && (
-        <div style={{
-          padding: '10px',
-          backgroundColor: '#fee',
-          border: '1px solid #fcc',
-          borderRadius: '4px',
-          color: '#c33',
-          marginBottom: '15px'
-        }}>
-          {state.message}
-        </div>
       )}
 
-      {state.type === 'starting' && (
-        <div style={{
-          padding: '10px',
-          backgroundColor: '#e8f5e8',
-          border: '1px solid #c3e6c3',
-          borderRadius: '4px',
-          color: '#2d5',
-          marginBottom: '15px'
-        }}>
-          正在自动启动服务器...
-        </div>
-      )}
-
-      {state.type === 'idle' && (
-        <div style={{
-          padding: '10px',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
-          borderRadius: '4px',
-          color: '#6c757d',
-          marginBottom: '15px',
-          fontSize: '13px'
-        }}>
-          提示：首次打开会自动启动服务器。如需更换端口，请先修改端口号再点击下方按钮。
-        </div>
-      )}
-
-      <button
-        onClick={handleStartServer}
-        disabled={state.type === 'starting'}
-        style={{
-          width: '100%',
-          padding: '12px',
-          backgroundColor: state.type === 'starting' ? '#ccc' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: state.type === 'starting' ? 'not-allowed' : 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold'
-        }}
-      >
-        {state.type === 'idle' ? '重新启动服务器' : '启动服务器'}
-      </button>
+      <style jsx>{`
+        .qrcode-mode {
+          text-align: center;
+          padding: 20px;
+        }
+        
+        .status-message {
+          margin: 15px 0;
+          color: #666;
+          min-height: 24px;
+        }
+        
+        .qrcode-container {
+          margin: 20px auto;
+          padding: 20px;
+          background: #fff;
+          border-radius: 8px;
+          display: inline-block;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qrcode-image {
+          width: 200px;
+          height: 200px;
+          display: block;
+          margin: 0 auto;
+        }
+        
+        .connection-info {
+          margin-top: 15px;
+          color: #333;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+        
+        .error-container {
+          color: #d32f2f;
+          margin: 20px 0;
+        }
+        
+        .retry-button {
+          margin-top: 10px;
+          padding: 8px 16px;
+          background-color: #1976d2;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+        
+        .retry-button:hover {
+          background-color: #1565c0;
+        }
+      `}</style>
     </div>
   );
 };

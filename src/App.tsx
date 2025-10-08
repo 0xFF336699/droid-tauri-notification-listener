@@ -4,8 +4,11 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 import AddConnectionDialog from "./components/AddConnectionDialog";
-import ConnectionManager from "./components/ConnectionManager";
-import { ConnectionStorage } from "./types/connectionStorage";
+import { usePairingListener } from './hooks/usePairingListener';
+import { loadDevices, deleteDevice as deleteStoredDevice } from './utils/deviceStorage';
+import { AndroidDeviceInfo } from './types/deviceStorage';
+import { DeviceCard } from './components/DeviceCard';
+import React from "react";
 
 type Notification = {
   id: string;
@@ -33,10 +36,31 @@ function App() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  // 迁移旧配置
-  useEffect(() => {
-    ConnectionStorage.migrateFromOldConfig();
-  }, []);
+  // WebSocket 设备管理状态
+  const [devices, setDevices] = useState<AndroidDeviceInfo[]>([]);
+
+  // 监听配对事件
+  usePairingListener({
+    onPairingReceived: (device) => {
+      console.log('[App] ===== onPairingReceived callback =====');
+      log('New device paired', { data: device });
+      // 重新加载设备列表
+      console.log('[App] Reloading device list after pairing...');
+      const newDevices = loadDevices();
+      console.log('[App] New device list:', newDevices.length, newDevices);
+      setDevices(newDevices);
+      console.log('[App] Device list updated');
+
+      // 自动打开设置页面以显示设备
+      console.log('[App] Auto-opening settings page to show device');
+      setShowSettings(true);
+    }
+  });
+
+  // 迁移旧配置（可以移除，因为已废弃旧系统）
+  // useEffect(() => {
+  //   ConnectionStorage.migrateFromOldConfig();
+  // }, []);
 
   const selectedIds = useMemo(() => Object.keys(selected).filter((k) => selected[k]), [selected]);
 
@@ -74,7 +98,14 @@ function App() {
   }
 
   useEffect(() => {
+    console.log('[App] ===== App mounted, loading initial data =====');
     refreshAll();
+
+    // 加载已保存的设备
+    console.log('[App] Loading saved devices...');
+    const savedDevices = loadDevices();
+    console.log('[App] Loaded devices:', savedDevices.length, savedDevices);
+    setDevices(savedDevices);
 
     // 监听后端发来的"打开设置"事件
     const unlistenPromise = listen("open-settings", () => {
@@ -222,7 +253,75 @@ function App() {
             + 添加连接
           </button>
 
-          <ConnectionManager />
+          <button
+            onClick={() => {
+              if (window.confirm('确定要清空所有设备吗？此操作不可恢复！')) {
+                log('Clearing all devices');
+                // 使用导入的函数清空数据
+                import('./utils/deviceStorage').then(({ clearAllDevices }) => {
+                  clearAllDevices();
+                  setDevices([]);
+                  log('All devices cleared');
+                });
+              }
+            }}
+            style={{
+              marginBottom: '20px',
+              marginLeft: '10px',
+              padding: '10px 20px',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+          >
+            清空所有设备
+          </button>
+
+          {/* WebSocket 设备列表 */}
+          <div style={{ marginBottom: '30px' }}>
+            <h3 style={{ marginBottom: '15px' }}>WebSocket 设备</h3>
+            {devices.length === 0 ? (
+              <div style={{
+                padding: '20px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '4px',
+                textAlign: 'center',
+                color: '#666'
+              }}>
+                <p>暂无设备</p>
+                <p style={{ fontSize: '14px', marginTop: '8px' }}>
+                  请点击"+ 添加连接"扫码添加设备
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {devices.map(device => {
+                  console.log('[App] Rendering DeviceCard for:', device.uuid, device);
+                  return (
+                    <DeviceCard
+                      key={device.uuid}
+                      deviceInfo={device}
+                    onDelete={() => {
+                      deleteStoredDevice(device.uuid);
+                      setDevices(loadDevices());
+                      log('Device deleted', { data: device.uuid });
+                    }}
+                      onToggleEnabled={(enabled) => {
+                        log('Toggle device enabled', { data: { uuid: device.uuid, enabled } });
+                        // 可以更新设备的 enabled 状态
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* 旧的连接管理器（已废弃，可选择移除） */}
+          {/* <ConnectionManager /> */}
         </div>
       </main>
     );
@@ -433,4 +532,9 @@ function App() {
   );
 }
 
-export default App;
+function Shell(){
+  return  <React.StrictMode>  
+    <App />
+  </React.StrictMode>
+}
+export default Shell;

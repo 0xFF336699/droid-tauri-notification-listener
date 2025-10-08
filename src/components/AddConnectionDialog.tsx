@@ -12,23 +12,39 @@ interface AddConnectionDialogProps {
 
 const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionAdded, onClose }) => {
   const [activeTab, setActiveTab] = useState<TabType>('qrcode');
+  const [serverPort, setServerPort] = useState<number | null>(null);
+  const [serverRunning, setServerRunning] = useState<boolean>(false);
 
-  // 组件卸载时清理临时服务器
-  useEffect(() => {
-    return () => {
-      invoke('stop_temp_server').catch(() => {
-        // 忽略错误，可能服务器已经停止
-      });
-    };
-  }, []);
+  // 组件挂载时启动服务器
+  // useEffect(() => {
+  //   const startServer = async () => {
+  //     try {
+  //       console.log('[AddConnectionDialog] Starting server...');
+  //       const port = 10035;
+  //       const actualPort = await invoke<number>('start_temp_server', { port });
+  //       console.log('[AddConnectionDialog] Server started on port:', actualPort);
+  //       setServerPort(actualPort);
+  //       setServerRunning(true);
+  //     } catch (err) {
+  //       console.error('[AddConnectionDialog] Failed to start server:', err);
+  //     }
+  //   };
 
-  // 关闭按钮处理 - 异步停止服务器，不等待完成
+  //   startServer();
+
+  //   // 组件卸载时停止服务器
+  //   return () => {
+  //     console.log('[AddConnectionDialog] Stopping server...');
+  //     invoke('stop_temp_server').catch(() => {
+  //       // 忽略错误
+  //     });
+  //     setServerRunning(false);
+  //   };
+  // }, []);
+
+  // 关闭按钮处理
   const handleClose = () => {
-    // 异步停止服务器，不等待
-    invoke('stop_temp_server').catch(() => {
-      // 忽略错误
-    });
-    // 立即关闭弹窗
+    // cleanup 会处理服务器停止
     onClose();
   };
 
@@ -115,16 +131,18 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
 
         {/* 内容区域 */}
         <div>
-          {activeTab === 'qrcode' && (
+          <div style={{ display: activeTab === 'qrcode' ? 'block' : 'none' }}>
             <QRCodeMode
               onConnectionAdded={onConnectionAdded}
+              serverPort={serverPort}
+              serverRunning={serverRunning}
             />
-          )}
-          {activeTab === 'manual' && (
+          </div>
+          <div style={{ display: activeTab === 'manual' ? 'block' : 'none' }}>
             <ManualInputMode
               onConnectionAdded={onConnectionAdded}
             />
-          )}
+          </div>
         </div>
       </div>
     </div>

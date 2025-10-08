@@ -4,7 +4,8 @@
 use std::collections::{HashMap, HashSet};
 use std::sync::Mutex;
 use std::sync::Arc;
-use parking_lot::RwLock;
+use parking_lot::RwLock as ParkingLotRwLock;
+use tokio::sync::RwLock as TokioRwLock;
 
 use serde::{Deserialize, Serialize};
 use tauri::State;
@@ -14,16 +15,29 @@ use crate::network_utils;
 use crate::temp_server::TempServer;
 use crate::android_client::AndroidSocketClient;
 
-#[derive(Default)]
 pub struct AppState {
     // 通知存储（临时内存实现）：id -> Notification
     notifications: Mutex<HashMap<String, Notification>>,
     // 已读集合
     read_set: Mutex<HashSet<String>>,
-    // 临时服务器（用于扫码配对）
-    temp_server: Arc<RwLock<Option<TempServer>>>,
+    // 临时服务器（用于扫码配对）- 使用tokio::sync::RwLock因为需要跨await
+    temp_server: Arc<TokioRwLock<Option<TempServer>>>,
+    // 配对数据（独立于TempServer，避免长时间持有server锁）
+    pairing_data: Arc<TokioRwLock<Option<crate::temp_server::PairingData>>>,
     // 客户端连接池：connection_id -> AndroidSocketClient
-    clients: Arc<RwLock<HashMap<String, Arc<AndroidSocketClient>>>>,
+    clients: Arc<ParkingLotRwLock<HashMap<String, Arc<AndroidSocketClient>>>>,
+}
+
+impl Default for AppState {
+    fn default() -> Self {
+        Self {
+            notifications: Mutex::new(HashMap::new()),
+            read_set: Mutex::new(HashSet::new()),
+            temp_server: Arc::new(TokioRwLock::new(None)),
+            pairing_data: Arc::new(TokioRwLock::new(None)),
+            clients: Arc::new(ParkingLotRwLock::new(HashMap::new())),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -269,63 +283,28 @@ pub async fn start_temp_server(state: State<'_, AppState>, port: u16) -> Result<
 
     // 先停止旧服务器
     {
-        let mut temp_server_lock = state.temp_server.write();
-        if temp_server_lock.is_some() {
+        let mut temp_server_lock = state.temp_server.write().await;
+        if let Some(server) = temp_server_lock.as_mut() {
             println!("[cmd] Stopping existing server");
+            server.stop();
         }
-        *temp_server_lock = None; // Drop 会自动停止服务器
+        *temp_server_lock = None;
     }
 
     // 等待端口释放
-    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+    tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
 
-    // 创建新服务器
-    let server = TempServer::new(port)?;
-
+    // 创建并启动新服务器
+    let mut server = TempServer::new(port)?;
     let actual_port = server.port();
-    *state.temp_server.write() = Some(server);
 
-    println!("[cmd] Server created on port {}", actual_port);
+    println!("[cmd] Starting server on port {}", actual_port);
+    // 传入pairing_data引用给server
+    server.start(state.pairing_data.clone()).await?;
 
-    // 立即启动后台监听任务（重要！否则服务器不会接受连接）
-    let temp_server_arc = state.temp_server.clone();
-    tokio::task::spawn_blocking(move || {
-        println!("[cmd] Background listener task started, CONTINUOUS listening mode...");
+    *state.temp_server.write().await = Some(server);
 
-        let server_guard = temp_server_arc.read();
-        if let Some(server) = server_guard.as_ref() {
-            println!("[cmd] Starting CONTINUOUS listener on port {}...", server.port());
-
-            // 持续监听，不退出
-            loop {
-                println!("[cmd] 🔄 Waiting for next pairing request...");
-                match server.wait_for_pairing(180) {
-                    Ok(data) => {
-                        println!("[cmd] ✅ Pairing received!");
-                        println!("[cmd] Pairing data: url={}, token_len={}", data.url, data.token.len());
-                        // TODO: 将配对数据保存到 AppState 或发送给前端
-
-                        // 继续监听下一个请求，不退出循环
-                        println!("[cmd] 🔄 Ready for next pairing...");
-                    }
-                    Err(e) => {
-                        println!("[cmd] ❌ Wait for pairing error: {}", e);
-                        // 如果是超时，继续等待；如果是服务器停止，退出
-                        if e.contains("Server stopped") {
-                            println!("[cmd] Server stopped, exiting listener loop");
-                            break;
-                        }
-                        // 超时后继续等待
-                        println!("[cmd] 🔄 Timeout, restarting listener...");
-                    }
-                }
-            }
-        } else {
-            println!("[cmd] ❌ ERROR: Server not found in state!");
-        }
-    });
-
-    println!("[cmd] Server is now actively listening on port {}", actual_port);
+    println!("[cmd] Server started successfully on port {}", actual_port);
 
     // 启动后台测试任务（7秒后自动测试 HTTP 连接）
     let test_port = actual_port;
@@ -333,64 +312,22 @@ pub async fn start_temp_server(state: State<'_, AppState>, port: u16) -> Result<
         tokio::time::sleep(tokio::time::Duration::from_secs(7)).await;
         println!("[AutoTest] 7 seconds elapsed, testing HTTP POST to localhost:{}...", test_port);
 
-        match tokio::task::spawn_blocking(move || {
-            use std::io::{Read, Write};
-            use std::net::TcpStream;
-
-            let mut stream = TcpStream::connect(("127.0.0.1", test_port))
-                .map_err(|e| format!("Connect error: {}", e))?;
-
-            // 构建 HTTP POST 请求
-            let test_data = r#"{"url":"127.0.0.1:10035","token":"auto_test_token_12345"}"#;
-            let request = format!(
-                "POST /pair HTTP/1.1\r\n\
-                 Host: 127.0.0.1:{}\r\n\
-                 Content-Type: application/json\r\n\
-                 Content-Length: {}\r\n\
-                 \r\n\
-                 {}",
-                test_port,
-                test_data.len(),
-                test_data
-            );
-
-            stream.write_all(request.as_bytes())
-                .map_err(|e| format!("Write error: {}", e))?;
-            stream.flush()
-                .map_err(|e| format!("Flush error: {}", e))?;
-
-            // 读取响应
-            stream.set_read_timeout(Some(std::time::Duration::from_secs(5)))
-                .map_err(|e| format!("Set timeout error: {}", e))?;
-            let mut response = Vec::new();
-            let mut buffer = [0u8; 1024];
-
-            loop {
-                match stream.read(&mut buffer) {
-                    Ok(0) => break,
-                    Ok(n) => {
-                        response.extend_from_slice(&buffer[..n]);
-                        if response.windows(4).any(|w| w == b"\r\n\r\n") {
-                            break;
-                        }
-                    }
-                    Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => break,
-                    Err(e) => return Err(format!("Read error: {}", e)),
+        match reqwest::Client::new()
+            .post(format!("http://127.0.0.1:{}/pair", test_port))
+            .header("Content-Type", "application/json")
+            .body(r#"{"url":"127.0.0.1:10035","token":"auto_test_token_12345"}"#)
+            .send()
+            .await
+        {
+            Ok(response) => {
+                println!("[AutoTest] ✅ HTTP test successful!");
+                println!("[AutoTest] Status: {}", response.status());
+                if let Ok(text) = response.text().await {
+                    println!("[AutoTest] Response: {}", text);
                 }
             }
-
-            let response_str = String::from_utf8_lossy(&response);
-            Ok::<String, String>(response_str.to_string())
-        }).await {
-            Ok(Ok(response)) => {
-                println!("[AutoTest] ✅ HTTP test successful!");
-                println!("[AutoTest] Response: {}", response);
-            }
-            Ok(Err(e)) => {
-                println!("[AutoTest] ❌ HTTP test failed: {}", e);
-            }
             Err(e) => {
-                println!("[AutoTest] ❌ Test task error: {:?}", e);
+                println!("[AutoTest] ❌ HTTP test failed: {}", e);
             }
         }
     });
@@ -402,18 +339,20 @@ pub async fn start_temp_server(state: State<'_, AppState>, port: u16) -> Result<
 pub async fn stop_temp_server(state: State<'_, AppState>) -> Result<(), String> {
     println!("[cmd] stop_temp_server");
 
-    let mut server_lock = state.temp_server.write();
-    if let Some(server) = server_lock.take() {
+    let mut server_lock = state.temp_server.write().await;
+    if let Some(server) = server_lock.as_mut() {
         server.stop();
-        println!("[cmd] Server stopped");
+        println!("[cmd] Server stop signal sent");
     }
+    *server_lock = None;
 
+    println!("[cmd] Server stopped");
     Ok(())
 }
 
 #[tauri::command]
 pub async fn get_temp_server_status(state: State<'_, AppState>) -> Result<Option<TempServerStatus>, String> {
-    let temp_server_lock = state.temp_server.read();
+    let temp_server_lock = state.temp_server.read().await;
 
     if let Some(server) = temp_server_lock.as_ref() {
         Ok(Some(TempServerStatus {
@@ -683,42 +622,52 @@ pub async fn test_http_pairing(state: State<'_, AppState>) -> Result<String, Str
 
     // 先停止旧服务器
     {
-        let mut temp_server_lock = state.temp_server.write();
-        if temp_server_lock.is_some() {
+        let mut temp_server_lock = state.temp_server.write().await;
+        if let Some(server) = temp_server_lock.as_mut() {
             println!("{} Stopping existing server", tag);
+            server.stop();
         }
-        *temp_server_lock = None; // Drop 会自动停止服务器
+        *temp_server_lock = None;
     }
 
     // 等待端口释放
-    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+    tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
 
     // 启动新服务器
-    let server = crate::temp_server::TempServer::new(port)?;
+    let mut server = crate::temp_server::TempServer::new(port)?;
     let actual_port = server.port();
-    println!("{} Server started on port {}", tag, actual_port);
+
+    println!("{} Starting server on port {}", tag, actual_port);
+    server.start(state.pairing_data.clone()).await?;
 
     // 保存服务器到状态
-    *state.temp_server.write() = Some(server);
+    *state.temp_server.write().await = Some(server);
 
-    // 启动配对等待线程（直接使用 temp_server Arc）
-    let temp_server_arc = state.temp_server.clone();
-    let server_handle = tokio::task::spawn_blocking(move || {
-        println!("{} Starting wait_for_pairing in blocking task...", tag);
+    // 启动配对等待任务（轮询AppState中的pairing_data）
+    let pairing_data_arc = state.pairing_data.clone();
+    let server_handle = tokio::spawn(async move {
+        println!("{} Starting pairing wait task...", tag);
 
-        let server_guard = temp_server_arc.read();
-        let server = server_guard.as_ref()
-            .ok_or("Server not found in state".to_string())?;
+        let start = tokio::time::Instant::now();
+        let timeout = tokio::time::Duration::from_secs(30);
 
-        match server.wait_for_pairing(30) {
-            Ok(data) => {
-                println!("{} Pairing successful: url={}, token_len={}", tag, data.url, data.token.len());
-                Ok(data)
+        loop {
+            if start.elapsed() > timeout {
+                println!("{} Pairing timeout", tag);
+                return Err("Timeout waiting for pairing".to_string());
             }
-            Err(e) => {
-                println!("{} Pairing failed: {}", tag, e);
-                Err(e)
+
+            // 检查pairing_data（短时间持有锁）
+            let data = pairing_data_arc.read().await.clone();
+            if let Some(pairing) = data {
+                println!("{} Pairing successful: url={}, token_len={}", tag, pairing.url, pairing.token.len());
+                // 清空数据
+                *pairing_data_arc.write().await = None;
+                return Ok(pairing);
             }
+
+            // 等待一段时间再检查
+            tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
         }
     });
 
@@ -728,96 +677,33 @@ pub async fn test_http_pairing(state: State<'_, AppState>) -> Result<String, Str
     println!("{} 7 seconds elapsed, sending HTTP POST request...", tag);
 
     // 3. 发送 HTTP POST 请求
-    let client_result = tokio::task::spawn_blocking(move || {
-        use std::io::{Read, Write};
-        use std::net::TcpStream;
-
-        println!("{} Client: Connecting to 127.0.0.1:{}...", tag, actual_port);
-        let mut stream = TcpStream::connect(("127.0.0.1", actual_port))
-            .map_err(|e| {
-                println!("{} Client: Connection failed: {}", tag, e);
-                format!("Connection failed: {}", e)
-            })?;
-
-        println!("{} Client: Connected successfully", tag);
-
-        // 构建 HTTP POST 请求
-        let test_data = r#"{"url":"127.0.0.1:10057","token":"test_http_token_12345"}"#;
-        let request = format!(
-            "POST /pair HTTP/1.1\r\n\
-             Host: 127.0.0.1:{}\r\n\
-             Content-Type: application/json\r\n\
-             Content-Length: {}\r\n\
-             \r\n\
-             {}",
-            actual_port,
-            test_data.len(),
-            test_data
-        );
-
-        println!("{} Client: Sending HTTP request:", tag);
-        println!("{} ----------------------------------------", tag);
-        println!("{}", request);
-        println!("{} ----------------------------------------", tag);
-
-        stream.write_all(request.as_bytes())
-            .map_err(|e| {
-                println!("{} Client: Failed to send request: {}", tag, e);
-                format!("Failed to send: {}", e)
-            })?;
-
-        stream.flush()
-            .map_err(|e| {
-                println!("{} Client: Failed to flush: {}", tag, e);
-                format!("Failed to flush: {}", e)
-            })?;
-
-        println!("{} Client: Request sent, reading response...", tag);
-
-        // 读取响应
-        let mut response = Vec::new();
-        let mut buffer = [0u8; 1024];
-
-        // 设置读取超时
-        stream.set_read_timeout(Some(std::time::Duration::from_secs(5)))
-            .map_err(|e| format!("Failed to set read timeout: {}", e))?;
-
-        loop {
-            match stream.read(&mut buffer) {
-                Ok(0) => {
-                    println!("{} Client: Connection closed by server", tag);
-                    break;
-                }
-                Ok(n) => {
-                    response.extend_from_slice(&buffer[..n]);
-                    // 简单检查是否读取完整响应（包含空行表示 headers 结束）
-                    if response.windows(4).any(|w| w == b"\r\n\r\n") {
-                        break;
-                    }
-                }
-                Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
-                    break; // 超时，读取完成
+    println!("{} Client: Sending HTTP POST to 127.0.0.1:{}...", tag, actual_port);
+    let client_result = match reqwest::Client::new()
+        .post(format!("http://127.0.0.1:{}/pair", actual_port))
+        .header("Content-Type", "application/json")
+        .body(r#"{"url":"127.0.0.1:10057","token":"test_http_token_12345"}"#)
+        .send()
+        .await
+    {
+        Ok(response) => {
+            println!("{} Client: HTTP request successful!", tag);
+            println!("{} Status: {}", tag, response.status());
+            match response.text().await {
+                Ok(text) => {
+                    println!("{} Response: {}", tag, text);
+                    text
                 }
                 Err(e) => {
-                    println!("{} Client: Read error: {}", tag, e);
-                    return Err(format!("Read error: {}", e));
+                    println!("{} Failed to read response: {}", tag, e);
+                    format!("Failed to read response: {}", e)
                 }
             }
         }
-
-        let response_str = String::from_utf8_lossy(&response);
-        println!("{} Client: Received response:", tag);
-        println!("{} ----------------------------------------", tag);
-        println!("{}", response_str);
-        println!("{} ----------------------------------------", tag);
-
-        Ok::<String, String>(response_str.to_string())
-    })
-    .await
-    .map_err(|e| {
-        println!("{} Client task join error: {:?}", tag, e);
-        format!("Client task error: {:?}", e)
-    })??;
+        Err(e) => {
+            println!("{} HTTP request failed: {}", tag, e);
+            return Err(format!("HTTP request failed: {}", e));
+        }
+    };
 
     // 4. 等待服务器端配对完成
     println!("{} Waiting for server-side pairing to complete...", tag);
