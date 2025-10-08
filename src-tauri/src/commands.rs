@@ -8,7 +8,7 @@ use parking_lot::RwLock as ParkingLotRwLock;
 use tokio::sync::RwLock as TokioRwLock;
 
 use serde::{Deserialize, Serialize};
-use tauri::State;
+use tauri::{Emitter, State};
 
 use crate::types::Notification;
 use crate::network_utils;
@@ -278,7 +278,11 @@ pub async fn test_connect_to_server(host: String, port: u16) -> Result<String, S
 }
 
 #[tauri::command]
-pub async fn start_temp_server(state: State<'_, AppState>, port: u16) -> Result<u16, String> {
+pub async fn start_temp_server(
+    state: State<'_, AppState>,
+    app_handle: tauri::AppHandle,
+    port: u16
+) -> Result<u16, String> {
     println!("[cmd] start_temp_server -> port={}", port);
 
     // 先停止旧服务器
@@ -306,28 +310,29 @@ pub async fn start_temp_server(state: State<'_, AppState>, port: u16) -> Result<
 
     println!("[cmd] Server started successfully on port {}", actual_port);
 
-    // 启动后台测试任务（7秒后自动测试 HTTP 连接）
-    let test_port = actual_port;
+    // 启动pairing_data监听任务，收到配对数据后发送事件给前端
+    let pairing_data_arc = state.pairing_data.clone();
+    let app_handle_clone = app_handle.clone();
     tokio::spawn(async move {
-        tokio::time::sleep(tokio::time::Duration::from_secs(7)).await;
-        println!("[AutoTest] 7 seconds elapsed, testing HTTP POST to localhost:{}...", test_port);
+        println!("[cmd] Pairing data listener started");
 
-        match reqwest::Client::new()
-            .post(format!("http://127.0.0.1:{}/pair", test_port))
-            .header("Content-Type", "application/json")
-            .body(r#"{"url":"127.0.0.1:10035","token":"auto_test_token_12345"}"#)
-            .send()
-            .await
-        {
-            Ok(response) => {
-                println!("[AutoTest] ✅ HTTP test successful!");
-                println!("[AutoTest] Status: {}", response.status());
-                if let Ok(text) = response.text().await {
-                    println!("[AutoTest] Response: {}", text);
+        loop {
+            tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+
+            // 检查是否有新的配对数据
+            let data = pairing_data_arc.read().await.clone();
+            if let Some(pairing) = data {
+                println!("[cmd] ✅ Pairing data detected: url={}, token_len={}", pairing.url, pairing.token.len());
+
+                // 发送Tauri事件给前端
+                if let Err(e) = app_handle_clone.emit("pairing-received", &pairing) {
+                    println!("[cmd] ❌ Failed to emit pairing-received event: {}", e);
+                } else {
+                    println!("[cmd] 📤 Emitted pairing-received event to frontend");
                 }
-            }
-            Err(e) => {
-                println!("[AutoTest] ❌ HTTP test failed: {}", e);
+
+                // 清空配对数据，避免重复发送
+                *pairing_data_arc.write().await = None;
             }
         }
     });
