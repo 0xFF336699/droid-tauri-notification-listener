@@ -262,6 +262,8 @@ function App() {
                   clearAllDevices();
                   setDevices([]);
                   log('All devices cleared');
+                  // 刷新页面以断开所有WebSocket连接
+                  window.location.reload();
                 });
               }
             }}
