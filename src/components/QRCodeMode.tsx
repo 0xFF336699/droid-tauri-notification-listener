@@ -78,17 +78,20 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
 
       if (!isMountedRef.current) return;
 
-      // 4. 生成二维码
-      console.log(`${LOG_TAG} 步骤 4/4: 生成二维码`);
+      // 4. 获取本机IP
+      console.log(`${LOG_TAG} 步骤 4/5: 获取本机IP`);
+      setStatusMessage('正在获取本机IP...');
+      const localIp = await invoke<string>('get_local_ip');
+
+      if (!isMountedRef.current) return;
+
+      // 5. 生成二维码
+      console.log(`${LOG_TAG} 步骤 5/5: 生成二维码`);
       setStatusMessage('正在生成二维码...');
-      
+
       const qrData: QRCodeData = {
-        type: 'device_info',
-        data: {
-          ...deviceInfo,
-          port: port,
-          timestamp: Date.now()
-        }
+        url: `${localIp}:${port}`,
+        device: deviceInfo
       };
 
       const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData), {

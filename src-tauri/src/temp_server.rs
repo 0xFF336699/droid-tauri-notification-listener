@@ -15,6 +15,10 @@ const LOG_TAG: &str = "[TempServer]";
 pub struct PairingData {
     pub url: String,
     pub token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_uuid: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_hostname: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
