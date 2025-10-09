@@ -5,9 +5,9 @@ import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 import AddConnectionDialog from "./components/AddConnectionDialog";
 import { usePairingListener } from './hooks/usePairingListener';
-import { loadDevices, deleteDevice as deleteStoredDevice } from './utils/deviceStorage';
-import { AndroidDeviceInfo } from './types/deviceStorage';
-import { DeviceCard } from './components/DeviceCard';
+import { DeviceList } from './components/DeviceList';
+import { SettingsDeviceList } from './components/SettingsDeviceList';
+import { mainModelController } from './data/main-model-controller';
 import React from "react";
 
 type Notification = {
@@ -36,23 +36,16 @@ function App() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  // WebSocket 设备管理状态
-  const [devices, setDevices] = useState<AndroidDeviceInfo[]>([]);
-
   // 监听配对事件
   usePairingListener({
     onPairingReceived: (device) => {
       console.log('[App] ===== onPairingReceived callback =====');
       log('New device paired', { data: device });
-      // 重新加载设备列表
-      console.log('[App] Reloading device list after pairing...');
-      const newDevices = loadDevices();
-      console.log('[App] New device list:', newDevices.length, newDevices);
-      setDevices(newDevices);
-      console.log('[App] Device list updated');
 
-      // 自动打开设置页面以显示设备
-      console.log('[App] Auto-opening settings page to show device');
+      // 添加设备
+      mainModelController.addDevice(device);
+
+      console.log('[App] Device added');
       setShowSettings(true);
     }
   });
@@ -100,12 +93,6 @@ function App() {
   useEffect(() => {
     console.log('[App] ===== App mounted, loading initial data =====');
     refreshAll();
-
-    // 加载已保存的设备
-    console.log('[App] Loading saved devices...');
-    const savedDevices = loadDevices();
-    console.log('[App] Loaded devices:', savedDevices.length, savedDevices);
-    setDevices(savedDevices);
 
     // 监听后端发来的"打开设置"事件
     const unlistenPromise = listen("open-settings", () => {
@@ -257,14 +244,12 @@ function App() {
             onClick={() => {
               if (window.confirm('确定要清空所有设备吗？此操作不可恢复！')) {
                 log('Clearing all devices');
-                // 使用导入的函数清空数据
-                import('./utils/deviceStorage').then(({ clearAllDevices }) => {
-                  clearAllDevices();
-                  setDevices([]);
-                  log('All devices cleared');
-                  // 刷新页面以断开所有WebSocket连接
-                  window.location.reload();
-                });
+
+                // 清空所有设备
+                mainModelController.clearAllDevices();
+
+                log('All devices cleared');
+                window.location.reload();
               }
             }}
             style={{
@@ -285,41 +270,7 @@ function App() {
           {/* WebSocket 设备列表 */}
           <div style={{ marginBottom: '30px' }}>
             <h3 style={{ marginBottom: '15px' }}>WebSocket 设备</h3>
-            {devices.length === 0 ? (
-              <div style={{
-                padding: '20px',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '4px',
-                textAlign: 'center',
-                color: '#666'
-              }}>
-                <p>暂无设备</p>
-                <p style={{ fontSize: '14px', marginTop: '8px' }}>
-                  请点击"+ 添加连接"扫码添加设备
-                </p>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {devices.map(device => {
-                  console.log('[App] Rendering DeviceCard for:', device.uuid, device);
-                  return (
-                    <DeviceCard
-                      key={device.uuid}
-                      deviceInfo={device}
-                    onDelete={() => {
-                      deleteStoredDevice(device.uuid);
-                      setDevices(loadDevices());
-                      log('Device deleted', { data: device.uuid });
-                    }}
-                      onToggleEnabled={(enabled) => {
-                        log('Toggle device enabled', { data: { uuid: device.uuid, enabled } });
-                        // 可以更新设备的 enabled 状态
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            )}
+            <SettingsDeviceList />
           </div>
 
           {/* 旧的连接管理器（已废弃，可选择移除） */}
@@ -446,7 +397,10 @@ function App() {
         </div>
       </div>
 
-      <h2>通知列表</h2>
+      {/* 设备和通知列表 */}
+      <DeviceList />
+
+      <h2>旧通知列表</h2>
       <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
         <div>
           <b>未读</b>: {counts.unread}

@@ -1,137 +1,88 @@
-import React from 'react';
-import { useDeviceConnection } from '../hooks/useDeviceConnection';
-
-export interface DeviceInfo {
-  uuid: string;
-  hostname: string;
-  url: string;
-  token: string;
-  enabled?: boolean;
-}
+import { useProxyWatch } from 'fanfanlo-deep-watcher';
+import { DeviceConnection } from '../data/main-model-controller';
+import { mainModelController } from '../data/main-model-controller';
+import { NotificationList } from './NotificationList';
 
 interface DeviceCardProps {
-  deviceInfo: DeviceInfo;
-  onDelete?: () => void;
-  onToggleEnabled?: (enabled: boolean) => void;
+  connection: DeviceConnection;
 }
 
-/**
- * 设备卡片组件
- * 显示单个安卓设备的信息、连接状态和操作按钮
- *
- * @example
- * ```tsx
- * <DeviceCard
- *   deviceInfo={{
- *     uuid: 'android-xxx',
- *     hostname: 'Pixel 6',
- *     url: 'ws://192.168.1.101:6001',
- *     token: 'abc123',
- *   }}
- *   onDelete={() => console.log('Delete clicked')}
- * />
- * ```
- */
-export function DeviceCard({ deviceInfo, onDelete, onToggleEnabled }: DeviceCardProps) {
-  console.log('[DeviceCard] ===== Component rendering =====');
-  console.log('[DeviceCard] Device UUID:', deviceInfo.uuid);
-  console.log('[DeviceCard] Device hostname:', deviceInfo.hostname);
-  console.log('[DeviceCard] Device URL:', deviceInfo.url);
-  console.log('[DeviceCard] Device enabled:', deviceInfo.enabled);
-  console.log('[DeviceCard] Will auto-connect:', deviceInfo.enabled !== false);
-
-  const { connected, error, connect, disconnect } = useDeviceConnection({
-    url: deviceInfo.url,
-    token: deviceInfo.token,
-    autoConnect: deviceInfo.enabled !== false,
-  });
-
-  console.log('[DeviceCard] After useDeviceConnection - connected:', connected);
-  console.log('[DeviceCard] After useDeviceConnection - error:', error);
-
-  const handleConnect = async () => {
-    try {
-      await connect();
-      if (onToggleEnabled) {
-        onToggleEnabled(true);
-      }
-    } catch (err) {
-      console.error('Failed to connect:', err);
-    }
-  };
-
-  const handleDisconnect = () => {
-    disconnect();
-    if (onToggleEnabled) {
-      onToggleEnabled(false);
-    }
-  };
+export function DeviceCard({ connection }: DeviceCardProps) {
+  const [state] = useProxyWatch(connection, 'state', connection.state);
+  const [notifications] = useProxyWatch(
+    connection,
+    'notifications',
+    connection.notifications
+  );
+  const [errorMessage] = useProxyWatch(
+    connection,
+    'errorMessage',
+    connection.errorMessage
+  );
 
   return (
     <div className="device-card" style={styles.card}>
-      {/* 设备头部 */}
       <div className="device-header" style={styles.header}>
         <div style={styles.headerLeft}>
-          <h3 style={styles.hostname}>{deviceInfo.hostname}</h3>
-          <span style={styles.uuid}>{deviceInfo.uuid}</span>
+          <h3 style={styles.hostname}>{connection.device.hostname}</h3>
+          <span style={styles.uuid}>{connection.device.uuid}</span>
         </div>
         <div style={styles.headerRight}>
           <span
-            className={`status ${connected ? 'connected' : 'disconnected'}`}
+            className={`status ${state}`}
             style={{
               ...styles.status,
-              ...(connected ? styles.statusConnected : styles.statusDisconnected),
+              ...(state === 'connected' ? styles.statusConnected : styles.statusDisconnected),
             }}
           >
-            {connected ? '● 已连接' : '○ 未连接'}
+            {state === 'connected' ? '● 已连接' : '○ 未连接'}
           </span>
         </div>
       </div>
 
-      {/* 设备信息 */}
       <div className="device-info" style={styles.info}>
         <div style={styles.infoItem}>
           <span style={styles.infoLabel}>地址:</span>
-          <span style={styles.infoValue}>{deviceInfo.url}</span>
+          <span style={styles.infoValue}>{connection.device.url}</span>
         </div>
       </div>
 
-      {/* 错误信息 */}
-      {error && (
-        <div className="error" style={styles.error}>
-          ⚠️ {error}
+      {errorMessage && state === 'disconnected' && (
+        <div style={styles.errorBanner}>
+          <span style={styles.errorIcon}>⚠️</span>
+          <div style={styles.errorContent}>
+            <div style={styles.errorTitle}>连接失败</div>
+            <div style={styles.errorText}>{errorMessage}</div>
+          </div>
         </div>
       )}
 
-      {/* 操作按钮 */}
-      <div className="device-actions" style={styles.actions}>
-        {connected ? (
-          <button onClick={handleDisconnect} style={styles.buttonSecondary}>
-            断开连接
-          </button>
-        ) : (
-          <button onClick={handleConnect} style={styles.buttonPrimary}>
-            连接
-          </button>
-        )}
-        <button onClick={onDelete} style={styles.buttonDanger}>
+      <div style={styles.actions}>
+        <button
+          onClick={() => {
+            if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
+              mainModelController.removeDevice(connection.device.uuid);
+            }
+          }}
+          style={styles.deleteButton}
+        >
           删除设备
         </button>
       </div>
 
-      {/* TODO: 添加通知列表 */}
-      {/* {connected && <NotificationList deviceUuid={deviceInfo.uuid} />} */}
+      <NotificationList
+        notifications={notifications}
+        deviceUuid={connection.device.uuid}
+      />
     </div>
   );
 }
 
-// 简单的内联样式（后续可以改为 CSS 模块或 Tailwind）
 const styles: Record<string, React.CSSProperties> = {
   card: {
     border: '1px solid #e0e0e0',
     borderRadius: '8px',
     padding: '16px',
-    marginBottom: '16px',
     backgroundColor: '#fff',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
@@ -191,46 +142,46 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'monospace',
     color: '#333',
   },
-  error: {
-    padding: '8px 12px',
-    marginBottom: '12px',
-    backgroundColor: '#fff3e0',
-    color: '#e65100',
-    borderRadius: '4px',
-    fontSize: '14px',
-  },
   actions: {
+    marginBottom: '12px',
     display: 'flex',
     gap: '8px',
   },
-  buttonPrimary: {
-    padding: '8px 16px',
-    backgroundColor: '#1976d2',
-    color: '#fff',
+  deleteButton: {
+    padding: '6px 12px',
+    backgroundColor: '#dc3545',
+    color: 'white',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
     fontSize: '14px',
-    fontWeight: 500,
   },
-  buttonSecondary: {
-    padding: '8px 16px',
-    backgroundColor: '#757575',
-    color: '#fff',
-    border: 'none',
+  errorBanner: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    padding: '12px',
+    backgroundColor: '#fff3cd',
+    border: '1px solid #ffc107',
     borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: 500,
+    marginBottom: '12px',
+    gap: '8px',
   },
-  buttonDanger: {
-    padding: '8px 16px',
-    backgroundColor: '#d32f2f',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
+  errorIcon: {
+    fontSize: '20px',
+    flexShrink: 0,
+  },
+  errorContent: {
+    flex: 1,
+  },
+  errorTitle: {
+    fontWeight: 600,
     fontSize: '14px',
-    fontWeight: 500,
+    color: '#856404',
+    marginBottom: '4px',
+  },
+  errorText: {
+    fontSize: '13px',
+    color: '#856404',
+    lineHeight: '1.4',
   },
 };
