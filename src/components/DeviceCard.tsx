@@ -47,6 +47,17 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           >
             {state === 'connected' ? '● 已连接' : '○ 未连接'}
           </span>
+          <button
+            onClick={() => {
+              if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
+                mainModelController.removeDevice(connection.device.uuid);
+              }
+            }}
+            style={styles.deleteButton}
+            title="删除设备"
+          >
+            🗑️
+          </button>
         </div>
       </div>
 
@@ -67,22 +78,13 @@ export function DeviceCard({ connection }: DeviceCardProps) {
         </div>
       )}
 
-      <div style={styles.actions}>
+      {/* 过滤器按钮 */}
+      <div style={styles.filterButtonContainer}>
         <button
           onClick={() => setShowFilterSettings(!showFilterSettings)}
           style={styles.filterButton}
         >
           {showFilterSettings ? '🔽 隐藏过滤器' : '🔼 显示过滤器'}
-        </button>
-        <button
-          onClick={() => {
-            if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
-              mainModelController.removeDevice(connection.device.uuid);
-            }
-          }}
-          style={styles.deleteButton}
-        >
-          删除设备
         </button>
       </div>
 
@@ -127,6 +129,9 @@ const styles: Record<string, React.CSSProperties> = {
   },
   headerRight: {
     marginLeft: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
   },
   hostname: {
     margin: '0 0 4px 0',
@@ -172,10 +177,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'monospace',
     color: '#333',
   },
-  actions: {
+  filterButtonContainer: {
     marginBottom: '12px',
-    display: 'flex',
-    gap: '8px',
   },
   filterButton: {
     padding: '6px 12px',
@@ -187,13 +190,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '14px',
   },
   deleteButton: {
-    padding: '6px 12px',
+    padding: '4px 8px',
     backgroundColor: '#dc3545',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
-    fontSize: '14px',
+    fontSize: '16px',
   },
   errorBanner: {
     display: 'flex',
