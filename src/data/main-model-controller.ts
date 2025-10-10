@@ -2,7 +2,6 @@
 
 import { toProxy, proxyWatch, watchUpdates } from 'fanfanlo-deep-watcher';
 import { AndroidDeviceInfo } from '../types/deviceStorage';
-import { AndroidWebSocketClient } from '../services/AndroidWebSocketClient';
 import { Notification } from '../types/notification';
 import {
   loadDevices,
@@ -10,7 +9,13 @@ import {
   deleteDevice,
   clearAllDevices as clearStorage
 } from '../utils/deviceStorage';
-import { filterNotifications, isVisibleNotification } from '../utils/notificationFilter';
+import {
+  connectDevice as handleConnect,
+  disconnectDevice as handleDisconnect,
+  disconnectAllDevices
+} from './device-connection-handler';
+import { filterNotifications } from '../utils/notificationFilter';
+import { filterConfigController } from './notification-filter-config';
 
 export enum ConnectionState {
   Connected = 'connected',
@@ -21,24 +26,22 @@ export enum ConnectionState {
 export interface DeviceConnection {
   device: AndroidDeviceInfo;
   state: ConnectionState;
-  notifications: Notification[];
+  allNotifications: Notification[];         // 所有通知 (原始数据)
+  filteredNotifications: Notification[];    // 过滤后的通知 (用于显示)
   errorMessage?: string;
 }
 
 export interface AppData {
-  allDevices: DeviceConnection[];      // 全部设备
-  enabledDevices: DeviceConnection[];  // 启用的设备（自动筛选）
+  allDevices: DeviceConnection[];
+  enabledDevices: DeviceConnection[];
 }
 
-// ========== WebSocket 客户端管理（在 toProxy 之外） ==========
-const clientMap = new Map<string, AndroidWebSocketClient>();
-
-// 加载已保存的设备并转换为 DeviceConnection
 const savedDevices = loadDevices();
 const initialDevices: DeviceConnection[] = savedDevices.map(device => ({
   device,
   state: ConnectionState.Disconnected,
-  notifications: [],
+  allNotifications: [],
+  filteredNotifications: [],
 }));
 
 const data: AppData = toProxy({
@@ -46,251 +49,141 @@ const data: AppData = toProxy({
   enabledDevices: [],
 });
 
-// 监听 allDevices 变化，自动更新 enabledDevices
+// 监听 allDevices 变化,自动更新 enabledDevices
 proxyWatch(data, 'allDevices', () => {
   onAllDevicesUpdate();
 });
 
-watchUpdates(data.allDevices, () =>{
+watchUpdates(data.allDevices, () => {
   onAllDevicesUpdate();
-})
+});
 
-function onAllDevicesUpdate(){
+function onAllDevicesUpdate() {
   data.enabledDevices = data.allDevices.filter(conn => conn.device.enabled !== false);
 }
 
-function updateDeviceEnabled(){
+function updateDeviceEnabled() {
   onAllDevicesUpdate();
 }
 
-// ========== 设备管理方法 ==========
+// ========== 过滤相关 ==========
 
 /**
- * 添加设备
+ * 为单个设备重新计算过滤后的通知列表
  */
+function recomputeFilteredNotifications(connection: DeviceConnection) {
+  connection.filteredNotifications = filterNotifications(connection.allNotifications);
+  console.log(
+    `[mainModelController] Recomputed filtered notifications: ` +
+    `${connection.allNotifications.length} -> ${connection.filteredNotifications.length}`
+  );
+}
+
+/**
+ * 为所有设备重新计算过滤后的通知列表
+ * 当用户修改过滤配置时调用
+ */
+function recomputeAllFilteredNotifications() {
+  console.log('[mainModelController] Recomputing all filtered notifications...');
+  data.allDevices.forEach(conn => {
+    recomputeFilteredNotifications(conn);
+  });
+}
+
+// 监听每个设备的 allNotifications 变化,自动重新计算过滤
+data.allDevices.forEach(conn => {
+  proxyWatch(conn, 'allNotifications', () => {
+    recomputeFilteredNotifications(conn);
+  });
+});
+
+// 监听过滤配置变化,自动重新计算所有设备的过滤
+// 使用 watchUpdates 监听深层变化 (rules 数组内部元素的属性变化)
+watchUpdates(filterConfigController.config.rules, () => {
+  console.log('[mainModelController] Filter config changed, recomputing all...');
+  recomputeAllFilteredNotifications();
+});
+
+// ========== 设备管理方法 ==========
+
 function addDevice(device: AndroidDeviceInfo) {
   console.log('[mainModelController] addDevice:', device.uuid);
 
-  // 检查是否已存在
   const exists = data.allDevices.find(conn => conn.device.uuid === device.uuid);
   if (exists) {
     console.warn('[mainModelController] Device already exists:', device.uuid);
     return;
   }
 
-  // 创建连接对象
   const connection: DeviceConnection = {
     device,
     state: ConnectionState.Disconnected,
-    notifications: [],
+    allNotifications: [],
+    filteredNotifications: [],
   };
 
-  // 添加到列表
   data.allDevices.push(connection);
 
-  // 保存到 LocalStorage
-  saveDevice(device);
+  // 为新设备添加 allNotifications 监听
+  proxyWatch(connection, 'allNotifications', () => {
+    recomputeFilteredNotifications(connection);
+  });
 
+  saveDevice(device);
   console.log('[mainModelController] Device added:', device.uuid);
 }
 
-/**
- * 删除设备
- */
 function removeDevice(uuid: string) {
   console.log('[mainModelController] removeDevice:', uuid);
 
-  // 查找设备
   const index = data.allDevices.findIndex(conn => conn.device.uuid === uuid);
   if (index === -1) {
     console.warn('[mainModelController] Device not found:', uuid);
     return;
   }
 
-  // 先断开连接并删除 client
-  const client = clientMap.get(uuid);
-  if (client) {
-    client.disconnect();
-    clientMap.delete(uuid);
-  }
-
-  // 从列表删除
+  const connection = data.allDevices[index];
+  handleDisconnect(uuid, connection);
   data.allDevices.splice(index, 1);
-
-  // 从 LocalStorage 删除
   deleteDevice(uuid);
 
   console.log('[mainModelController] Device removed:', uuid);
 }
 
-/**
- * 清空所有设备
- */
 function clearAllDevices() {
   console.log('[mainModelController] clearAllDevices');
-
-  // 断开所有连接并清空 clientMap
-  data.allDevices.forEach(conn => {
-    const client = clientMap.get(conn.device.uuid);
-    if (client) {
-      client.disconnect();
-    }
-  });
-  clientMap.clear();
-
-  // 清空列表
+  disconnectAllDevices(data.allDevices);
   data.allDevices.length = 0;
-
-  // 清空 LocalStorage
   clearStorage();
-
   console.log('[mainModelController] All devices cleared');
 }
 
-/**
- * 连接到设备
- */
 function connectDevice(uuid: string) {
   console.log('[mainModelController] connectDevice:', uuid);
 
-  // 查找设备
   const connection = data.allDevices.find(conn => conn.device.uuid === uuid);
   if (!connection) {
     console.warn('[mainModelController] Device not found:', uuid);
     return;
   }
 
-  // 如果已连接，先断开
-  const existingClient = clientMap.get(uuid);
-  if (existingClient) {
-    existingClient.disconnect();
-  }
-
-  // 更新状态为连接中
-  connection.state = ConnectionState.Connecting;
-
-  // 创建 WebSocket 客户端
-  const client = new AndroidWebSocketClient(connection.device.url);
-
-  // 设置回调
-  client.onConnectionChange(async (connected) => {
-    console.log('[mainModelController] Connection state changed:', uuid, connected);
-
-    if (connected) {
-      // 连接成功，尝试登录
-      console.log('[mainModelController] Connection established, attempting login...');
-
-      try {
-        // 获取 token
-        const token = connection.device.token;
-        if (!token) {
-          console.error('[mainModelController] No token available for device:', uuid);
-          connection.errorMessage = '登录失败: 缺少授权 token';
-          connection.state = ConnectionState.Disconnected;
-          client.disconnect();
-          return;
-        }
-
-        console.log('[mainModelController] Logging in with token...');
-        await client.login(token);
-
-        console.log('[mainModelController] Login successful for device:', uuid);
-        connection.state = ConnectionState.Connected;
-        connection.errorMessage = undefined;
-
-      } catch (error) {
-        console.error('[mainModelController] Login failed:', error);
-        connection.errorMessage = `登录失败: ${error}`;
-        connection.state = ConnectionState.Disconnected;
-        // 登录失败，断开连接
-        client.disconnect();
-      }
-    } else {
-      // 连接断开
-      connection.state = ConnectionState.Disconnected;
-    }
-  });
-
-  client.onError((error) => {
-    console.error('[mainModelController] WebSocket error:', uuid, error);
-    connection.state = ConnectionState.Disconnected;
-    connection.errorMessage = error;
-  });
-
-  client.onMessage((message) => {
-    console.log('[mainModelController] WebSocket message:', uuid, message);
-
-    // 处理初始通知列表（连接成功后同步）
-    if (message.type === 'initial' && Array.isArray(message.data)) {
-      console.log('[mainModelController] Received initial notifications:', message.data.length);
-
-      // 过滤通知列表
-      const filteredNotifications = filterNotifications(message.data);
-
-      // 替换整个通知列表
-      connection.notifications = filteredNotifications;
-      console.log('[mainModelController] Synced', filteredNotifications.length, 'notifications (filtered from', message.data.length, ') for device:', uuid);
-      return;
-    }
-
-    // 处理单条新通知（实时推送）
-    if (message.type === 'notification' && message.notification) {
-      console.log('[mainModelController] Received new notification:', message.notification.id);
-
-      // 过滤通知
-      if (isVisibleNotification(message.notification)) {
-        connection.notifications.push(message.notification);
-        console.log('[mainModelController] Added notification, total:', connection.notifications.length);
-      } else {
-        console.log('[mainModelController] Notification filtered out:', message.notification.id);
-      }
-      return;
-    }
-
-    // 其他消息类型
-    console.log('[mainModelController] Unknown message type:', message.type);
-  });
-
-  // 保存客户端到 Map
-  clientMap.set(uuid, client);
-
-  // 连接
-  client.connect();
-
-  console.log('[mainModelController] Connecting to device:', uuid);
+  handleConnect(connection, uuid);
 }
 
-/**
- * 断开设备连接
- */
 function disconnectDevice(uuid: string) {
   console.log('[mainModelController] disconnectDevice:', uuid);
 
-  // 查找设备
   const connection = data.allDevices.find(conn => conn.device.uuid === uuid);
   if (!connection) {
     console.warn('[mainModelController] Device not found:', uuid);
     return;
   }
 
-  // 断开连接并删除 client
-  const client = clientMap.get(uuid);
-  if (client) {
-    client.disconnect();
-    clientMap.delete(uuid);
-  }
-
-  // 更新状态
-  connection.state = ConnectionState.Disconnected;
-
-  console.log('[mainModelController] Device disconnected:', uuid);
+  handleDisconnect(uuid, connection);
 }
 
 // ========== 自动连接启用的设备 ==========
 
-/**
- * 初始化时自动连接所有启用的设备
- */
 function initAutoConnect() {
   console.log('[mainModelController] initAutoConnect: Checking enabled devices...');
   console.log('[mainModelController] Total devices:', data.allDevices.length);
@@ -309,7 +202,6 @@ function initAutoConnect() {
   console.log('[mainModelController] Auto-connect initiated for', data.enabledDevices.length, 'devices');
 }
 
-// 延迟执行，确保 enabledDevices 已通过 watcher 更新
 setTimeout(() => {
   console.log('[mainModelController] Running initAutoConnect after delay...');
   initAutoConnect();
@@ -323,4 +215,5 @@ export const mainModelController = {
   clearAllDevices,
   connectDevice,
   disconnectDevice,
+  recomputeAllFilteredNotifications,
 };

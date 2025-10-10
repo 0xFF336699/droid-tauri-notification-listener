@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useProxyWatch } from 'fanfanlo-deep-watcher';
 import { DeviceConnection } from '../data/main-model-controller';
 import { mainModelController } from '../data/main-model-controller';
 import { NotificationList } from './NotificationList';
+import { FilterSettings } from './FilterSettings';
 
 interface DeviceCardProps {
   connection: DeviceConnection;
@@ -9,16 +11,24 @@ interface DeviceCardProps {
 
 export function DeviceCard({ connection }: DeviceCardProps) {
   const [state] = useProxyWatch(connection, 'state', connection.state);
-  const [notifications] = useProxyWatch(
+  const [filteredNotifications] = useProxyWatch(
     connection,
-    'notifications',
-    connection.notifications
+    'filteredNotifications',
+    connection.filteredNotifications
+  );
+  const [allNotifications] = useProxyWatch(
+    connection,
+    'allNotifications',
+    connection.allNotifications
   );
   const [errorMessage] = useProxyWatch(
     connection,
     'errorMessage',
     connection.errorMessage
   );
+
+  // 控制过滤器面板的显示/隐藏
+  const [showFilterSettings, setShowFilterSettings] = useState(false);
 
   return (
     <div className="device-card" style={styles.card}>
@@ -59,6 +69,12 @@ export function DeviceCard({ connection }: DeviceCardProps) {
 
       <div style={styles.actions}>
         <button
+          onClick={() => setShowFilterSettings(!showFilterSettings)}
+          style={styles.filterButton}
+        >
+          {showFilterSettings ? '🔽 隐藏过滤器' : '🔼 显示过滤器'}
+        </button>
+        <button
           onClick={() => {
             if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
               mainModelController.removeDevice(connection.device.uuid);
@@ -70,10 +86,24 @@ export function DeviceCard({ connection }: DeviceCardProps) {
         </button>
       </div>
 
+      {/* 过滤器设置面板 */}
+      {showFilterSettings && (
+        <div style={{ marginBottom: '12px' }}>
+          <FilterSettings />
+        </div>
+      )}
+
       <NotificationList
-        notifications={notifications}
+        notifications={filteredNotifications}
         deviceUuid={connection.device.uuid}
       />
+
+      {/* 调试信息 - 显示过滤统计 */}
+      {allNotifications.length > 0 && (
+        <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#f0f7ff', borderRadius: '4px', fontSize: '12px', color: '#666' }}>
+          <span>显示 {filteredNotifications.length} / {allNotifications.length} 条通知</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -146,6 +176,15 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '12px',
     display: 'flex',
     gap: '8px',
+  },
+  filterButton: {
+    padding: '6px 12px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
   },
   deleteButton: {
     padding: '6px 12px',

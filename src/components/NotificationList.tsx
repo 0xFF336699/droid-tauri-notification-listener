@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { filterConfigController } from '../data/notification-filter-config';
 
 export interface Notification {
   id: string;
@@ -134,6 +135,45 @@ function NotificationItem({
   onDelete,
   formatTimestamp,
 }: NotificationItemProps) {
+  // 展开/折叠状态
+  const [expanded, setExpanded] = useState(false);
+
+  // 兼容两种命名方式
+  const packageName = notification.packageName || notification.package_name;
+  const timestamp = notification.postTime || notification.posted_at || notification.updated_at;
+
+  // 添加到黑名单
+  function handleAddToBlacklist() {
+    if (!packageName) return;
+
+    if (!window.confirm(`确定要将 "${packageName}" 添加到黑名单吗？\n\n该应用的所有通知将被过滤。`)) {
+      return;
+    }
+
+    // 先禁用白名单
+    filterConfigController.setRuleEnabled('package-whitelist', false);
+    // 启用黑名单
+    filterConfigController.setRuleEnabled('package-blacklist', true);
+    // 添加包名
+    filterConfigController.addPackagePattern('package-blacklist', packageName);
+  }
+
+  // 添加到白名单
+  function handleAddToWhitelist() {
+    if (!packageName) return;
+
+    if (!window.confirm(`确定要将 "${packageName}" 添加到白名单吗？\n\n将只显示该应用的通知,其他应用的通知将被过滤。`)) {
+      return;
+    }
+
+    // 先禁用黑名单
+    filterConfigController.setRuleEnabled('package-blacklist', false);
+    // 启用白名单
+    filterConfigController.setRuleEnabled('package-whitelist', true);
+    // 添加包名
+    filterConfigController.addPackagePattern('package-whitelist', packageName);
+  }
+
   return (
     <div
       className={`notification-item ${notification.read ? 'read' : 'unread'}`}
@@ -149,17 +189,20 @@ function NotificationItem({
           onChange={(e) => onSelect(notification.id, e.target.checked)}
           style={styles.checkbox}
         />
-        <div style={styles.itemInfo}>
+        <div style={styles.itemInfo} onClick={() => setExpanded(!expanded)}>
           <div style={styles.itemTitle}>
             {!notification.read && <span style={styles.unreadDot}>●</span>}
             <h4 style={styles.title}>{notification.title || '无标题'}</h4>
+            <span style={styles.expandIcon}>{expanded ? '▼' : '▶'}</span>
           </div>
-          <div style={styles.itemMeta}>
-            <span style={styles.packageName}>{notification.package_name}</span>
-            <span style={styles.timestamp}>
-              {formatTimestamp(notification.posted_at || notification.updated_at)}
-            </span>
-          </div>
+          {!expanded && (
+            <div style={styles.itemMeta}>
+              <span style={styles.packageName}>{packageName}</span>
+              <span style={styles.timestamp}>
+                {formatTimestamp(timestamp)}
+              </span>
+            </div>
+          )}
         </div>
         <button
           onClick={() => onDelete(notification.id)}
@@ -169,9 +212,50 @@ function NotificationItem({
           ✕
         </button>
       </div>
-      {notification.text && (
-        <div style={styles.itemText}>
-          <p style={styles.text}>{notification.text}</p>
+
+      {/* 展开后显示的详细信息 */}
+      {expanded && (
+        <div style={styles.itemDetails}>
+          {notification.text && (
+            <div style={styles.itemText}>
+              <div style={styles.detailLabel}>内容:</div>
+              <p style={styles.text}>{notification.text}</p>
+            </div>
+          )}
+          <div style={styles.itemMeta}>
+            <div style={styles.metaRow}>
+              <span style={styles.detailLabel}>包名:</span>
+              <span style={styles.packageName}>{packageName || '未知'}</span>
+              {packageName && (
+                <div style={styles.filterButtons}>
+                  <button
+                    onClick={handleAddToBlacklist}
+                    style={styles.blacklistButton}
+                    title="加入黑名单"
+                  >
+                    加入黑名单
+                  </button>
+                  <button
+                    onClick={handleAddToWhitelist}
+                    style={styles.whitelistButton}
+                    title="加入白名单"
+                  >
+                    加入白名单
+                  </button>
+                </div>
+              )}
+            </div>
+            <div style={styles.metaRow}>
+              <span style={styles.detailLabel}>时间:</span>
+              <span style={styles.timestamp}>
+                {formatTimestamp(timestamp)}
+              </span>
+            </div>
+            <div style={styles.metaRow}>
+              <span style={styles.detailLabel}>ID:</span>
+              <span style={styles.monospace}>{notification.id}</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -247,12 +331,18 @@ const styles: Record<string, React.CSSProperties> = {
   },
   itemInfo: {
     flex: 1,
+    cursor: 'pointer',
   },
   itemTitle: {
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
     marginBottom: '4px',
+  },
+  expandIcon: {
+    fontSize: '10px',
+    color: '#999',
+    marginLeft: 'auto',
   },
   unreadDot: {
     color: '#1976d2',
@@ -283,12 +373,61 @@ const styles: Record<string, React.CSSProperties> = {
   },
   itemText: {
     marginTop: '8px',
-    marginLeft: '28px', // 对齐到 checkbox 之后
+    marginBottom: '8px',
   },
   text: {
     margin: 0,
     fontSize: '14px',
     color: '#333',
     lineHeight: 1.5,
+  },
+  itemDetails: {
+    marginTop: '12px',
+    paddingTop: '12px',
+    borderTop: '1px solid #e0e0e0',
+    marginLeft: '28px',
+  },
+  detailLabel: {
+    fontSize: '12px',
+    fontWeight: 600,
+    color: '#666',
+    marginRight: '8px',
+  },
+  metaRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginBottom: '8px',
+    flexWrap: 'wrap',
+  },
+  monospace: {
+    fontFamily: 'monospace',
+    fontSize: '12px',
+    color: '#666',
+  },
+  filterButtons: {
+    display: 'flex',
+    gap: '8px',
+    marginLeft: '8px',
+  },
+  blacklistButton: {
+    padding: '4px 10px',
+    backgroundColor: '#dc3545',
+    color: 'white',
+    border: 'none',
+    borderRadius: '3px',
+    cursor: 'pointer',
+    fontSize: '12px',
+    fontWeight: 500,
+  },
+  whitelistButton: {
+    padding: '4px 10px',
+    backgroundColor: '#28a745',
+    color: 'white',
+    border: 'none',
+    borderRadius: '3px',
+    cursor: 'pointer',
+    fontSize: '12px',
+    fontWeight: 500,
   },
 };
