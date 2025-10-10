@@ -10,6 +10,7 @@ import {
   deleteDevice,
   clearAllDevices as clearStorage
 } from '../utils/deviceStorage';
+import { filterNotifications, isVisibleNotification } from '../utils/notificationFilter';
 
 export enum ConnectionState {
   Connected = 'connected',
@@ -172,13 +173,41 @@ function connectDevice(uuid: string) {
   const client = new AndroidWebSocketClient(connection.device.url);
 
   // 设置回调
-  client.onConnectionChange((connected) => {
+  client.onConnectionChange(async (connected) => {
     console.log('[mainModelController] Connection state changed:', uuid, connected);
-    connection.state = connected ? ConnectionState.Connected : ConnectionState.Disconnected;
 
-    // 连接成功时清除错误信息
     if (connected) {
-      connection.errorMessage = undefined;
+      // 连接成功，尝试登录
+      console.log('[mainModelController] Connection established, attempting login...');
+
+      try {
+        // 获取 token
+        const token = connection.device.token;
+        if (!token) {
+          console.error('[mainModelController] No token available for device:', uuid);
+          connection.errorMessage = '登录失败: 缺少授权 token';
+          connection.state = ConnectionState.Disconnected;
+          client.disconnect();
+          return;
+        }
+
+        console.log('[mainModelController] Logging in with token...');
+        await client.login(token);
+
+        console.log('[mainModelController] Login successful for device:', uuid);
+        connection.state = ConnectionState.Connected;
+        connection.errorMessage = undefined;
+
+      } catch (error) {
+        console.error('[mainModelController] Login failed:', error);
+        connection.errorMessage = `登录失败: ${error}`;
+        connection.state = ConnectionState.Disconnected;
+        // 登录失败，断开连接
+        client.disconnect();
+      }
+    } else {
+      // 连接断开
+      connection.state = ConnectionState.Disconnected;
     }
   });
 
@@ -191,10 +220,35 @@ function connectDevice(uuid: string) {
   client.onMessage((message) => {
     console.log('[mainModelController] WebSocket message:', uuid, message);
 
-    // 添加通知到列表
-    if (message.type === 'notification' && message.notification) {
-      connection.notifications.push(message.notification);
+    // 处理初始通知列表（连接成功后同步）
+    if (message.type === 'initial' && Array.isArray(message.data)) {
+      console.log('[mainModelController] Received initial notifications:', message.data.length);
+
+      // 过滤通知列表
+      const filteredNotifications = filterNotifications(message.data);
+
+      // 替换整个通知列表
+      connection.notifications = filteredNotifications;
+      console.log('[mainModelController] Synced', filteredNotifications.length, 'notifications (filtered from', message.data.length, ') for device:', uuid);
+      return;
     }
+
+    // 处理单条新通知（实时推送）
+    if (message.type === 'notification' && message.notification) {
+      console.log('[mainModelController] Received new notification:', message.notification.id);
+
+      // 过滤通知
+      if (isVisibleNotification(message.notification)) {
+        connection.notifications.push(message.notification);
+        console.log('[mainModelController] Added notification, total:', connection.notifications.length);
+      } else {
+        console.log('[mainModelController] Notification filtered out:', message.notification.id);
+      }
+      return;
+    }
+
+    // 其他消息类型
+    console.log('[mainModelController] Unknown message type:', message.type);
   });
 
   // 保存客户端到 Map
