@@ -11,6 +11,7 @@ export class AndroidWebSocketClient {
   private maxReconnectAttempts = 10;
   private reconnectDelay = 3000; // 初始延迟 3 秒
   private maxReconnectDelay = 30000; // 最大延迟 30 秒
+  private isManuallyDisconnected = false; // 是否手动断开连接
 
   // 事件回调
   private messageHandler: ((data: any) => void) | null = null;
@@ -101,6 +102,9 @@ export class AndroidWebSocketClient {
    */
   disconnect(): void {
     console.log('[AndroidWebSocketClient] Disconnecting...');
+
+    // 标记为手动断开
+    this.isManuallyDisconnected = true;
 
     // 停止重连
     if (this.reconnectTimer) {
@@ -277,9 +281,15 @@ export class AndroidWebSocketClient {
    * 处理重连逻辑
    */
   private handleReconnect(): void {
+    // 如果是手动断开，不自动重连
+    if (this.isManuallyDisconnected) {
+      console.log('[AndroidWebSocketClient] Manual disconnect, skipping reconnect');
+      return;
+    }
+
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
       console.error('[AndroidWebSocketClient] Max reconnect attempts reached');
-      this.notifyError('Failed to reconnect after maximum attempts');
+      this.notifyError('connection-failed-max-attempts');
       return;
     }
 
@@ -372,5 +382,91 @@ export class AndroidWebSocketClient {
    */
   setToken(token: string): void {
     this.token = token;
+  }
+
+  /**
+   * 手动重连（重置计数器）
+   */
+  async manualReconnect(): Promise<void> {
+    console.log('[AndroidWebSocketClient] Manual reconnect requested');
+
+    // 重置状态
+    this.reconnectAttempts = 0;
+    this.isManuallyDisconnected = false;
+
+    // 清理现有连接
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+
+    if (this.ws) {
+      this.ws.close();
+      this.ws = null;
+    }
+
+    // 发起连接
+    try {
+      await this.connect();
+
+      // 如果有 token，自动登录
+      if (this.token) {
+        await this.login();
+      }
+
+      console.log('[AndroidWebSocketClient] Manual reconnect successful');
+    } catch (error) {
+      console.error('[AndroidWebSocketClient] Manual reconnect failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 检查是否正在重连
+   */
+  isReconnecting(): boolean {
+    return this.reconnectTimer !== null;
+  }
+
+  /**
+   * 检查连接状态并主动连接
+   * 用于窗口激活时检测连接
+   */
+  async checkAndConnect(): Promise<void> {
+    console.log('[AndroidWebSocketClient] Checking connection status');
+
+    // 1. 如果已连接，无需操作
+    if (this.isConnected()) {
+      console.log('[AndroidWebSocketClient] Already connected, skipping');
+      return;
+    }
+
+    // 2. 如果正在重连，无需操作
+    if (this.isReconnecting()) {
+      console.log('[AndroidWebSocketClient] Already reconnecting, skipping');
+      return;
+    }
+
+    // 3. 如果是手动断开，无需操作
+    if (this.isManuallyDisconnected) {
+      console.log('[AndroidWebSocketClient] Manually disconnected, skipping');
+      return;
+    }
+
+    // 4. 发起连接
+    console.log('[AndroidWebSocketClient] Not connected and not reconnecting, initiating connection');
+    try {
+      await this.connect();
+
+      // 如果有 token，自动登录
+      if (this.token) {
+        await this.login();
+      }
+
+      console.log('[AndroidWebSocketClient] Connection established successfully');
+    } catch (error) {
+      console.error('[AndroidWebSocketClient] Failed to establish connection:', error);
+      // 失败后会触发 onclose，开始重连逻辑
+    }
   }
 }

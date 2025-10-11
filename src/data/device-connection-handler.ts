@@ -48,6 +48,50 @@ export function connectDevice(connection: DeviceConnection, uuid: string) {
 }
 
 /**
+ * 手动重连设备
+ */
+export async function manualReconnectDevice(connection: DeviceConnection, uuid: string) {
+  console.log('[DeviceConnectionHandler] manualReconnectDevice:', uuid);
+
+  const client = clientMap.get(uuid);
+  if (!client) {
+    console.log('[DeviceConnectionHandler] No existing client, creating new connection');
+    connectDevice(connection, uuid);
+    return;
+  }
+
+  // 更新状态为连接中
+  connection.state = ConnectionState.Connecting;
+  connection.errorMessage = undefined;
+
+  try {
+    console.log('[DeviceConnectionHandler] Calling client.manualReconnect()');
+    await client.manualReconnect();
+
+    // 登录
+    const token = connection.device.token;
+    if (!token) {
+      console.error('[DeviceConnectionHandler] No token available for device:', uuid);
+      connection.errorMessage = '登录失败: 缺少授权 token';
+      connection.state = ConnectionState.Disconnected;
+      return;
+    }
+
+    console.log('[DeviceConnectionHandler] Logging in after manual reconnect...');
+    await client.login(token);
+
+    console.log('[DeviceConnectionHandler] Manual reconnect successful for device:', uuid);
+    connection.state = ConnectionState.Connected;
+    connection.errorMessage = undefined;
+
+  } catch (error) {
+    console.error('[DeviceConnectionHandler] Manual reconnect failed:', error);
+    connection.errorMessage = `重连失败: ${error}`;
+    connection.state = ConnectionState.Disconnected;
+  }
+}
+
+/**
  * 断开设备连接
  */
 export function disconnectDevice(uuid: string, connection: DeviceConnection) {

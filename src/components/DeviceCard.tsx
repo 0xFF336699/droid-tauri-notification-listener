@@ -4,6 +4,7 @@ import { DeviceConnection } from '../data/main-model-controller';
 import { mainModelController } from '../data/main-model-controller';
 import { NotificationList } from './NotificationList';
 import { FilterSettings } from './FilterSettings';
+import { manualReconnectDevice } from '../data/device-connection-handler';
 
 interface DeviceCardProps {
   connection: DeviceConnection;
@@ -75,6 +76,16 @@ export function DeviceCard({ connection }: DeviceCardProps) {
             <div style={styles.errorTitle}>连接失败</div>
             <div style={styles.errorText}>{errorMessage}</div>
           </div>
+          <button
+            onClick={async () => {
+              console.log('[DeviceCard] Manual reconnect button clicked');
+              await manualReconnectDevice(connection, connection.device.uuid);
+            }}
+            style={styles.reconnectButton}
+            title="手动重连"
+          >
+            🔄 重连
+          </button>
         </div>
       )}
 
@@ -225,5 +236,17 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '13px',
     color: '#856404',
     lineHeight: '1.4',
+  },
+  reconnectButton: {
+    padding: '6px 12px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: 500,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
   },
 };
