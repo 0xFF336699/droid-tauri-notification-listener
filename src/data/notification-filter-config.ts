@@ -26,6 +26,30 @@ const STORAGE_KEY = 'notification-filter-config';
 
 const DEFAULT_RULES: FilterRule[] = [
   {
+    id: 'ongoing-notification',
+    name: '常驻通知',
+    description: '过滤常驻通知 (FLAG_ONGOING_EVENT)',
+    enabled: true
+  },
+  {
+    id: 'system-notification',
+    name: '系统通知',
+    description: '过滤 Android 系统通知 (android, com.android.*)',
+    enabled: true
+  },
+  {
+    id: 'empty-content',
+    name: '无内容通知',
+    description: '过滤标题和内容都为空的通知',
+    enabled: true
+  },
+  {
+    id: 'low-priority',
+    name: '低优先级通知',
+    description: '过滤低优先级和低重要性的通知',
+    enabled: true
+  },
+  {
     id: 'foreground-service',
     name: '前台服务通知',
     description: '过滤 channelId 包含 "foreground" 的通知',

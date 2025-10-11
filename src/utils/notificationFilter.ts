@@ -52,6 +52,45 @@ export function isVisibleNotification(notification: any): boolean {
     return false;
   }
 
+  // 1. 过滤常驻通知 (FLAG_ONGOING_EVENT)
+  if (filterConfigController.isRuleEnabled('ongoing-notification')) {
+    const flags = notification.flags || 0;
+    const FLAG_ONGOING_EVENT = 0x00000002; // Android Notification.FLAG_ONGOING_EVENT
+    if ((flags & FLAG_ONGOING_EVENT) !== 0) {
+      return false;
+    }
+  }
+
+  // 2. 过滤系统通知
+  if (filterConfigController.isRuleEnabled('system-notification')) {
+    const packageName = notification.packageName || notification.package_name || '';
+    if (packageName === 'android' || packageName.startsWith('com.android.')) {
+      return false;
+    }
+  }
+
+  // 3. 过滤无内容通知
+  if (filterConfigController.isRuleEnabled('empty-content')) {
+    const title = (notification.title || '').trim();
+    const text = (notification.text || '').trim();
+    if (!title && !text) {
+      return false;
+    }
+  }
+
+  // 4. 过滤低优先级通知
+  if (filterConfigController.isRuleEnabled('low-priority')) {
+    // Android priority: -2 (MIN), -1 (LOW), 0 (DEFAULT), 1 (HIGH), 2 (MAX)
+    const priority = notification.priority ?? 0;
+    // Android importance: 0 (NONE), 1 (MIN), 2 (LOW), 3 (DEFAULT), 4 (HIGH), 5 (MAX)
+    const importance = notification.importance ?? 3;
+
+    // 过滤优先级 < 0 或重要性 < 3 的通知
+    if (priority < 0 || importance < 3) {
+      return false;
+    }
+  }
+
   if (filterConfigController.isRuleEnabled('foreground-service')) {
     const channelId = notification.channelId || '';
     if (channelId.toLowerCase().includes('foreground') ||
