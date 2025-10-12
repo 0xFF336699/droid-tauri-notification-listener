@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
 import { filterConfigController } from '../data/notification-filter-config';
-
-export interface Notification {
-  id: string;
-  packageName?: string;
-  title?: string;
-  text?: string;
-  read: boolean;
-  postTime?: number;
-  updated_at?: number;
-}
+import type { Notification, NotificationMessageItem } from '../types/notification';
 
 interface NotificationListProps {
   notifications?: Notification[];
@@ -130,8 +121,8 @@ interface NotificationItemProps {
 
 function NotificationItem({
   notification,
-  selected,
-  onSelect,
+  // selected,
+  // onSelect,
   onDelete,
   formatTimestamp,
 }: NotificationItemProps) {
@@ -173,6 +164,58 @@ function NotificationItem({
     filterConfigController.addPackagePattern('package-whitelist', packageName);
   }
 
+  // 渲染单个字段行
+  const renderField = (label: string, value: any) => {
+    if (value === undefined || value === null || value === '') return null;
+
+    return (
+      <div style={styles.metaRow} key={label}>
+        <span style={styles.detailLabel}>{label}:</span>
+        <span style={styles.fieldValue}>{String(value)}</span>
+      </div>
+    );
+  };
+
+  // 渲染数组字段
+  const renderArrayField = (label: string, items: any[] | undefined) => {
+    if (!items || items.length === 0) return null;
+
+    return (
+      <div style={styles.metaRow} key={label}>
+        <span style={styles.detailLabel}>{label}:</span>
+        <div style={styles.arrayContainer}>
+          {items.map((item, index) => (
+            <div key={index} style={styles.arrayItem}>
+              • {String(item)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // 渲染消息列表
+  const renderMessages = (messages: NotificationMessageItem[] | undefined) => {
+    if (!messages || messages.length === 0) return null;
+
+    return (
+      <div style={styles.metaRow} key="messages">
+        <span style={styles.detailLabel}>消息列表:</span>
+        <div style={styles.arrayContainer}>
+          {messages.map((msg, index) => (
+            <div key={index} style={styles.messageItem}>
+              <div style={styles.messageSender}>{msg.sender || '未知发送者'}</div>
+              <div style={styles.messageText}>{msg.text}</div>
+              {msg.timestamp && (
+                <div style={styles.messageTime}>{formatTimestamp(msg.timestamp)}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       className={`notification-item ${notification.read ? 'read' : 'unread'}`}
@@ -182,12 +225,12 @@ function NotificationItem({
       }}
     >
       <div style={styles.itemHeader}>
-        <input
+        {/* <input
           type="checkbox"
           checked={selected}
           onChange={(e) => onSelect(notification.id, e.target.checked)}
           style={styles.checkbox}
-        />
+        /> */}
         <div style={styles.itemInfo} onClick={() => setExpanded(!expanded)}>
           <div style={styles.itemTitle}>
             {!notification.read && <span style={styles.unreadDot}>●</span>}
@@ -195,12 +238,18 @@ function NotificationItem({
             <span style={styles.expandIcon}>{expanded ? '▼' : '▶'}</span>
           </div>
           {!expanded && (
-            <div style={styles.itemMeta}>
-              <span style={styles.packageName}>{packageName}</span>
-              <span style={styles.timestamp}>
-                {formatTimestamp(timestamp)}
-              </span>
-            </div>
+            <>
+              {notification.text && (
+                <div style={styles.itemTextPreview}>
+                  {notification.text}
+                </div>
+              )}
+              <div style={styles.itemMeta}>
+                <span style={styles.timestamp}>
+                  {formatTimestamp(timestamp)}
+                </span>
+              </div>
+            </>
           )}
         </div>
         <button
@@ -215,13 +264,33 @@ function NotificationItem({
       {/* 展开后显示的详细信息 */}
       {expanded && (
         <div style={styles.itemDetails}>
-          {notification.text && (
-            <div style={styles.itemText}>
-              <div style={styles.detailLabel}>内容:</div>
-              <p style={styles.text}>{notification.text}</p>
-            </div>
+          {/* === 文本内容区 === */}
+          {(notification.text || notification.subText || notification.summaryText || notification.bigText || notification.textLines) && (
+            <>
+              <div style={styles.sectionTitle}>文本内容</div>
+              <div style={styles.itemMetaExpanded}>
+                {notification.text && (
+                  <div style={styles.metaRow}>
+                    <span style={styles.detailLabel}>内容:</span>
+                    <p style={styles.text}>{notification.text}</p>
+                  </div>
+                )}
+                {renderField('子文本', notification.subText)}
+                {renderField('摘要', notification.summaryText)}
+                {notification.bigText && (
+                  <div style={styles.metaRow}>
+                    <span style={styles.detailLabel}>大文本:</span>
+                    <p style={styles.text}>{notification.bigText}</p>
+                  </div>
+                )}
+                {renderArrayField('多行文本', notification.textLines)}
+              </div>
+            </>
           )}
-          <div style={styles.itemMeta}>
+
+          {/* === 基本信息区 === */}
+          <div style={styles.sectionTitle}>基本信息</div>
+          <div style={styles.itemMetaExpanded}>
             <div style={styles.metaRow}>
               <span style={styles.detailLabel}>包名:</span>
               <span style={styles.packageName}>{packageName || '未知'}</span>
@@ -244,17 +313,39 @@ function NotificationItem({
                 </div>
               )}
             </div>
-            <div style={styles.metaRow}>
-              <span style={styles.detailLabel}>时间:</span>
-              <span style={styles.timestamp}>
-                {formatTimestamp(timestamp)}
-              </span>
-            </div>
-            <div style={styles.metaRow}>
-              <span style={styles.detailLabel}>ID:</span>
-              <span style={styles.monospace}>{notification.id}</span>
-            </div>
+            {renderField('ID', notification.id)}
+            {renderField('时间', formatTimestamp(timestamp))}
+            {renderField('通道ID', notification.channelId)}
+            {renderField('动作', notification.action)}
+            {renderField('是否初始化', notification.isInit ? '是' : undefined)}
+            {renderField('已读状态', notification.read ? '已读' : '未读')}
           </div>
+
+          {/* === 消息样式（聊天应用） === */}
+          {(notification.template || notification.conversationTitle || notification.messages) && (
+            <>
+              <div style={styles.sectionTitle}>消息样式</div>
+              <div style={styles.itemMetaExpanded}>
+                {renderField('模板类型', notification.template)}
+                {renderField('会话标题', notification.conversationTitle)}
+                {renderField('附加信息', notification.infoText)}
+                {renderArrayField('参与者', notification.people)}
+                {renderMessages(notification.messages)}
+              </div>
+            </>
+          )}
+
+          {/* === 优先级与状态 === */}
+          {(notification.isOngoing || notification.priority !== undefined || notification.importance !== undefined) && (
+            <>
+              <div style={styles.sectionTitle}>优先级与状态</div>
+              <div style={styles.itemMetaExpanded}>
+                {renderField('是否常驻', notification.isOngoing ? '是' : undefined)}
+                {renderField('优先级', notification.priority)}
+                {renderField('重要性', notification.importance)}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
@@ -352,9 +443,22 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '15px',
     fontWeight: 500,
   },
+  itemTextPreview: {
+    fontSize: '14px',
+    color: '#555',
+    marginBottom: '6px',
+    lineHeight: 1.4,
+  },
   itemMeta: {
     display: 'flex',
     gap: '12px',
+    fontSize: '12px',
+    color: '#666',
+  },
+  itemMetaExpanded: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0',
     fontSize: '12px',
     color: '#666',
   },
@@ -428,5 +532,54 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     fontSize: '12px',
     fontWeight: 500,
+  },
+  sectionTitle: {
+    fontSize: '13px',
+    fontWeight: 700,
+    color: '#333',
+    marginTop: '12px',
+    marginBottom: '8px',
+    paddingBottom: '4px',
+    borderBottom: '1px solid #e0e0e0',
+  },
+  fieldValue: {
+    fontSize: '12px',
+    color: '#333',
+    wordBreak: 'break-word',
+  },
+  arrayContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+    flex: 1,
+  },
+  arrayItem: {
+    fontSize: '12px',
+    color: '#333',
+    paddingLeft: '8px',
+    lineHeight: 1.4,
+  },
+  messageItem: {
+    backgroundColor: '#f8f9fa',
+    padding: '8px',
+    borderRadius: '4px',
+    marginBottom: '4px',
+    borderLeft: '3px solid #1976d2',
+  },
+  messageSender: {
+    fontSize: '11px',
+    fontWeight: 600,
+    color: '#1976d2',
+    marginBottom: '4px',
+  },
+  messageText: {
+    fontSize: '12px',
+    color: '#333',
+    lineHeight: 1.4,
+    marginBottom: '4px',
+  },
+  messageTime: {
+    fontSize: '10px',
+    color: '#999',
   },
 };
