@@ -3,6 +3,7 @@
 import { toProxy, proxyWatch, watchUpdates } from 'fanfanlo-deep-watcher';
 import { AndroidDeviceInfo } from '../types/deviceStorage';
 import { Notification } from '../types/notification';
+import { IconMap } from '../types/icon';
 import {
   loadDevices,
   saveDevice,
@@ -36,6 +37,7 @@ export interface DeviceConnection {
 export interface AppData {
   allDevices: DeviceConnection[];
   enabledDevices: DeviceConnection[];
+  packageIcons: IconMap;
 }
 
 const savedDevices = loadDevices();
@@ -49,6 +51,7 @@ const initialDevices: DeviceConnection[] = savedDevices.map(device => ({
 const data: AppData = toProxy({
   allDevices: initialDevices,
   enabledDevices: [],
+  packageIcons: {},
 });
 
 // 监听 allDevices 变化,自动更新 enabledDevices

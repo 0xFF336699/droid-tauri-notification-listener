@@ -108,6 +108,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
 
       <NotificationList
         notifications={filteredNotifications}
+        device={connection.device}
         onDelete={async (id) => {
           try {
             // 将字符串 ID 转换为数字

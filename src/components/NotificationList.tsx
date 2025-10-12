@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { filterConfigController } from '../data/notification-filter-config';
 import type { Notification, NotificationMessageItem } from '../types/notification';
+import { useProxyWatch } from 'fanfanlo-deep-watcher';
+import type { PropertiesChain } from 'fanfanlo-deep-watcher';
+import { mainModelController } from '../data/main-model-controller';
+import { getPackageIcon } from '../services/icon-service';
+import type { IconMap, IconData } from '../types/icon';
+import type { AndroidDeviceInfo } from '../types/deviceStorage';
 
 interface NotificationListProps {
   notifications?: Notification[];
   onMarkRead?: (ids: string[]) => void;
   onDelete?: (id: string) => void;
+  device?: AndroidDeviceInfo;
 }
 
 /**
@@ -25,6 +32,7 @@ export function NotificationList({
   notifications = [],
   onMarkRead,
   onDelete,
+  device,
 }: NotificationListProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
@@ -102,6 +110,7 @@ export function NotificationList({
               onSelect={handleSelectNotification}
               onDelete={handleDeleteNotification}
               formatTimestamp={formatTimestamp}
+              device={device}
             />
           ))}
         </div>
@@ -117,6 +126,7 @@ interface NotificationItemProps {
   onSelect: (id: string, checked: boolean) => void;
   onDelete: (id: string) => void;
   formatTimestamp: (timestamp?: number) => string;
+  device?: AndroidDeviceInfo;
 }
 
 function NotificationItem({
@@ -125,12 +135,71 @@ function NotificationItem({
   // onSelect,
   onDelete,
   formatTimestamp,
+  device,
 }: NotificationItemProps) {
+  console.log('[NotificationItem] ===== RENDER START =====');
+  console.log('[NotificationItem] notification.id:', notification.id);
+  console.log('[NotificationItem] notification.packageName:', notification.packageName);
+  console.log('[NotificationItem] device?.uuid:', device?.uuid);
+
   // 展开/折叠状态
   const [expanded, setExpanded] = useState(false);
 
   const packageName = notification.packageName;
   const timestamp = notification.postTime || notification.updated_at;
+
+  console.log('[NotificationItem] Extracted packageName:', packageName);
+  console.log('[NotificationItem] Extracted timestamp:', timestamp);
+
+  // 使用 useProxyWatch 从根节点监听，使用完整路径
+  const iconDataChain = `packageIcons.${packageName || ''}` as PropertiesChain<typeof mainModelController.data>;
+
+  // const [iconData] = useProxyWatch<typeof mainModelController.data, IconData | undefined>(
+  //   mainModelController.data,
+  //   iconDataChain,
+  //   undefined
+  // );
+  const [iconData] = useProxyWatch<typeof mainModelController.data, IconData | undefined>(
+    mainModelController.data,
+    ['packageIcons', packageName || ''],
+    mainModelController.data.packageIcons[packageName || '']
+  );
+
+  console.log('[NotificationItem] useProxyWatch chain:', iconDataChain);
+  console.log('[NotificationItem] useProxyWatch result for', packageName, ':', iconData);
+  console.log('[NotificationItem] iconData?.iconBase64 length:', iconData?.iconBase64?.length || 0);
+  console.log('[NotificationItem] iconData?.iconBase64 preview:', iconData?.iconBase64?.substring(0, 50));
+  console.log('[NotificationItem] iconData?.error:', iconData?.error);
+  console.log('[NotificationItem] iconData?.timestamp:', iconData?.timestamp);
+
+  // 如果没有 icon 数据，主动加载
+  useEffect(() => {
+    console.log('[NotificationItem] useEffect triggered');
+    console.log('[NotificationItem]   - packageName:', packageName);
+    console.log('[NotificationItem]   - iconData exists:', !!iconData);
+    console.log('[NotificationItem]   - device exists:', !!device);
+
+    if (packageName && !iconData && device) {
+      const deviceUuid = device.uuid;
+      console.log('[NotificationItem] Conditions met, calling getPackageIcon');
+      console.log('[NotificationItem] Loading icon for:', packageName, 'device:', deviceUuid);
+
+      getPackageIcon(packageName, deviceUuid).catch(err => {
+        console.error('[NotificationItem] Failed to load icon:', packageName, err);
+      });
+    } else {
+      console.log('[NotificationItem] Skipping getPackageIcon:');
+      console.log('[NotificationItem]   - has packageName:', !!packageName);
+      console.log('[NotificationItem]   - has iconData:', !!iconData);
+      console.log('[NotificationItem]   - has device:', !!device);
+    }
+  }, [packageName, iconData, device]);
+
+  const iconBase64 = iconData?.iconBase64;
+  const iconError = iconData?.error;
+
+  console.log('[NotificationItem] Final iconBase64:', iconBase64 ? 'EXISTS (length: ' + iconBase64.length + ')' : 'NOT FOUND');
+  console.log('[NotificationItem] Final iconError:', iconError);
 
   // 添加到黑名单
   function handleAddToBlacklist() {
@@ -216,6 +285,9 @@ function NotificationItem({
     );
   };
 
+  console.log('[NotificationItem] About to render, icon source will be:', iconBase64 ? 'base64 image' : 'placeholder');
+  console.log('[NotificationItem] ===== RENDER END =====');
+
   return (
     <div
       className={`notification-item ${notification.read ? 'read' : 'unread'}`}
@@ -233,6 +305,31 @@ function NotificationItem({
         /> */}
         <div style={styles.itemInfo} onClick={() => setExpanded(!expanded)}>
           <div style={styles.itemTitle}>
+            {/* 应用图标 */}
+            {iconBase64 && (
+              <>
+                {console.log('[NotificationItem] Rendering IMG tag for:', packageName, 'with base64 length:', iconBase64.length)}
+                <img
+                  src={`data:image/png;base64,${iconBase64}`}
+                  alt="app icon"
+                  style={styles.appIcon}
+                  onError={(e) => {
+                    console.error('[NotificationItem] IMG onError for:', packageName);
+                    console.error('[NotificationItem] Failed to load image, src length:', iconBase64?.length);
+                  }}
+                  onLoad={() => {
+                    console.log('[NotificationItem] IMG onLoad success for:', packageName);
+                  }}
+                />
+              </>
+            )}
+            {!iconBase64 && !iconError && (
+              <>
+                {console.log('[NotificationItem] Rendering placeholder for:', packageName)}
+                <div style={styles.iconPlaceholder}>📦</div>
+              </>
+            )}
+
             {!notification.read && <span style={styles.unreadDot}>●</span>}
             <h4 style={styles.title}>{notification.title || '无标题'}</h4>
             <span style={styles.expandIcon}>{expanded ? '▼' : '▶'}</span>
@@ -581,5 +678,23 @@ const styles: Record<string, React.CSSProperties> = {
   messageTime: {
     fontSize: '10px',
     color: '#999',
+  },
+  appIcon: {
+    width: '20px',
+    height: '20px',
+    borderRadius: '4px',
+    marginRight: '8px',
+    objectFit: 'contain',
+    flexShrink: 0,
+  },
+  iconPlaceholder: {
+    width: '20px',
+    height: '20px',
+    marginRight: '8px',
+    fontSize: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
 };

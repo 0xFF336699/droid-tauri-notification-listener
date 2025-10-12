@@ -80,10 +80,10 @@ export class AndroidWebSocketClient {
 
         this.ws.onmessage = (event) => {
           console.log('[AndroidWebSocketClient.onmessage] Received message');
-          console.log('[AndroidWebSocketClient.onmessage] Raw data:', event.data);
+          // console.log('[AndroidWebSocketClient.onmessage] Raw data:', event.data);
           try {
             const data = JSON.parse(event.data);
-            console.log('[AndroidWebSocketClient.onmessage] Parsed data:', JSON.stringify(data, null, 2));
+            console.log('[AndroidWebSocketClient.onmessage] Parsed data:', JSON.stringify(data, null, 2).slice(0, 50));
             this.handleMessage(data);
           } catch (error) {
             console.error('[AndroidWebSocketClient.onmessage] Failed to parse message:', error);
@@ -426,6 +426,31 @@ export class AndroidWebSocketClient {
       console.log('[AndroidWebSocketClient] Notifications cleared successfully');
     } else {
       throw new Error(response.message || 'Failed to clear notifications');
+    }
+  }
+
+  /**
+   * 获取应用包图标
+   * @param packageName 包名
+   * @returns 包含 iconBase64 的对象
+   */
+  async getPackageIcon(packageName: string): Promise<{ iconBase64: string }> {
+    console.log('[AndroidWebSocketClient] Getting icon for package:', packageName);
+
+    if (!this.token) {
+      throw new Error('Token is required to get package icon');
+    }
+
+    const response = await this.sendRequest('get_package_icon', {
+      token: this.token,
+      packageName: packageName,
+    }, 30000); // 30秒超时
+
+    if (response.success && response.data?.iconBase64) {
+      console.log('[AndroidWebSocketClient] Icon received for:', packageName, 'size:', response.data.iconBase64.length);
+      return { iconBase64: response.data.iconBase64 };
+    } else {
+      throw new Error(response.message || 'Failed to get package icon');
     }
   }
 
