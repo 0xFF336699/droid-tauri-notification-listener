@@ -1,5 +1,17 @@
 import { filterConfigController } from '../data/notification-filter-config';
 
+// 重要的系统应用白名单 - 即使是 com.android.* 也不过滤
+const SYSTEM_APP_WHITELIST = [
+  'com.android.mms',      // 短信
+  'com.android.phone',    // 电话
+];
+
+// 系统应用黑名单 - 强制过滤这些系统应用（优先级最高）
+const SYSTEM_APP_BLACKLIST: string[] = [
+  // 用户可以在这里添加想要过滤的系统应用
+  // 例如：'com.android.mms' 如果想过滤短信
+];
+
 function matchesPackagePattern(packageName: string, pattern: string): boolean {
   try {
     let regexPattern = pattern;
@@ -64,7 +76,22 @@ export function isVisibleNotification(notification: any): boolean {
   // 2. 过滤系统通知
   if (filterConfigController.isRuleEnabled('system-notification')) {
     const packageName = notification.packageName || '';
-    if (packageName === 'android' || packageName.startsWith('com.android.')) {
+
+    // 优先检查黑名单，如果在黑名单中，直接过滤
+    const isBlacklisted = SYSTEM_APP_BLACKLIST.some(blacklistedPkg =>
+      packageName === blacklistedPkg
+    );
+    if (isBlacklisted) {
+      return false;
+    }
+
+    // 检查是否在白名单中
+    const isWhitelisted = SYSTEM_APP_WHITELIST.some(whitelistedPkg =>
+      packageName === whitelistedPkg
+    );
+
+    // 只有不在白名单中的系统应用才会被过滤
+    if (!isWhitelisted && (packageName === 'android' || packageName.startsWith('com.android.'))) {
       return false;
     }
   }
