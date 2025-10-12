@@ -5,6 +5,14 @@ import { handleWebSocketMessage } from './notification-message-handler';
 // WebSocket 客户端管理
 const clientMap = new Map<string, AndroidWebSocketClient>();
 
+
+export function getClientByUuid(uuid: string): AndroidWebSocketClient | undefined {
+  return clientMap.get(uuid);
+}
+
+export function removeClientByUuid(uuid: string) {
+  clientMap.delete(uuid);
+}
 /**
  * 连接到设备
  */
@@ -21,7 +29,7 @@ export function connectDevice(connection: DeviceConnection, uuid: string) {
   connection.state = ConnectionState.Connecting;
 
   // 创建 WebSocket 客户端
-  const client = new AndroidWebSocketClient(connection.device.url);
+  const client = new AndroidWebSocketClient(connection, connection.device.url);
 
   // 设置连接状态回调
   client.onConnectionChange(async (connected) => {
@@ -42,7 +50,7 @@ export function connectDevice(connection: DeviceConnection, uuid: string) {
   clientMap.set(uuid, client);
 
   // 连接
-  client.connect();
+  // client.connect();
 
   console.log('[DeviceConnectionHandler] Connecting to device:', uuid);
 }

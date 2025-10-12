@@ -200,6 +200,14 @@ export function FilterSettings() {
       {/* 基础过滤规则 */}
       <div style={styles.section}>
         <h4 style={styles.sectionTitle}>基础过滤规则</h4>
+
+        {/* ✅ 从 Android 端迁移的过滤规则 */}
+        <BasicFilterRuleItem ruleId="ongoing-notification" />
+        <BasicFilterRuleItem ruleId="system-notification" />
+        <BasicFilterRuleItem ruleId="empty-content" />
+        <BasicFilterRuleItem ruleId="low-priority" />
+
+        {/* 原有的过滤规则 */}
         <BasicFilterRuleItem ruleId="foreground-service" />
         <BasicFilterRuleItem ruleId="group-summary" />
         <BasicFilterRuleItem ruleId="running-service" />

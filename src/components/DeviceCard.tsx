@@ -4,7 +4,7 @@ import { DeviceConnection } from '../data/main-model-controller';
 import { mainModelController } from '../data/main-model-controller';
 import { NotificationList } from './NotificationList';
 import { FilterSettings } from './FilterSettings';
-import { manualReconnectDevice } from '../data/device-connection-handler';
+import { manualReconnectDevice, getClientByUuid } from '../data/device-connection-handler';
 
 interface DeviceCardProps {
   connection: DeviceConnection;
@@ -108,7 +108,41 @@ export function DeviceCard({ connection }: DeviceCardProps) {
 
       <NotificationList
         notifications={filteredNotifications}
-        deviceUuid={connection.device.uuid}
+        onDelete={async (id) => {
+          try {
+            // 将字符串 ID 转换为数字
+            const numericId = parseInt(id, 10);
+            if (isNaN(numericId)) {
+              console.error('[DeviceCard] Invalid notification ID:', id);
+              return;
+            }
+
+            console.log('[DeviceCard] Deleting notification:', numericId);
+
+            // 通过 getClientByUuid 获取 WebSocket 客户端
+            const wsClient = getClientByUuid(connection.device.uuid);
+
+            if (!wsClient) {
+              console.error('[DeviceCard] WebSocket client not available for device:', connection.device.uuid);
+              alert('WebSocket 客户端未初始化，无法删除通知');
+              return;
+            }
+
+            if (!wsClient.isConnected()) {
+              console.error('[DeviceCard] WebSocket not connected');
+              alert('WebSocket 未连接，无法删除通知');
+              return;
+            }
+
+            console.log('[DeviceCard] Calling clearNotifications...');
+            await wsClient.clearNotifications([numericId]);
+            console.log('[DeviceCard] Notification deleted successfully');
+          } catch (error) {
+            console.error('[DeviceCard] Failed to delete notification:', error);
+            console.error('[DeviceCard] Error stack:', (error as Error).stack);
+            alert('删除失败: ' + (error as Error).message);
+          }
+        }}
       />
 
       {/* 调试信息 - 显示过滤统计 */}

@@ -1,8 +1,12 @@
+import { proxyWatch } from "fanfanlo-deep-watcher";
+import { DeviceConnection } from "../data/main-model-controller";
+
 /**
  * Android WebSocket 客户端类
  * 用于管理与安卓设备的 WebSocket 连接
  */
 export class AndroidWebSocketClient {
+  private deviceConnection!: DeviceConnection;
   private ws: WebSocket | null = null;
   private url: string;
   private token: string | null;
@@ -12,6 +16,7 @@ export class AndroidWebSocketClient {
   private reconnectDelay = 3000; // 初始延迟 3 秒
   private maxReconnectDelay = 30000; // 最大延迟 30 秒
   private isManuallyDisconnected = false; // 是否手动断开连接
+  private unwatch: (() => void) | null = null;
 
   // 事件回调
   private messageHandler: ((data: any) => void) | null = null;
@@ -25,15 +30,32 @@ export class AndroidWebSocketClient {
     timeout: NodeJS.Timeout;
   }> = new Map();
 
-  constructor(url: string, token?: string) {
+  constructor(deviceConnection:DeviceConnection, url: string, token?: string) {
     console.log('[AndroidWebSocketClient.constructor] Creating client');
     console.log('[AndroidWebSocketClient.constructor] URL:', url);
     console.log('[AndroidWebSocketClient.constructor] Token provided:', !!token);
+    this.deviceConnection = deviceConnection;
     this.url = url;
     this.token = token || null;
+    this.init();
     console.log('[AndroidWebSocketClient.constructor] Client initialized');
   }
 
+  private  init(){
+    console.log('[AndroidWebSocketClient.init]');
+    const {unwatch} = proxyWatch(this.deviceConnection.device, 'enabled', this.onEnabledChange.bind(this));
+    this.unwatch = unwatch;
+    console.log('[AndroidWebSocketClient.init] watch set up');
+  }
+  private onEnabledChange(){
+     const enabled = this.deviceConnection.device.enabled;
+    console.log('[AndroidWebSocketClient.init] enabled changed:', enabled);
+    if(enabled){
+      this.connect();
+    }else{
+      this.disconnect();
+    }
+  }
   /**
    * 连接到 WebSocket 服务器
    */
@@ -385,6 +407,29 @@ export class AndroidWebSocketClient {
   }
 
   /**
+   * 清除指定的通知
+   * @param ids 通知ID数组
+   */
+  async clearNotifications(ids: number[]): Promise<void> {
+    console.log('[AndroidWebSocketClient] Clearing notifications:', ids);
+
+    if (!this.token) {
+      throw new Error('Token is required to clear notifications');
+    }
+
+    const response = await this.sendRequest('clear_messages', {
+      token: this.token,
+      ids: ids
+    });
+
+    if (response.success) {
+      console.log('[AndroidWebSocketClient] Notifications cleared successfully');
+    } else {
+      throw new Error(response.message || 'Failed to clear notifications');
+    }
+  }
+
+  /**
    * 手动重连（重置计数器）
    */
   async manualReconnect(): Promise<void> {
@@ -468,5 +513,12 @@ export class AndroidWebSocketClient {
       console.error('[AndroidWebSocketClient] Failed to establish connection:', error);
       // 失败后会触发 onclose，开始重连逻辑
     }
+  }
+  destroy(){
+    if(this.unwatch){
+      this.unwatch();
+      this.unwatch = null;
+    }
+    this.disconnect();
   }
 }

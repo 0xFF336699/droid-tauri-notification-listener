@@ -12,7 +12,9 @@ import {
 import {
   connectDevice as handleConnect,
   disconnectDevice as handleDisconnect,
-  disconnectAllDevices
+  disconnectAllDevices,
+  removeClientByUuid,
+  getClientByUuid
 } from './device-connection-handler';
 import { filterNotifications } from '../utils/notificationFilter';
 import { filterConfigController } from './notification-filter-config';
@@ -144,6 +146,11 @@ function removeDevice(uuid: string) {
 
   const connection = data.allDevices[index];
   handleDisconnect(uuid, connection);
+  const client = getClientByUuid(uuid);
+  if (client) {
+    client.destroy();
+  }
+  removeClientByUuid(uuid);
   data.allDevices.splice(index, 1);
   deleteDevice(uuid);
 
@@ -189,17 +196,17 @@ function initAutoConnect() {
   console.log('[mainModelController] Total devices:', data.allDevices.length);
   console.log('[mainModelController] Enabled devices:', data.enabledDevices.length);
 
-  if (data.enabledDevices.length === 0) {
-    console.log('[mainModelController] No enabled devices to connect');
-    return;
-  }
+  // if (data.enabledDevices.length === 0) {
+  //   console.log('[mainModelController] No enabled devices to connect');
+  //   return;
+  // }
 
-  data.enabledDevices.forEach(conn => {
+  data.allDevices.forEach(conn => {
     console.log('[mainModelController] Auto-connecting device:', conn.device.uuid, conn.device.hostname);
     connectDevice(conn.device.uuid);
   });
 
-  console.log('[mainModelController] Auto-connect initiated for', data.enabledDevices.length, 'devices');
+  // console.log('[mainModelController] Auto-connect initiated for', data.enabledDevices.length, 'devices');
 }
 
 setTimeout(() => {
