@@ -12,11 +12,11 @@ import React from "react";
 
 type Notification = {
   id: string;
-  package_name?: string;
+  packageName?: string;
   title?: string;
   text?: string;
   read: boolean;
-  posted_at?: number;
+  postTime?: number;
   updated_at?: number;
 };
 
@@ -439,7 +439,7 @@ function App() {
 
       <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
         {items.map((n) => {
-          const time = n.updated_at ?? n.posted_at;
+          const time = n.updated_at ?? n.postTime;
           const bg = n.read ? "#e6ffed" : "#ffe6e6"; // 绿 for 已读，红 for 未读
           return (
             <div
@@ -465,7 +465,7 @@ function App() {
                   <div style={{ fontWeight: 600 }}>{n.title ?? "(无标题)"}</div>
                   <div style={{ opacity: 0.8 }}>{n.text ?? "(无内容)"}</div>
                   <div style={{ fontSize: 12, opacity: 0.6 }}>
-                    {n.package_name ?? "(unknown)"} · {time ?? "-"}
+                    {n.packageName ?? "(unknown)"} · {time ?? "-"}
                   </div>
                 </div>
               </div>

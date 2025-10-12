@@ -22,7 +22,7 @@ function matchesPackagePattern(packageName: string, pattern: string): boolean {
 }
 
 function shouldFilterByPackage(notification: any): boolean {
-  const packageName = notification.packageName || notification.package_name || '';
+  const packageName = notification.packageName || '';
 
   const blacklist = filterConfigController.getPackageFilter('package-blacklist');
   if (blacklist && blacklist.enabled && blacklist.patterns.length > 0) {
@@ -63,7 +63,7 @@ export function isVisibleNotification(notification: any): boolean {
 
   // 2. 过滤系统通知
   if (filterConfigController.isRuleEnabled('system-notification')) {
-    const packageName = notification.packageName || notification.package_name || '';
+    const packageName = notification.packageName || '';
     if (packageName === 'android' || packageName.startsWith('com.android.')) {
       return false;
     }

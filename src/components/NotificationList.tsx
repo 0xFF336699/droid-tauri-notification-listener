@@ -3,11 +3,11 @@ import { filterConfigController } from '../data/notification-filter-config';
 
 export interface Notification {
   id: string;
-  package_name?: string;
+  packageName?: string;
   title?: string;
   text?: string;
   read: boolean;
-  posted_at?: number;
+  postTime?: number;
   updated_at?: number;
 }
 
@@ -105,7 +105,7 @@ export function NotificationList({
         <div className="notification-items" style={styles.items}>
           {notifications.map((notification) => (
             <NotificationItem
-              key={notification.id}
+              key={`${notification.packageName || 'unknown'}_${notification.id}`}
               notification={notification}
               selected={selectedIds.has(notification.id)}
               onSelect={handleSelectNotification}
@@ -138,9 +138,8 @@ function NotificationItem({
   // 展开/折叠状态
   const [expanded, setExpanded] = useState(false);
 
-  // 兼容两种命名方式
-  const packageName = notification.packageName || notification.package_name;
-  const timestamp = notification.postTime || notification.posted_at || notification.updated_at;
+  const packageName = notification.packageName;
+  const timestamp = notification.postTime || notification.updated_at;
 
   // 添加到黑名单
   function handleAddToBlacklist() {

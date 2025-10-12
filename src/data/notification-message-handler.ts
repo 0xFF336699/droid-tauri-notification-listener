@@ -1,4 +1,4 @@
-import { DeviceConnection } from './main-model-controller';
+import { DeviceConnection, mainModelController } from './main-model-controller';
 
 interface WebSocketMessage {
   type: string;
@@ -49,17 +49,36 @@ function handleInitialNotifications(
 
 /**
  * 处理新通知
- * 直接添加到 allNotifications,不过滤
+ * 根据 action 字段决定是添加还是移除通知
  */
 function handleNewNotification(
   notification: any,
   connection: DeviceConnection,
   uuid: string
 ) {
-  console.log('[NotificationMessageHandler] Processing new notification:', notification.id);
+  console.log('[NotificationMessageHandler] Processing notification:', notification.id, 'action:', notification.action);
 
-  // 直接添加,不过滤
-  connection.allNotifications.push(notification);
+  // 检查 action 类型
+  if (notification.action === 'removed') {
+    // 移除通知
+    const index = connection.allNotifications.findIndex(n => n.id === notification.id);
+    if (index !== -1) {
+      connection.allNotifications.splice(index, 1);
+      console.log(`[NotificationMessageHandler] Removed notification: ${notification.id}, total: ${connection.allNotifications.length}`);
 
-  console.log(`[NotificationMessageHandler] Total notifications: ${connection.allNotifications.length}`);
+      // 手动触发过滤更新，确保 UI 同步
+      mainModelController.recomputeFilteredNotifications(connection);
+    } else {
+      console.warn(`[NotificationMessageHandler] Notification not found for removal: ${notification.id}`);
+    }
+  } else if (notification.action === 'posted' || notification.action === 'init') {
+    // 添加新通知（posted 是新发布，init 是初始化）
+    connection.allNotifications.push(notification);
+    console.log(`[NotificationMessageHandler] Added notification: ${notification.id}, total: ${connection.allNotifications.length}`);
+
+    // 手动触发过滤更新，确保 UI 同步
+    mainModelController.recomputeFilteredNotifications(connection);
+  } else {
+    console.warn('[NotificationMessageHandler] Unknown action:', notification.action);
+  }
 }

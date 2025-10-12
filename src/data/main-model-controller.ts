@@ -223,4 +223,5 @@ export const mainModelController = {
   connectDevice,
   disconnectDevice,
   recomputeAllFilteredNotifications,
+  recomputeFilteredNotifications,
 };

@@ -57,8 +57,8 @@ export function NotificationItem({ notification, deviceUuid }: NotificationItemP
           display: 'flex',
           gap: '12px'
         }}>
-          <span>{notification.package_name}</span>
-          <span>{formatTime(notification.posted_at || notification.updated_at)}</span>
+          <span>{notification.packageName}</span>
+          <span>{formatTime(notification.postTime || notification.updated_at)}</span>
         </div>
       </div>
 
