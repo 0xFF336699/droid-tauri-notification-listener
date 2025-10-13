@@ -36,6 +36,15 @@ export function NotificationList({
 }: NotificationListProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
+  // 按时间戳降序排序（最新的在前）
+  const sortedNotifications = React.useMemo(() => {
+    return [...notifications].sort((a, b) => {
+      const timeA = a.postTime || a.updated_at || 0;
+      const timeB = b.postTime || b.updated_at || 0;
+      return timeB - timeA; // 降序：新的在前
+    });
+  }, [notifications]);
+
   const handleSelectNotification = (id: string, checked: boolean) => {
     const newSelected = new Set(selectedIds);
     if (checked) {
@@ -65,7 +74,17 @@ export function NotificationList({
 
   const formatTimestamp = (timestamp?: number) => {
     if (!timestamp) return '';
-    const date = new Date(timestamp * 1000);
+
+    // 自动判断时间戳单位
+    // 如果时间戳小于 10000000000（2286-11-20），认为是秒级；否则是毫秒级
+    let milliseconds: number;
+    if (timestamp < 10000000000) {
+      milliseconds = timestamp * 1000; // 秒级转毫秒
+    } else {
+      milliseconds = timestamp; // 已经是毫秒级
+    }
+
+    const date = new Date(milliseconds);
     return date.toLocaleString('zh-CN', {
       month: '2-digit',
       day: '2-digit',
@@ -77,11 +96,11 @@ export function NotificationList({
   return (
     <div className="notification-list" style={styles.container}>
       {/* 工具栏 */}
-      {notifications.length > 0 && (
+      {sortedNotifications.length > 0 && (
         <div className="toolbar" style={styles.toolbar}>
           <div style={styles.toolbarLeft}>
             <span style={styles.count}>
-              共 {notifications.length} 条通知
+              共 {sortedNotifications.length} 条通知
               {selectedIds.size > 0 && ` (已选 ${selectedIds.size} 条)`}
             </span>
           </div>
@@ -96,13 +115,13 @@ export function NotificationList({
       )}
 
       {/* 通知列表 */}
-      {notifications.length === 0 ? (
+      {sortedNotifications.length === 0 ? (
         <div style={styles.empty}>
           <p>暂无通知</p>
         </div>
       ) : (
         <div className="notification-items" style={styles.items}>
-          {notifications.map((notification) => (
+          {sortedNotifications.map((notification) => (
             <NotificationItem
               key={`${notification.packageName || 'unknown'}_${notification.id}`}
               notification={notification}
