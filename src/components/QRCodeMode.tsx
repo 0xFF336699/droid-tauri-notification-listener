@@ -199,13 +199,15 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
           padding: 20px;
           background: #fff;
           border-radius: 8px;
-          display: inline-block;
+          display: block;
+          max-width: min(400px, 90%);
+          width: fit-content;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .qrcode-image {
-          width: 200px;
-          height: 200px;
+          width: clamp(150px, 80vw, 300px);
+          height: auto;
           display: block;
           margin: 0 auto;
         }

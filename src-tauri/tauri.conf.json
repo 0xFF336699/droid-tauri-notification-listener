@@ -39,7 +39,7 @@
         "title": "notification-listener-project",
         "width": 800,
         "height": 600,
-        "visible": true,
+        "visible": false,
         "skipTaskbar": true,
         "decorations": false,
         "minimizable": true,

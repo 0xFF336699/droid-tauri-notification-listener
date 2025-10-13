@@ -36,6 +36,12 @@ pub fn run() {
         .setup(|app| {
             use tauri::{menu::MenuItemBuilder, tray::TrayIconBuilder};
 
+            // 初始化主窗口的位置和大小
+            if let Some(win) = app.get_webview_window("main") {
+                init_window_state(&win);
+                setup_window_state_listeners(&win);
+            }
+
             // 构建托盘菜单
             let toggle = MenuItemBuilder::with_id("toggle", "显示/隐藏").build(app)?;
             let settings = MenuItemBuilder::with_id("settings", "设置").build(app)?;
@@ -198,6 +204,138 @@ fn toggle_main_window(app: &tauri::AppHandle) {
         } else {
             let _ = win.show();
             let _ = win.set_focus();
+        }
+    }
+}
+
+// 窗口状态管理
+const WINDOW_STATE_KEY: &str = "window_state";
+
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+struct WindowState {
+    x: i32,
+    y: i32,
+    width: u32,
+    height: u32,
+}
+
+/// 初始化窗口状态（大小和位置）
+fn init_window_state(win: &tauri::WebviewWindow) {
+    use tauri::Manager;
+
+    // 获取主显示器信息
+    let monitor = win.current_monitor().ok().flatten();
+    let screen_size = monitor.as_ref().map(|m| m.size());
+
+    // 尝试从本地存储读取窗口状态
+    let state_json = win.app_handle()
+        .path()
+        .app_local_data_dir()
+        .ok()
+        .and_then(|dir| {
+            std::fs::create_dir_all(&dir).ok()?;
+            let state_file = dir.join("window_state.json");
+            std::fs::read_to_string(&state_file).ok()
+        });
+
+    if let Some(json) = state_json {
+        // 尝试恢复保存的状态
+        if let Ok(state) = serde_json::from_str::<WindowState>(&json) {
+            let _ = win.set_size(tauri::Size::Physical(tauri::PhysicalSize {
+                width: state.width,
+                height: state.height,
+            }));
+            let _ = win.set_position(tauri::Position::Physical(tauri::PhysicalPosition {
+                x: state.x,
+                y: state.y,
+            }));
+            let _ = win.show();
+            return;
+        }
+    }
+
+    // 没有保存的状态，使用默认值
+    let default_width = 800;
+    let default_height = if let Some(size) = screen_size {
+        (size.height as f32 * 0.65) as u32
+    } else {
+        600
+    };
+
+    let _ = win.set_size(tauri::Size::Physical(tauri::PhysicalSize {
+        width: default_width,
+        height: default_height,
+    }));
+
+    // 居中显示
+    if let Some(size) = screen_size {
+        let x = (size.width as i32 - default_width as i32) / 2;
+        let y = (size.height as i32 - default_height as i32) / 2;
+        let _ = win.set_position(tauri::Position::Physical(tauri::PhysicalPosition {
+            x: x.max(0),
+            y: y.max(0),
+        }));
+    }
+
+    let _ = win.show();
+}
+
+/// 监听窗口状态变化并保存
+fn setup_window_state_listeners(win: &tauri::WebviewWindow) {
+    use std::sync::Mutex;
+    use std::time::{Duration, Instant};
+
+    // 防抖：避免频繁保存
+    let last_save = std::sync::Arc::new(Mutex::new(Instant::now()));
+    let save_debounce = Duration::from_millis(500);
+
+    let win_clone = win.clone();
+    win.on_window_event(move |event| {
+        match event {
+            tauri::WindowEvent::Resized(_) | tauri::WindowEvent::Moved(_) => {
+                let mut last = last_save.lock().unwrap();
+                let now = Instant::now();
+
+                // 防抖：500ms内只保存一次
+                if now.duration_since(*last) < save_debounce {
+                    return;
+                }
+                *last = now;
+                drop(last);
+
+                // 保存窗口状态
+                save_window_state(&win_clone);
+            }
+            _ => {}
+        }
+    });
+}
+
+/// 保存窗口状态到本地文件
+fn save_window_state(win: &tauri::WebviewWindow) {
+    use tauri::Manager;
+
+    let position = win.outer_position().ok();
+    let size = win.outer_size().ok();
+
+    if let (Some(pos), Some(size)) = (position, size) {
+        let state = WindowState {
+            x: pos.x,
+            y: pos.y,
+            width: size.width,
+            height: size.height,
+        };
+
+        if let Ok(json) = serde_json::to_string_pretty(&state) {
+            let _ = win.app_handle()
+                .path()
+                .app_local_data_dir()
+                .ok()
+                .and_then(|dir| {
+                    std::fs::create_dir_all(&dir).ok()?;
+                    let state_file = dir.join("window_state.json");
+                    std::fs::write(&state_file, &json).ok()
+                });
         }
     }
 }
