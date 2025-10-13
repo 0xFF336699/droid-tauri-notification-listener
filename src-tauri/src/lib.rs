@@ -36,6 +36,9 @@ pub fn run() {
         .setup(|app| {
             use tauri::{menu::MenuItemBuilder, tray::TrayIconBuilder};
 
+            // 检查是否需要执行重置（必须在其他初始化之前）
+            check_and_perform_reset(&app.handle());
+
             // 初始化主窗口的位置和大小
             if let Some(win) = app.get_webview_window("main") {
                 init_window_state(&win);
@@ -173,6 +176,9 @@ pub fn run() {
             crate::commands::disconnect_android,
             crate::commands::test_socket_server,
             crate::commands::test_http_pairing,
+            // 应用管理
+            reset_app_to_defaults,
+            exit_app,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -338,4 +344,74 @@ fn save_window_state(win: &tauri::WebviewWindow) {
                 });
         }
     }
+}
+
+/// 重置应用到默认状态
+/// 清除所有本地数据（窗口状态、应用设置等）
+///
+/// 由于Windows文件锁定，使用标记文件策略：
+/// 1. 创建 .reset_on_next_start 标记文件
+/// 2. 退出应用
+/// 3. 下次启动时检测到标记文件，删除数据并移除标记
+#[tauri::command]
+fn reset_app_to_defaults(app: tauri::AppHandle) -> Result<String, String> {
+    use tauri::Manager;
+
+    // 获取数据目录路径
+    match app.path().app_local_data_dir() {
+        Ok(data_dir) => {
+            // 确保目录存在
+            let _ = std::fs::create_dir_all(&data_dir);
+
+            // 创建重置标记文件
+            let reset_marker = data_dir.join(".reset_on_next_start");
+            match std::fs::write(&reset_marker, "1") {
+                Ok(_) => {
+                    Ok(format!("✓ 已标记重置\n下次启动时将清除所有数据\n路径: {:?}", data_dir))
+                }
+                Err(e) => {
+                    Err(format!("✗ 无法创建重置标记: {}", e))
+                }
+            }
+        }
+        Err(e) => Err(format!("✗ 无法获取数据目录: {}", e))
+    }
+}
+
+/// 检查并执行重置标记
+/// 在应用启动时调用，如果存在重置标记则删除所有数据
+fn check_and_perform_reset(app: &tauri::AppHandle) {
+    use tauri::Manager;
+
+    if let Ok(data_dir) = app.path().app_local_data_dir() {
+        let reset_marker = data_dir.join(".reset_on_next_start");
+
+        // 检查是否存在重置标记
+        if reset_marker.exists() {
+            println!("[reset] 检测到重置标记，开始清理数据...");
+
+            // 先删除标记文件本身
+            let _ = std::fs::remove_file(&reset_marker);
+
+            // 删除 window_state.json
+            let window_state = data_dir.join("window_state.json");
+            if window_state.exists() {
+                match std::fs::remove_file(&window_state) {
+                    Ok(_) => println!("[reset] ✓ 已删除 window_state.json"),
+                    Err(e) => eprintln!("[reset] ✗ 删除 window_state.json 失败: {}", e),
+                }
+            }
+
+            // 可以在这里添加删除其他数据文件的逻辑
+            // 例如：let config_file = data_dir.join("config.json");
+
+            println!("[reset] 数据清理完成");
+        }
+    }
+}
+
+/// 退出应用
+#[tauri::command]
+fn exit_app(app: tauri::AppHandle) {
+    app.exit(0);
 }

@@ -8,6 +8,7 @@ import { usePairingListener } from './hooks/usePairingListener';
 import { DeviceList } from './components/DeviceList';
 import { SettingsDeviceList } from './components/SettingsDeviceList';
 import { mainModelController } from './data/main-model-controller';
+import { resetAppToDefaults } from './utils/appReset';
 import React from "react";
 
 type Notification = {
@@ -271,6 +272,37 @@ function App() {
           <div style={{ marginBottom: '30px' }}>
             <h3 style={{ marginBottom: '15px' }}>WebSocket 设备</h3>
             <SettingsDeviceList />
+          </div>
+
+          {/* 重置应用区域 */}
+          <div style={{
+            marginTop: '40px',
+            padding: '20px',
+            backgroundColor: '#fff3cd',
+            borderRadius: '8px',
+            border: '1px solid #ffc107'
+          }}>
+            <h4 style={{ color: '#856404', marginTop: 0, marginBottom: '12px' }}>
+              ⚠️ 危险操作
+            </h4>
+            <p style={{ color: '#856404', fontSize: '14px', marginBottom: '16px', lineHeight: '1.5' }}>
+              重置应用将清除所有数据（包括设备列表、窗口设置、过滤器配置等），恢复到初始安装状态。此操作不可撤销！
+            </p>
+            <button
+              onClick={resetAppToDefaults}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              🔄 重置应用到初始状态
+            </button>
           </div>
 
           {/* 旧的连接管理器（已废弃，可选择移除） */}
