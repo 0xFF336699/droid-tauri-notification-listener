@@ -1,0 +1,34 @@
+{
+  "app": {
+    "title": "通知监听器",
+    "description": "监听和管理设备通知"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "confirm": "确认",
+    "loading": "加载中...",
+    "error": "发生错误"
+  },
+  "connection": {
+    "connect": "连接",
+    "disconnect": "断开连接",
+    "connecting": "连接中...",
+    "connected": "已连接",
+    "disconnected": "已断开连接",
+    "connectionFailed": "连接失败"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "theme": "主题",
+    "general": "通用",
+    "notifications": "通知"
+  },
+  "notifications": {
+    "title": "通知",
+    "noNotifications": "没有通知",
+    "clearAll": "清除所有"
+  }
+}
