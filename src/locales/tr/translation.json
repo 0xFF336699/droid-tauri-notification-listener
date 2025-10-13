@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Bildirim Dinleyicisi",
+    "description": "Cihaz bildirimlerini dinleyin ve yönetin"
+  },
+  "common": {
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "back": "Geri",
+    "delete": "Sil",
+    "confirm": "Onayla",
+    "loading": "Yükleniyor...",
+    "error": "Bir hata oluştu",
+    "connect": "Bağlan",
+    "connecting": "Bağlanıyor...",
+    "disconnect": "Bağlantıyı kes",
+    "disconnecting": "Bağlantı kesiliyor...",
+    "connected": "Bağlı",
+    "disconnected": "Bağlantı kesildi",
+    "connectionFailed": "Bağlantı başarısız",
+    "minimize": "Küçült",
+    "unread": "Okunmamış",
+    "total": "Toplam",
+    "errorOccurred": "Bir hata oluştu",
+    "retry": "Yeniden dene",
+    "settings": "Ayarlar",
+    "close": "Kapat",
+    "maximize": "Büyüt",
+    "restore": "Geri yükle"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "language": "Dil",
+    "appearance": "Görünüm",
+    "theme": "Tema",
+    "light": "Açık",
+    "dark": "Koyu",
+    "system": "Sistem",
+    "notifications": "Bildirimler",
+    "enableNotifications": "Bildirimleri etkinleştir",
+    "notificationSound": "Bildirim sesi",
+    "about": "Hakkında",
+    "version": "Sürüm",
+    "checkForUpdates": "Güncellemeleri kontrol et",
+    "clearAllDevices": "Tüm cihazları temizle"
+  },
+  "connection": {
+    "add": "Bağlantı ekle"
+  },
+  "device": {
+    "connect": "Cihazı bağla",
+    "disconnect": "Bağlantıyı kes",
+    "connected": "Bağlı",
+    "disconnected": "Bağlantı kesildi",
+    "connectionFailed": "Bağlantı başarısız",
+    "retry": "Yeniden dene",
+    "deviceInfo": "Cihaz bilgisi",
+    "deviceName": "Cihaz adı",
+    "deviceModel": "Model",
+    "deviceOS": "İşletim sistemi sürümü",
+    "batteryLevel": "Pil",
+    "storage": "Depolama",
+    "memory": "Bellek"
+  },
+  "notification": {
+    "noNotifications": "Bildirim yok",
+    "clearAll": "Tümünü temizle",
+    "markAsRead": "Okundu olarak işaretle",
+    "markAsUnread": "Okunmamış olarak işaretle",
+    "delete": "Sil",
+    "reply": "Yanıtla",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!",
+    "expand": "Daha fazla göster",
+    "collapse": "Daha az göster"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Pencere küçültülemedi"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "Ακροατής Ειδοποιήσεων",
+    "description": "Ακούστε και διαχειριστείτε τις ειδοποιήσεις συσκευής"
+  },
+  "common": {
+    "save": "Αποθήκευση",
+    "cancel": "Ακύρωση",
+    "back": "Πίσω",
+    "delete": "Διαγραφή",
+    "confirm": "Επιβεβαίωση",
+    "loading": "Φόρτωση...",
+    "error": "Παρουσιάστηκε σφάλμα",
+    "connect": "Σύνδεση",
+    "connecting": "Σύνδεση...",
+    "disconnect": "Αποσύνδεση",
+    "disconnecting": "Αποσύνδεση...",
+    "connected": "Συνδεδεμένο",
+    "disconnected": "Αποσυνδεδεμένο",
+    "connectionFailed": "Η σύνδεση απέτυχε",
+    "minimize": "Ελαχιστοποίηση",
+    "unread": "Αδιάβαστα",
+    "total": "Σύνολο",
+    "errorOccurred": "Παρουσιάστηκε σφάλμα",
+    "retry": "Δοκιμή ξανά",
+    "settings": "Ρυθμίσεις",
+    "close": "Κλείσιμο",
+    "maximize": "Μεγιστοποίηση",
+    "restore": "Επαναφορά"
+  },
+  "settings": {
+    "title": "Ρυθμίσεις",
+    "language": "Γλώσσα",
+    "appearance": "Εμφάνιση",
+    "theme": "Θέμα",
+    "light": "Φωτεινό",
+    "dark": "Σκούρο",
+    "system": "Σύστημα",
+    "notifications": "Ειδοποιήσεις",
+    "enableNotifications": "Ενεργοποίηση ειδοποιήσεων",
+    "notificationSound": "Ήχος ειδοποίησης",
+    "about": "Σχετικά",
+    "version": "Έκδοση",
+    "checkForUpdates": "Έλεγχος για ενημερώσεις"
+  },
+  "device": {
+    "connect": "Σύνδεση συσκευής",
+    "disconnect": "Αποσύνδεση",
+    "connected": "Συνδεδεμένο",
+    "disconnected": "Αποσυνδεδεμένο",
+    "connectionFailed": "Η σύνδεση απέτυχε",
+    "retry": "Δοκιμή ξανά",
+    "deviceInfo": "Πληροφορίες συσκευής",
+    "deviceName": "Όνομα συσκευής",
+    "deviceModel": "Μοντέλο",
+    "deviceOS": "Έκδοση λειτουργικού συστήματος",
+    "batteryLevel": "Μπαταρία",
+    "storage": "Αποθήκευση",
+    "memory": "Μνήμη"
+  },
+  "notification": {
+    "noNotifications": "Δεν υπάρχουν ειδοποιήσεις",
+    "clearAll": "Καθαρισμός όλων",
+    "markAsRead": "Σήμανση ως διαβασμένο",
+    "markAsUnread": "Σήμανση ως μη διαβασμένο",
+    "delete": "Διαγραφή",
+    "reply": "Απάντηση",
+    "copy": "Αντιγραφή",
+    "copied": "Αντιγράφτηκε!",
+    "expand": "Εμφάνιση περισσότερων",
+    "collapse": "Εμφάνιση λιγότερων"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Αποτυχία ελαχιστοποίησης παραθύρου"
+  }
+}

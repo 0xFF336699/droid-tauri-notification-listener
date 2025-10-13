@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Aviseringslyssnare",
+    "description": "Lyssna och hantera enhetsaviseringar"
+  },
+  "common": {
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "back": "Tillbaka",
+    "delete": "Ta bort",
+    "confirm": "Bekräfta",
+    "loading": "Laddar...",
+    "error": "Ett fel uppstod",
+    "connect": "Anslut",
+    "connecting": "Ansluter...",
+    "disconnect": "Koppla från",
+    "disconnecting": "Kopplar från...",
+    "connected": "Ansluten",
+    "disconnected": "Frånkopplad",
+    "connectionFailed": "Anslutning misslyckades",
+    "minimize": "Minimera",
+    "unread": "Oläst",
+    "total": "Totalt",
+    "errorOccurred": "Ett fel uppstod",
+    "retry": "Försök igen",
+    "settings": "Inställningar",
+    "close": "Stäng",
+    "maximize": "Maximera",
+    "restore": "Återställ"
+  },
+  "settings": {
+    "title": "Inställningar",
+    "language": "Språk",
+    "appearance": "Utseende",
+    "theme": "Tema",
+    "light": "Ljust",
+    "dark": "Mörkt",
+    "system": "System",
+    "notifications": "Aviseringar",
+    "enableNotifications": "Aktivera aviseringar",
+    "notificationSound": "Aviseringsljud",
+    "about": "Om",
+    "version": "Version",
+    "checkForUpdates": "Sök efter uppdateringar",
+    "clearAllDevices": "Rensa alla enheter"
+  },
+  "connection": {
+    "add": "Lägg till anslutning"
+  },
+  "device": {
+    "connect": "Anslut enhet",
+    "disconnect": "Koppla från",
+    "connected": "Ansluten",
+    "disconnected": "Frånkopplad",
+    "connectionFailed": "Anslutning misslyckades",
+    "retry": "Försök igen",
+    "deviceInfo": "Enhetsinformation",
+    "deviceName": "Enhetsnamn",
+    "deviceModel": "Modell",
+    "deviceOS": "OS-version",
+    "batteryLevel": "Batterinivå",
+    "storage": "Lagring",
+    "memory": "Minne"
+  },
+  "notification": {
+    "noNotifications": "Inga aviseringar",
+    "clearAll": "Rensa alla",
+    "markAsRead": "Märk som läst",
+    "markAsUnread": "Märk som oläst",
+    "delete": "Ta bort",
+    "reply": "Svara",
+    "copy": "Kopiera",
+    "copied": "Kopierad!",
+    "expand": "Visa mer",
+    "collapse": "Visa mindre"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Kunde inte minimera fönstret"
+  }
+}

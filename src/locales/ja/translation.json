@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "通知リスナー",
+    "description": "デバイスの通知を聞いて管理する"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "back": "戻る",
+    "delete": "削除",
+    "confirm": "確認",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "connect": "接続",
+    "connecting": "接続中...",
+    "disconnect": "切断",
+    "disconnecting": "切断中...",
+    "connected": "接続済み",
+    "disconnected": "切断されました",
+    "connectionFailed": "接続に失敗しました",
+    "minimize": "最小化",
+    "unread": "未読",
+    "total": "合計",
+    "errorOccurred": "エラーが発生しました",
+    "retry": "再試行",
+    "settings": "設定",
+    "close": "閉じる",
+    "maximize": "最大化",
+    "restore": "元に戻す"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "appearance": "外観",
+    "theme": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム",
+    "notifications": "通知",
+    "enableNotifications": "通知を有効にする",
+    "notificationSound": "通知音",
+    "about": "バージョン情報",
+    "version": "バージョン",
+    "checkForUpdates": "アップデートを確認",
+    "clearAllDevices": "すべてのデバイスをクリア"
+  },
+  "connection": {
+    "add": "接続を追加"
+  },
+  "device": {
+    "connect": "デバイスに接続",
+    "disconnect": "切断",
+    "connected": "接続済み",
+    "disconnected": "切断されました",
+    "connectionFailed": "接続に失敗しました",
+    "retry": "再試行",
+    "deviceInfo": "デバイス情報",
+    "deviceName": "デバイス名",
+    "deviceModel": "モデル",
+    "deviceOS": "OSバージョン",
+    "batteryLevel": "バッテリー",
+    "storage": "ストレージ",
+    "memory": "メモリ"
+  },
+  "notification": {
+    "noNotifications": "通知はありません",
+    "clearAll": "すべてクリア",
+    "markAsRead": "既読にする",
+    "markAsUnread": "未読にする",
+    "delete": "削除",
+    "reply": "返信",
+    "copy": "コピー",
+    "copied": "コピーしました！",
+    "expand": "もっと見る",
+    "collapse": "折りたたむ"
+  },
+  "errors": {
+    "minimizeWindowFailed": "ウィンドウの最小化に失敗しました"
+  }
+}

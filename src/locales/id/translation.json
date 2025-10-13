@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Pendengar Notifikasi",
+    "description": "Dengarkan dan kelola notifikasi perangkat"
+  },
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "back": "Kembali",
+    "delete": "Hapus",
+    "confirm": "Konfirmasi",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "connect": "Sambung",
+    "connecting": "Menyambung...",
+    "disconnect": "Putuskan",
+    "disconnecting": "Memutuskan...",
+    "connected": "Terhubung",
+    "disconnected": "Terputus",
+    "connectionFailed": "Koneksi gagal",
+    "minimize": "Minimalkan",
+    "unread": "Belum dibaca",
+    "total": "Total",
+    "errorOccurred": "Terjadi kesalahan",
+    "retry": "Coba lagi",
+    "settings": "Pengaturan",
+    "close": "Tutup",
+    "maximize": "Maksimalkan",
+    "restore": "Pulihkan"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "language": "Bahasa",
+    "appearance": "Tampilan",
+    "theme": "Tema",
+    "light": "Terang",
+    "dark": "Gelap",
+    "system": "Sistem",
+    "notifications": "Notifikasi",
+    "enableNotifications": "Aktifkan notifikasi",
+    "notificationSound": "Suara notifikasi",
+    "about": "Tentang",
+    "version": "Versi",
+    "checkForUpdates": "Periksa pembaruan",
+    "clearAllDevices": "Hapus semua perangkat"
+  },
+  "connection": {
+    "add": "Tambahkan koneksi"
+  },
+  "device": {
+    "connect": "Sambungkan perangkat",
+    "disconnect": "Putuskan",
+    "connected": "Terhubung",
+    "disconnected": "Terputus",
+    "connectionFailed": "Koneksi gagal",
+    "retry": "Coba lagi",
+    "deviceInfo": "Informasi perangkat",
+    "deviceName": "Nama perangkat",
+    "deviceModel": "Model",
+    "deviceOS": "Versi sistem operasi",
+    "batteryLevel": "Baterai",
+    "storage": "Penyimpanan",
+    "memory": "Memori"
+  },
+  "notification": {
+    "noNotifications": "Tidak ada notifikasi",
+    "clearAll": "Hapus semua",
+    "markAsRead": "Tandai sudah dibaca",
+    "markAsUnread": "Tandai belum dibaca",
+    "delete": "Hapus",
+    "reply": "Balas",
+    "copy": "Salin",
+    "copied": "Tersalin!",
+    "expand": "Tampilkan lebih banyak",
+    "collapse": "Sembunyikan"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Gagal meminimalkan jendela"
+  }
+}

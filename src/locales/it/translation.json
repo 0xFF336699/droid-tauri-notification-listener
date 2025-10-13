@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Ascoltatore di notifiche",
+    "description": "Ascolta e gestisci le notifiche del dispositivo"
+  },
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "back": "Indietro",
+    "delete": "Elimina",
+    "confirm": "Conferma",
+    "loading": "Caricamento...",
+    "error": "Si è verificato un errore",
+    "connect": "Connetti",
+    "connecting": "Connessione in corso...",
+    "disconnect": "Disconnetti",
+    "disconnecting": "Disconnessione in corso...",
+    "connected": "Connesso",
+    "disconnected": "Disconnesso",
+    "connectionFailed": "Connessione fallita",
+    "minimize": "Riduci a icona",
+    "unread": "Non letto",
+    "total": "Totale",
+    "errorOccurred": "Si è verificato un errore",
+    "retry": "Riprova",
+    "settings": "Impostazioni",
+    "close": "Chiudi",
+    "maximize": "Ingrandisci",
+    "restore": "Ripristina"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua",
+    "appearance": "Aspetto",
+    "theme": "Tema",
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "system": "Sistema",
+    "notifications": "Notifiche",
+    "enableNotifications": "Abilita notifiche",
+    "notificationSound": "Suono di notifica",
+    "about": "Informazioni",
+    "version": "Versione",
+    "checkForUpdates": "Controlla aggiornamenti",
+    "clearAllDevices": "Cancella tutti i dispositivi"
+  },
+  "connection": {
+    "add": "Aggiungi connessione"
+  },
+  "device": {
+    "connect": "Connetti dispositivo",
+    "disconnect": "Disconnetti",
+    "connected": "Connesso",
+    "disconnected": "Disconnesso",
+    "connectionFailed": "Connessione fallita",
+    "retry": "Riprova",
+    "deviceInfo": "Informazioni dispositivo",
+    "deviceName": "Nome dispositivo",
+    "deviceModel": "Modello",
+    "deviceOS": "Versione sistema operativo",
+    "batteryLevel": "Batteria",
+    "storage": "Archiviazione",
+    "memory": "Memoria"
+  },
+  "notification": {
+    "noNotifications": "Nessuna notifica",
+    "clearAll": "Pulisci tutto",
+    "markAsRead": "Segna come letto",
+    "markAsUnread": "Segna come non letto",
+    "delete": "Elimina",
+    "reply": "Rispondi",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "expand": "Mostra altro",
+    "collapse": "Mostra meno"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Impossibile ridurre a icona la finestra"
+  }
+}

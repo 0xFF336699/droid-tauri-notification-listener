@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "مستمع الإشعارات",
+    "description": "الاستماع إلى إشعارات الجهاز وإدارتها"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "back": "رجوع",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "connect": "اتصال",
+    "connecting": "جاري الاتصال...",
+    "disconnect": "قطع الاتصال",
+    "disconnecting": "جاري قطع الاتصال...",
+    "connected": "متصل",
+    "disconnected": "غير متصل",
+    "connectionFailed": "فشل الاتصال",
+    "minimize": "تصغير",
+    "unread": "غير مقروء",
+    "total": "الإجمالي",
+    "errorOccurred": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "settings": "الإعدادات",
+    "close": "إغلاق",
+    "maximize": "تكبير",
+    "restore": "استعادة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "appearance": "المظهر",
+    "theme": "السمة",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام",
+    "notifications": "الإشعارات",
+    "enableNotifications": "تمكين الإشعارات",
+    "notificationSound": "صوت الإشعار",
+    "about": "حول",
+    "version": "الإصدار",
+    "checkForUpdates": "التحقق من التحديثات",
+    "clearAllDevices": "مسح جميع الأجهزة"
+  },
+  "connection": {
+    "add": "إضافة اتصال"
+  },
+  "device": {
+    "connect": "اتصال الجهاز",
+    "disconnect": "قطع الاتصال",
+    "connected": "متصل",
+    "disconnected": "غير متصل",
+    "connectionFailed": "فشل الاتصال",
+    "retry": "إعادة المحاولة",
+    "deviceInfo": "معلومات الجهاز",
+    "deviceName": "اسم الجهاز",
+    "deviceModel": "الموديل",
+    "deviceOS": "إصدار نظام التشغيل",
+    "batteryLevel": "البطارية",
+    "storage": "التخزين",
+    "memory": "الذاكرة"
+  },
+  "notification": {
+    "noNotifications": "لا توجد إشعارات",
+    "clearAll": "مسح الكل",
+    "markAsRead": "وضع علامة مقروء",
+    "markAsUnread": "وضع علامة غير مقروء",
+    "delete": "حذف",
+    "reply": "رد",
+    "copy": "نسخ",
+    "copied": "تم النسخ!",
+    "expand": "عرض المزيد",
+    "collapse": "عرض أقل"
+  },
+  "errors": {
+    "minimizeWindowFailed": "فشل تصغير النافذة"
+  }
+}

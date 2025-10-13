@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "Notifikationslytter",
+    "description": "Lyt til og administrer enhedsnotifikationer"
+  },
+  "common": {
+    "save": "Gem",
+    "cancel": "Annuller",
+    "back": "Tilbage",
+    "delete": "Slet",
+    "confirm": "Bekræft",
+    "loading": "Indlæser...",
+    "error": "Der opstod en fejl",
+    "connect": "Forbind",
+    "connecting": "Opretter forbindelse...",
+    "disconnect": "Afbryd forbindelse",
+    "disconnecting": "Afbryder forbindelse...",
+    "connected": "Forbundet",
+    "disconnected": "Ikke forbundet",
+    "connectionFailed": "Forbindelsen mislykkedes",
+    "minimize": "Minimer",
+    "unread": "Ulæst",
+    "total": "I alt",
+    "errorOccurred": "Der opstod en fejl",
+    "retry": "Prøv igen",
+    "settings": "Indstillinger",
+    "close": "Luk",
+    "maximize": "Maksimer",
+    "restore": "Gendan"
+  },
+  "settings": {
+    "title": "Indstillinger",
+    "language": "Sprog",
+    "appearance": "Udseende",
+    "theme": "Tema",
+    "light": "Lyst",
+    "dark": "Mørkt",
+    "system": "System",
+    "notifications": "Notifikationer",
+    "enableNotifications": "Aktiver notifikationer",
+    "notificationSound": "Notifikationslyd",
+    "about": "Om",
+    "version": "Version",
+    "checkForUpdates": "Søg efter opdateringer"
+  },
+  "device": {
+    "connect": "Forbind enhed",
+    "disconnect": "Afbryd forbindelse",
+    "connected": "Forbundet",
+    "disconnected": "Ikke forbundet",
+    "connectionFailed": "Forbindelsen mislykkedes",
+    "retry": "Prøv igen",
+    "deviceInfo": "Enhedsoplysninger",
+    "deviceName": "Enhedsnavn",
+    "deviceModel": "Model",
+    "deviceOS": "OS-version",
+    "batteryLevel": "Batteriniveau",
+    "storage": "Lagerplads",
+    "memory": "Hukommelse"
+  },
+  "notification": {
+    "noNotifications": "Ingen notifikationer",
+    "clearAll": "Ryd alt",
+    "markAsRead": "Marker som læst",
+    "markAsUnread": "Marker som ulæst",
+    "delete": "Slet",
+    "reply": "Svar",
+    "copy": "Kopier",
+    "copied": "Kopieret!",
+    "expand": "Vis mere",
+    "collapse": "Vis mindre"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Kunne ikke minimere vinduet"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "מאזין התראות",
+    "description": "האזן ונהל התראות ממכשירים"
+  },
+  "common": {
+    "save": "שמור",
+    "cancel": "ביטול",
+    "back": "חזרה",
+    "delete": "מחק",
+    "confirm": "אישור",
+    "loading": "טוען...",
+    "error": "אירעה שגיאה",
+    "connect": "התחבר",
+    "connecting": "מתחבר...",
+    "disconnect": "התנתק",
+    "disconnecting": "מתנתק...",
+    "connected": "מחובר",
+    "disconnected": "לא מחובר",
+    "connectionFailed": "החיבור נכשל",
+    "minimize": "מזער",
+    "unread": "לא נקרא",
+    "total": "סה\"כ",
+    "errorOccurred": "אירעה שגיאה",
+    "retry": "נסה שוב",
+    "settings": "הגדרות",
+    "close": "סגור",
+    "maximize": "הגדל",
+    "restore": "שחזר"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "language": "שפה",
+    "appearance": "מראה",
+    "theme": "ערכת נושא",
+    "light": "בהיר",
+    "dark": "כהה",
+    "system": "מערכת",
+    "notifications": "התראות",
+    "enableNotifications": "הפעל התראות",
+    "notificationSound": "צליל התראה",
+    "about": "אודות",
+    "version": "גרסה",
+    "checkForUpdates": "בדוק עדכונים"
+  },
+  "device": {
+    "connect": "התחברות מכשיר",
+    "disconnect": "התנתק",
+    "connected": "מחובר",
+    "disconnected": "לא מחובר",
+    "connectionFailed": "החיבור נכשל",
+    "retry": "נסה שוב",
+    "deviceInfo": "מידע על המכשיר",
+    "deviceName": "שם המכשיר",
+    "deviceModel": "דגם",
+    "deviceOS": "גרסת מערכת הפעלה",
+    "batteryLevel": "סוללה",
+    "storage": "אחסון",
+    "memory": "זיכרון"
+  },
+  "notification": {
+    "noNotifications": "אין התראות",
+    "clearAll": "נקה הכל",
+    "markAsRead": "סמן כנקרא",
+    "markAsUnread": "סמן כלא נקרא",
+    "delete": "מחק",
+    "reply": "השב",
+    "copy": "העתק",
+    "copied": "הועתק!",
+    "expand": "הצג עוד",
+    "collapse": "הצג פחות"
+  },
+  "errors": {
+    "minimizeWindowFailed": "אירעה שגיאה במזעור החלון"
+  }
+}

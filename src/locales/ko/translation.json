@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "알림 수신기",
+    "description": "기기 알림 듣기 및 관리"
+  },
+  "common": {
+    "save": "저장",
+    "cancel": "취소",
+    "back": "뒤로",
+    "delete": "삭제",
+    "confirm": "확인",
+    "loading": "로드 중...",
+    "error": "오류가 발생했습니다",
+    "connect": "연결",
+    "connecting": "연결 중...",
+    "disconnect": "연결 해제",
+    "disconnecting": "연결 해제 중...",
+    "connected": "연결됨",
+    "disconnected": "연결 해제됨",
+    "connectionFailed": "연결 실패",
+    "minimize": "최소화",
+    "unread": "읽지 않음",
+    "total": "총",
+    "errorOccurred": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "settings": "설정",
+    "close": "닫기",
+    "maximize": "최대화",
+    "restore": "복원"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어",
+    "appearance": "모양",
+    "theme": "테마",
+    "light": "밝게",
+    "dark": "어둡게",
+    "system": "시스템",
+    "notifications": "알림",
+    "enableNotifications": "알림 사용",
+    "notificationSound": "알림음",
+    "about": "정보",
+    "version": "버전",
+    "checkForUpdates": "업데이트 확인",
+    "clearAllDevices": "모든 기기 지우기"
+  },
+  "connection": {
+    "add": "연결 추가"
+  },
+  "device": {
+    "connect": "기기 연결",
+    "disconnect": "연결 해제",
+    "connected": "연결됨",
+    "disconnected": "연결 해제됨",
+    "connectionFailed": "연결 실패",
+    "retry": "다시 시도",
+    "deviceInfo": "기기 정보",
+    "deviceName": "기기 이름",
+    "deviceModel": "모델",
+    "deviceOS": "OS 버전",
+    "batteryLevel": "배터리",
+    "storage": "저장공간",
+    "memory": "메모리"
+  },
+  "notification": {
+    "noNotifications": "알림 없음",
+    "clearAll": "모두 지우기",
+    "markAsRead": "읽음으로 표시",
+    "markAsUnread": "읽지 않음으로 표시",
+    "delete": "삭제",
+    "reply": "답장",
+    "copy": "복사",
+    "copied": "복사됨!",
+    "expand": "더 보기",
+    "collapse": "접기"
+  },
+  "errors": {
+    "minimizeWindowFailed": "창 최소화에 실패했습니다"
+  }
+}

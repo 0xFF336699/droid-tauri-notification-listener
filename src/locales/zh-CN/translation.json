@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "通知监听器",
+    "description": "监听和管理设备通知"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "back": "返回",
+    "delete": "删除",
+    "confirm": "确认",
+    "loading": "加载中...",
+    "error": "发生错误",
+    "connect": "连接",
+    "connecting": "连接中...",
+    "disconnect": "断开连接",
+    "disconnecting": "断开中...",
+    "connected": "已连接",
+    "disconnected": "已断开",
+    "connectionFailed": "连接失败",
+    "minimize": "最小化",
+    "unread": "未读",
+    "total": "总数",
+    "errorOccurred": "发生错误",
+    "retry": "重试",
+    "settings": "设置",
+    "close": "关闭",
+    "maximize": "最大化",
+    "restore": "还原"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "appearance": "外观",
+    "theme": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "系统",
+    "notifications": "通知",
+    "enableNotifications": "启用通知",
+    "notificationSound": "通知声音",
+    "about": "关于",
+    "version": "版本",
+    "checkForUpdates": "检查更新",
+    "clearAllDevices": "清除所有设备"
+  },
+  "connection": {
+    "add": "添加连接"
+  },
+  "device": {
+    "connect": "连接设备",
+    "disconnect": "断开连接",
+    "connected": "已连接",
+    "disconnected": "已断开",
+    "connectionFailed": "连接失败",
+    "retry": "重试",
+    "deviceInfo": "设备信息",
+    "deviceName": "设备名称",
+    "deviceModel": "型号",
+    "deviceOS": "系统版本",
+    "batteryLevel": "电量",
+    "storage": "存储",
+    "memory": "内存"
+  },
+  "notification": {
+    "noNotifications": "没有通知",
+    "clearAll": "全部清除",
+    "markAsRead": "标记为已读",
+    "markAsUnread": "标记为未读",
+    "delete": "删除",
+    "reply": "回复",
+    "copy": "复制",
+    "copied": "已复制!",
+    "expand": "显示更多",
+    "collapse": "收起"
+  },
+  "errors": {
+    "minimizeWindowFailed": "最小化窗口失败"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Ouvinte de Notificações",
+    "description": "Ouvir e gerir notificações do dispositivo"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "back": "Voltar",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "loading": "A carregar...",
+    "error": "Ocorreu um erro",
+    "connect": "Ligar",
+    "connecting": "A ligar...",
+    "disconnect": "Desligar",
+    "disconnecting": "A desligar...",
+    "connected": "Ligado",
+    "disconnected": "Desligado",
+    "connectionFailed": "Falha na ligação",
+    "minimize": "Minimizar",
+    "unread": "Por ler",
+    "total": "Total",
+    "errorOccurred": "Ocorreu um erro",
+    "retry": "Tentar novamente",
+    "settings": "Definições",
+    "close": "Fechar",
+    "maximize": "Maximizar",
+    "restore": "Restaurar"
+  },
+  "settings": {
+    "title": "Definições",
+    "language": "Idioma",
+    "appearance": "Aparência",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema",
+    "notifications": "Notificações",
+    "enableNotifications": "Ativar notificações",
+    "notificationSound": "Som de notificação",
+    "about": "Sobre",
+    "version": "Versão",
+    "checkForUpdates": "Verificar atualizações",
+    "clearAllDevices": "Limpar todos os dispositivos"
+  },
+  "connection": {
+    "add": "Adicionar ligação"
+  },
+  "device": {
+    "connect": "Ligar dispositivo",
+    "disconnect": "Desligar",
+    "connected": "Ligado",
+    "disconnected": "Desligado",
+    "connectionFailed": "Falha na ligação",
+    "retry": "Tentar novamente",
+    "deviceInfo": "Informação do dispositivo",
+    "deviceName": "Nome do dispositivo",
+    "deviceModel": "Modelo",
+    "deviceOS": "Versão do sistema operativo",
+    "batteryLevel": "Bateria",
+    "storage": "Armazenamento",
+    "memory": "Memória"
+  },
+  "notification": {
+    "noNotifications": "Sem notificações",
+    "clearAll": "Limpar tudo",
+    "markAsRead": "Marcar como lido",
+    "markAsUnread": "Marcar como não lido",
+    "delete": "Eliminar",
+    "reply": "Responder",
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "expand": "Mostrar mais",
+    "collapse": "Mostrar menos"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Falha ao minimizar a janela"
+  }
+}

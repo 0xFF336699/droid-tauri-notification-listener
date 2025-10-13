@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "ตัวแจ้งเตือน",
+    "description": "ฟังและจัดการการแจ้งเตือนจากอุปกรณ์"
+  },
+  "common": {
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "back": "ย้อนกลับ",
+    "delete": "ลบ",
+    "confirm": "ยืนยัน",
+    "loading": "กำลังโหลด...",
+    "error": "เกิดข้อผิดพลาด",
+    "connect": "เชื่อมต่อ",
+    "connecting": "กำลังเชื่อมต่อ...",
+    "disconnect": "ยกเลิกการเชื่อมต่อ",
+    "disconnecting": "กำลังยกเลิกการเชื่อมต่อ...",
+    "connected": "เชื่อมต่อแล้ว",
+    "disconnected": "ยกเลิกการเชื่อมต่อแล้ว",
+    "connectionFailed": "การเชื่อมต่อล้มเหลว",
+    "minimize": "ย่อเล็กสุด",
+    "unread": "ยังไม่ได้อ่าน",
+    "total": "ทั้งหมด",
+    "errorOccurred": "เกิดข้อผิดพลาด",
+    "retry": "ลองอีกครั้ง",
+    "settings": "การตั้งค่า",
+    "close": "ปิด",
+    "maximize": "ขยายใหญ่สุด",
+    "restore": "คืนค่า"
+  },
+  "settings": {
+    "title": "การตั้งค่า",
+    "language": "ภาษา",
+    "appearance": "รูปลักษณ์",
+    "theme": "ธีม",
+    "light": "สว่าง",
+    "dark": "มืด",
+    "system": "ระบบ",
+    "notifications": "การแจ้งเตือน",
+    "enableNotifications": "เปิดใช้งานการแจ้งเตือน",
+    "notificationSound": "เสียงแจ้งเตือน",
+    "about": "เกี่ยวกับ",
+    "version": "เวอร์ชัน",
+    "checkForUpdates": "ตรวจสอบการอัปเดต",
+    "clearAllDevices": "ล้างอุปกรณ์ทั้งหมด"
+  },
+  "connection": {
+    "add": "เพิ่มการเชื่อมต่อ"
+  },
+  "device": {
+    "connect": "เชื่อมต่ออุปกรณ์",
+    "disconnect": "ยกเลิกการเชื่อมต่อ",
+    "connected": "เชื่อมต่อแล้ว",
+    "disconnected": "ยกเลิกการเชื่อมต่อแล้ว",
+    "connectionFailed": "การเชื่อมต่อล้มเหลว",
+    "retry": "ลองอีกครั้ง",
+    "deviceInfo": "ข้อมูลอุปกรณ์",
+    "deviceName": "ชื่ออุปกรณ์",
+    "deviceModel": "รุ่น",
+    "deviceOS": "เวอร์ชันระบบปฏิบัติการ",
+    "batteryLevel": "แบตเตอรี่",
+    "storage": "ที่เก็บข้อมูล",
+    "memory": "หน่วยความจำ"
+  },
+  "notification": {
+    "noNotifications": "ไม่มีการแจ้งเตือน",
+    "clearAll": "ล้างทั้งหมด",
+    "markAsRead": "ทำเครื่องหมายว่าอ่านแล้ว",
+    "markAsUnread": "ทำเครื่องหมายว่ายังไม่ได้อ่าน",
+    "delete": "ลบ",
+    "reply": "ตอบกลับ",
+    "copy": "คัดลอก",
+    "copied": "คัดลอกแล้ว!",
+    "expand": "แสดงเพิ่มเติม",
+    "collapse": "แสดงน้อยลง"
+  },
+  "errors": {
+    "minimizeWindowFailed": "ไม่สามารถย่อหน้าต่างได้"
+  }
+}

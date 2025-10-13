@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "सूचना श्रोता",
+    "description": "डिवाइस सूचनाएं सुनें और प्रबंधित करें"
+  },
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "back": "वापस",
+    "delete": "हटाएं",
+    "confirm": "पुष्टि करें",
+    "loading": "लोड हो रहा है...",
+    "error": "एक त्रुटि हुई",
+    "connect": "कनेक्ट करें",
+    "connecting": "कनेक्ट हो रहा है...",
+    "disconnect": "डिस्कनेक्ट करें",
+    "disconnecting": "डिस्कनेक्ट हो रहा है...",
+    "connected": "कनेक्टेड",
+    "disconnected": "डिस्कनेक्टेड",
+    "connectionFailed": "कनेक्शन विफल",
+    "minimize": "छोटा करें",
+    "unread": "अनपढ़ा",
+    "total": "कुल",
+    "errorOccurred": "एक त्रुटि हुई",
+    "retry": "पुनः प्रयास करें",
+    "settings": "सेटिंग्स",
+    "close": "बंद करें",
+    "maximize": "बड़ा करें",
+    "restore": "पुनर्स्थापित करें"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "appearance": "दिखावट",
+    "theme": "थीम",
+    "light": "हल्का",
+    "dark": "डार्क",
+    "system": "सिस्टम",
+    "notifications": "सूचनाएं",
+    "enableNotifications": "सूचनाएं सक्षम करें",
+    "notificationSound": "सूचना ध्वनि",
+    "about": "के बारे में",
+    "version": "संस्करण",
+    "checkForUpdates": "अपडेट के लिए जांचें",
+    "clearAllDevices": "सभी डिवाइस साफ़ करें"
+  },
+  "connection": {
+    "add": "कनेक्शन जोड़ें"
+  },
+  "device": {
+    "connect": "डिवाइस कनेक्ट करें",
+    "disconnect": "डिस्कनेक्ट करें",
+    "connected": "कनेक्टेड",
+    "disconnected": "डिस्कनेक्टेड",
+    "connectionFailed": "कनेक्शन विफल",
+    "retry": "पुनः प्रयास करें",
+    "deviceInfo": "डिवाइस जानकारी",
+    "deviceName": "डिवाइस का नाम",
+    "deviceModel": "मॉडल",
+    "deviceOS": "ओएस संस्करण",
+    "batteryLevel": "बैटरी",
+    "storage": "स्टोरेज",
+    "memory": "मेमोरी"
+  },
+  "notification": {
+    "noNotifications": "कोई सूचना नहीं",
+    "clearAll": "सभी साफ़ करें",
+    "markAsRead": "पढ़ा हुआ चिह्नित करें",
+    "markAsUnread": "अनपढ़ा चिह्नित करें",
+    "delete": "हटाएं",
+    "reply": "जवाब दें",
+    "copy": "कॉपी करें",
+    "copied": "कॉपी किया गया!",
+    "expand": "और दिखाएं",
+    "collapse": "कम दिखाएं"
+  },
+  "errors": {
+    "minimizeWindowFailed": "विंडो को छोटा करने में विफल"
+  }
+}

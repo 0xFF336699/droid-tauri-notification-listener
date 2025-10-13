@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Benachrichtigungs-Listener",
+    "description": "Gerätebenachrichtigungen anhören und verwalten"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "back": "Zurück",
+    "delete": "Löschen",
+    "confirm": "Bestätigen",
+    "loading": "Wird geladen...",
+    "error": "Ein Fehler ist aufgetreten",
+    "connect": "Verbinden",
+    "connecting": "Wird verbunden...",
+    "disconnect": "Trennen",
+    "disconnecting": "Wird getrennt...",
+    "connected": "Verbunden",
+    "disconnected": "Getrennt",
+    "connectionFailed": "Verbindung fehlgeschlagen",
+    "minimize": "Minimieren",
+    "unread": "Ungelesen",
+    "total": "Gesamt",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "retry": "Wiederholen",
+    "settings": "Einstellungen",
+    "close": "Schließen",
+    "maximize": "Maximieren",
+    "restore": "Wiederherstellen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "appearance": "Darstellung",
+    "theme": "Design",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System",
+    "notifications": "Benachrichtigungen",
+    "enableNotifications": "Benachrichtigungen aktivieren",
+    "notificationSound": "Benachrichtigungston",
+    "about": "Über",
+    "version": "Version",
+    "checkForUpdates": "Auf Aktualisierungen prüfen",
+    "clearAllDevices": "Alle Geräte löschen"
+  },
+  "connection": {
+    "add": "Verbindung hinzufügen"
+  },
+  "device": {
+    "connect": "Gerät verbinden",
+    "disconnect": "Trennen",
+    "connected": "Verbunden",
+    "disconnected": "Getrennt",
+    "connectionFailed": "Verbindung fehlgeschlagen",
+    "retry": "Wiederholen",
+    "deviceInfo": "Geräteinformationen",
+    "deviceName": "Gerätename",
+    "deviceModel": "Modell",
+    "deviceOS": "Betriebssystem-Version",
+    "batteryLevel": "Akku",
+    "storage": "Speicher",
+    "memory": "Arbeitsspeicher"
+  },
+  "notification": {
+    "noNotifications": "Keine Benachrichtigungen",
+    "clearAll": "Alle löschen",
+    "markAsRead": "Als gelesen markieren",
+    "markAsUnread": "Als ungelesen markieren",
+    "delete": "Löschen",
+    "reply": "Antworten",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "expand": "Mehr anzeigen",
+    "collapse": "Weniger anzeigen"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Fenster konnte nicht minimiert werden"
+  }
+}

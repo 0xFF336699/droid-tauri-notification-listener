@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Escuchador de notificaciones",
+    "description": "Escuchar y gestionar notificaciones del dispositivo"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "back": "Atrás",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "connect": "Conectar",
+    "connecting": "Conectando...",
+    "disconnect": "Desconectar",
+    "disconnecting": "Desconectando...",
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "connectionFailed": "Error de conexión",
+    "minimize": "Minimizar",
+    "unread": "No leído",
+    "total": "Total",
+    "errorOccurred": "Ha ocurrido un error",
+    "retry": "Reintentar",
+    "settings": "Ajustes",
+    "close": "Cerrar",
+    "maximize": "Maximizar",
+    "restore": "Restaurar"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "appearance": "Apariencia",
+    "theme": "Tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "notifications": "Notificaciones",
+    "enableNotifications": "Activar notificaciones",
+    "notificationSound": "Sonido de notificación",
+    "about": "Acerca de",
+    "version": "Versión",
+    "checkForUpdates": "Buscar actualizaciones",
+    "clearAllDevices": "Eliminar todos los dispositivos"
+  },
+  "connection": {
+    "add": "Añadir conexión"
+  },
+  "device": {
+    "connect": "Conectar dispositivo",
+    "disconnect": "Desconectar",
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "connectionFailed": "Error de conexión",
+    "retry": "Reintentar",
+    "deviceInfo": "Información del dispositivo",
+    "deviceName": "Nombre del dispositivo",
+    "deviceModel": "Modelo",
+    "deviceOS": "Versión del sistema operativo",
+    "batteryLevel": "Batería",
+    "storage": "Almacenamiento",
+    "memory": "Memoria"
+  },
+  "notification": {
+    "noNotifications": "Sin notificaciones",
+    "clearAll": "Limpiar todo",
+    "markAsRead": "Marcar como leído",
+    "markAsUnread": "Marcar como no leído",
+    "delete": "Eliminar",
+    "reply": "Responder",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "expand": "Mostrar más",
+    "collapse": "Mostrar menos"
+  },
+  "errors": {
+    "minimizeWindowFailed": "No se pudo minimizar la ventana"
+  }
+}

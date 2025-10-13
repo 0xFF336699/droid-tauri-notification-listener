@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Trình nghe thông báo",
+    "description": "Nghe và quản lý thông báo thiết bị"
+  },
+  "common": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "back": "Quay lại",
+    "delete": "Xóa",
+    "confirm": "Xác nhận",
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "connect": "Kết nối",
+    "connecting": "Đang kết nối...",
+    "disconnect": "Ngắt kết nối",
+    "disconnecting": "Đang ngắt kết nối...",
+    "connected": "Đã kết nối",
+    "disconnected": "Đã ngắt kết nối",
+    "connectionFailed": "Kết nối thất bại",
+    "minimize": "Thu nhỏ",
+    "unread": "Chưa đọc",
+    "total": "Tổng",
+    "errorOccurred": "Đã xảy ra lỗi",
+    "retry": "Thử lại",
+    "settings": "Cài đặt",
+    "close": "Đóng",
+    "maximize": "Phóng to",
+    "restore": "Khôi phục"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "appearance": "Giao diện",
+    "theme": "Chủ đề",
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Hệ thống",
+    "notifications": "Thông báo",
+    "enableNotifications": "Bật thông báo",
+    "notificationSound": "Âm thanh thông báo",
+    "about": "Giới thiệu",
+    "version": "Phiên bản",
+    "checkForUpdates": "Kiểm tra cập nhật",
+    "clearAllDevices": "Xóa tất cả thiết bị"
+  },
+  "connection": {
+    "add": "Thêm kết nối"
+  },
+  "device": {
+    "connect": "Kết nối thiết bị",
+    "disconnect": "Ngắt kết nối",
+    "connected": "Đã kết nối",
+    "disconnected": "Đã ngắt kết nối",
+    "connectionFailed": "Kết nối thất bại",
+    "retry": "Thử lại",
+    "deviceInfo": "Thông tin thiết bị",
+    "deviceName": "Tên thiết bị",
+    "deviceModel": "Mẫu",
+    "deviceOS": "Phiên bản hệ điều hành",
+    "batteryLevel": "Pin",
+    "storage": "Bộ nhớ",
+    "memory": "Bộ nhớ"
+  },
+  "notification": {
+    "noNotifications": "Không có thông báo",
+    "clearAll": "Xóa tất cả",
+    "markAsRead": "Đánh dấu là đã đọc",
+    "markAsUnread": "Đánh dấu là chưa đọc",
+    "delete": "Xóa",
+    "reply": "Trả lời",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép!",
+    "expand": "Hiện thêm",
+    "collapse": "Thu gọn"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Không thể thu nhỏ cửa sổ"
+  }
+}

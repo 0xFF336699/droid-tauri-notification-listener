@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Notification Listener",
+    "description": "Listen and manage device notifications"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "connect": "Connect",
+    "connecting": "Connecting...",
+    "disconnect": "Disconnect",
+    "disconnecting": "Disconnecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "connectionFailed": "Connection failed",
+    "minimize": "Minimize",
+    "unread": "Unread",
+    "total": "Total",
+    "errorOccurred": "An error occurred",
+    "retry": "Retry",
+    "settings": "Settings",
+    "close": "Close",
+    "maximize": "Maximize",
+    "restore": "Restore"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "notifications": "Notifications",
+    "enableNotifications": "Enable notifications",
+    "notificationSound": "Notification sound",
+    "about": "About",
+    "version": "Version",
+    "checkForUpdates": "Check for updates",
+    "clearAllDevices": "Clear all devices"
+  },
+  "connection": {
+    "add": "Add connection"
+  },
+  "device": {
+    "connect": "Connect Device",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "connectionFailed": "Connection failed",
+    "retry": "Retry",
+    "deviceInfo": "Device Info",
+    "deviceName": "Device Name",
+    "deviceModel": "Model",
+    "deviceOS": "OS Version",
+    "batteryLevel": "Battery",
+    "storage": "Storage",
+    "memory": "Memory"
+  },
+  "notification": {
+    "noNotifications": "No notifications",
+    "clearAll": "Clear All",
+    "markAsRead": "Mark as read",
+    "markAsUnread": "Mark as unread",
+    "delete": "Delete",
+    "reply": "Reply",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "expand": "Show more",
+    "collapse": "Show less"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Failed to minimize window"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "通知監聽器",
+    "description": "監聽和管理設備通知"
+  },
+  "common": {
+    "save": "儲存",
+    "cancel": "取消",
+    "back": "返回",
+    "delete": "刪除",
+    "confirm": "確認",
+    "loading": "載入中...",
+    "error": "發生錯誤",
+    "connect": "連接",
+    "connecting": "連接中...",
+    "disconnect": "斷開連接",
+    "disconnecting": "斷開中...",
+    "connected": "已連接",
+    "disconnected": "已斷開",
+    "connectionFailed": "連接失敗",
+    "minimize": "最小化",
+    "unread": "未讀",
+    "total": "總數",
+    "errorOccurred": "發生錯誤",
+    "retry": "重試",
+    "settings": "設定",
+    "close": "關閉",
+    "maximize": "最大化",
+    "restore": "還原"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言",
+    "appearance": "外觀",
+    "theme": "主題",
+    "light": "淺色",
+    "dark": "深色",
+    "system": "系統",
+    "notifications": "通知",
+    "enableNotifications": "啟用通知",
+    "notificationSound": "通知音效",
+    "about": "關於",
+    "version": "版本",
+    "checkForUpdates": "檢查更新",
+    "clearAllDevices": "清除所有設備"
+  },
+  "connection": {
+    "add": "添加連接"
+  },
+  "device": {
+    "connect": "連接設備",
+    "disconnect": "斷開連接",
+    "connected": "已連接",
+    "disconnected": "已斷開",
+    "connectionFailed": "連接失敗",
+    "retry": "重試",
+    "deviceInfo": "設備信息",
+    "deviceName": "設備名稱",
+    "deviceModel": "型號",
+    "deviceOS": "系統版本",
+    "batteryLevel": "電量",
+    "storage": "存儲",
+    "memory": "內存"
+  },
+  "notification": {
+    "noNotifications": "沒有通知",
+    "clearAll": "全部清除",
+    "markAsRead": "標記為已讀",
+    "markAsUnread": "標記為未讀",
+    "delete": "刪除",
+    "reply": "回覆",
+    "copy": "複製",
+    "copied": "已複製!",
+    "expand": "顯示更多",
+    "collapse": "收起"
+  },
+  "errors": {
+    "minimizeWindowFailed": "最小化窗口失敗"
+  }
+}

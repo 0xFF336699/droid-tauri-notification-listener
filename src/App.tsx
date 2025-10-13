@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
+import { useTranslation } from "react-i18next";
+import "./i18n";
 import "./App.css";
 import AddConnectionDialog from "./components/AddConnectionDialog";
 import { usePairingListener } from './hooks/usePairingListener';
@@ -10,6 +12,7 @@ import { SettingsDeviceList } from './components/SettingsDeviceList';
 import { mainModelController } from './data/main-model-controller';
 import { resetAppToDefaults } from './utils/appReset';
 import React from "react";
+import LanguageSwitcher from "./components/LanguageSwitcher";
 
 type Notification = {
   id: string;
@@ -27,6 +30,7 @@ type Counts = {
 };
 
 function App() {
+  const { t, i18n } = useTranslation();
   const [counts, setCounts] = useState<Counts>({ unread: 0, total: 0 });
   const [items, setItems] = useState<Notification[]>([]);
   const [selected, setSelected] = useState<Record<string, boolean>>({});
@@ -42,7 +46,6 @@ function App() {
     onPairingReceived: (device) => {
       console.log('[App] ===== onPairingReceived callback =====');
       log('New device paired', { data: device });
-
       
       // 添加设备
       mainModelController.addDevice(device);
@@ -51,11 +54,6 @@ function App() {
       setShowSettings(true);
     }
   });
-
-  // 迁移旧配置（可以移除，因为已废弃旧系统）
-  // useEffect(() => {
-  //   ConnectionStorage.migrateFromOldConfig();
-  // }, []);
 
   const selectedIds = useMemo(() => Object.keys(selected).filter((k) => selected[k]), [selected]);
 
@@ -79,14 +77,16 @@ function App() {
       setCounts(c);
       setItems(list);
       try {
-        await invoke("set_tray_tooltip", { text: `未读 ${c.unread} / 总数 ${c.total}` });
+        await invoke("set_tray_tooltip", { 
+          text: `${t('common.unread')} ${c.unread} / ${t('common.total')} ${c.total}` 
+        });
       } catch (e) {
         console.warn("set_tray_tooltip failed", e);
       }
       log("refreshAll ok", { data: { counts: c, size: list.length } });
     } catch (e) {
       console.error(e);
-      setError(String(e));
+      setError(t('common.errorOccurred'));
     } finally {
       setLoading(false);
     }
@@ -153,6 +153,13 @@ function App() {
     }
   }
 
+  // 添加调试信息
+  useEffect(() => {
+    console.log('Current language:', i18n.language);
+    console.log('Available languages:', i18n.languages);
+    console.log('Current translation for settings.title:', t('settings.title'));
+  }, [i18n.language, t]);
+
   // 如果显示设置页面，渲染连接管理界面
   if (showSettings) {
     return (
@@ -175,17 +182,17 @@ function App() {
             userSelect: "none",
           }}
         >
-          <div style={{ fontWeight: 600, fontSize: "14px" }}>⚙️ 连接设置</div>
+          <div style={{ fontWeight: 600, fontSize: "14px" }}>⚙️ {t('settings.title')}</div>
           <button
             onClick={async () => {
               try {
                 const appWindow = getCurrentWindow();
                 await appWindow.minimize();
               } catch (error) {
-                console.error('最小化窗口失败:', error);
+                console.error(t('errors.minimizeWindowFailed'), error);
               }
             }}
-            title="最小化"
+            title={t('common.minimize')}
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
               border: 'none',
@@ -210,20 +217,23 @@ function App() {
             alignItems: 'center',
             marginBottom: '20px'
           }}>
-            <h2>连接设置</h2>
-            <button
-              onClick={() => setShowSettings(false)}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#6c757d',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              返回
-            </button>
+            <h2>{t('settings.title')}</h2>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <LanguageSwitcher />
+              <button
+                onClick={() => setShowSettings(false)}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#6c757d',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                {t('common.back')}
+              </button>
+            </div>
           </div>
 
           <button
@@ -239,7 +249,7 @@ function App() {
               fontSize: '14px'
             }}
           >
-            + 添加连接
+            + {t('connection.add')}
           </button>
 
           <button
@@ -266,12 +276,12 @@ function App() {
               fontSize: '14px'
             }}
           >
-            清空所有设备
+            {t('settings.clearAllDevices')}
           </button>
 
           {/* WebSocket 设备列表 */}
           <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ marginBottom: '15px' }}>WebSocket 设备</h3>
+            <h3 style={{ marginBottom: '15px' }}>{t('settings.websocketDevices')}</h3>
             <SettingsDeviceList />
           </div>
 
@@ -287,7 +297,7 @@ function App() {
               ⚠️ 危险操作
             </h4>
             <p style={{ color: '#856404', fontSize: '14px', marginBottom: '16px', lineHeight: '1.5' }}>
-              重置应用将清除所有数据（包括设备列表、窗口设置、过滤器配置等），恢复到初始安装状态。此操作不可撤销！
+              {t('settings.resetWarning')}
             </p>
             <button
               onClick={resetAppToDefaults}

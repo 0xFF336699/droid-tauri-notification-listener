@@ -6,6 +6,7 @@
   "common": {
     "save": "Save",
     "cancel": "Cancel",
+    "back": "Back",
     "delete": "Delete",
     "confirm": "Confirm",
     "loading": "Loading...",
@@ -17,14 +18,20 @@
     "connecting": "Connecting...",
     "connected": "Connected",
     "disconnected": "Disconnected",
-    "connectionFailed": "Connection failed"
+    "connectionFailed": "Connection failed",
+    "add": "Add Connection"
   },
   "settings": {
     "title": "Settings",
     "language": "Language",
     "theme": "Theme",
     "general": "General",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "clearAllDevices": "Clear All Devices",
+    "websocketDevices": "WebSocket Devices",
+    "resetWarning": "Resetting the application will delete all data (including device list, window settings, filter configurations, etc.) and restore to the initial installation state. This operation cannot be undone!",
+    "resetApp": "Reset Application",
+    "dangerousOperation": "⚠️ Dangerous Operation"
   },
   "notifications": {
     "title": "Notifications",

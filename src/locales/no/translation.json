@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "Varslingslytter",
+    "description": "Lytt til og håndter varsler fra enheter"
+  },
+  "common": {
+    "save": "Lagre",
+    "cancel": "Avbryt",
+    "back": "Tilbake",
+    "delete": "Slett",
+    "confirm": "Bekreft",
+    "loading": "Laster...",
+    "error": "Det oppstod en feil",
+    "connect": "Koble til",
+    "connecting": "Kobler til...",
+    "disconnect": "Koble fra",
+    "disconnecting": "Kobler fra...",
+    "connected": "Tilkoblet",
+    "disconnected": "Frakoblet",
+    "connectionFailed": "Tilkobling mislyktes",
+    "minimize": "Minimer",
+    "unread": "Ulest",
+    "total": "Totalt",
+    "errorOccurred": "Det oppstod en feil",
+    "retry": "Prøv igjen",
+    "settings": "Innstillinger",
+    "close": "Lukk",
+    "maximize": "Maksimer",
+    "restore": "Gjenopprett"
+  },
+  "settings": {
+    "title": "Innstillinger",
+    "language": "Språk",
+    "appearance": "Utseende",
+    "theme": "Tema",
+    "light": "Lyst",
+    "dark": "Mørkt",
+    "system": "System",
+    "notifications": "Varsler",
+    "enableNotifications": "Aktiver varsler",
+    "notificationSound": "Varsellyd",
+    "about": "Om",
+    "version": "Versjon",
+    "checkForUpdates": "Se etter oppdateringer"
+  },
+  "device": {
+    "connect": "Koble til enhet",
+    "disconnect": "Koble fra",
+    "connected": "Tilkoblet",
+    "disconnected": "Frakoblet",
+    "connectionFailed": "Tilkobling mislyktes",
+    "retry": "Prøv igjen",
+    "deviceInfo": "Enhetsinformasjon",
+    "deviceName": "Enhetsnavn",
+    "deviceModel": "Modell",
+    "deviceOS": "OS-versjon",
+    "batteryLevel": "Batterinivå",
+    "storage": "Lagring",
+    "memory": "Minne"
+  },
+  "notification": {
+    "noNotifications": "Ingen varsler",
+    "clearAll": "Tøm alle",
+    "markAsRead": "Merk som lest",
+    "markAsUnread": "Merk som ulest",
+    "delete": "Slett",
+    "reply": "Svar",
+    "copy": "Kopier",
+    "copied": "Kopiert!",
+    "expand": "Vis mer",
+    "collapse": "Vis mindre"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Kunne ikke minimere vinduet"
+  }
+}

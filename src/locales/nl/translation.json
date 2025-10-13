@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Notificatieluisteraar",
+    "description": "Luister naar en beheer apparaatmeldingen"
+  },
+  "common": {
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "back": "Terug",
+    "delete": "Verwijderen",
+    "confirm": "Bevestigen",
+    "loading": "Laden...",
+    "error": "Er is een fout opgetreden",
+    "connect": "Verbinden",
+    "connecting": "Verbinden...",
+    "disconnect": "Verbinding verbreken",
+    "disconnecting": "Verbinding verbreken...",
+    "connected": "Verbonden",
+    "disconnected": "Verbinding verbroken",
+    "connectionFailed": "Verbinding mislukt",
+    "minimize": "Minimaliseren",
+    "unread": "Ongelezen",
+    "total": "Totaal",
+    "errorOccurred": "Er is een fout opgetreden",
+    "retry": "Opnieuw proberen",
+    "settings": "Instellingen",
+    "close": "Sluiten",
+    "maximize": "Maximaliseren",
+    "restore": "Herstellen"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "language": "Taal",
+    "appearance": "Uiterlijk",
+    "theme": "Thema",
+    "light": "Licht",
+    "dark": "Donker",
+    "system": "Systeem",
+    "notifications": "Meldingen",
+    "enableNotifications": "Meldingen inschakelen",
+    "notificationSound": "Meldingsgeluid",
+    "about": "Over",
+    "version": "Versie",
+    "checkForUpdates": "Controleren op updates",
+    "clearAllDevices": "Alle apparaten wissen"
+  },
+  "connection": {
+    "add": "Verbinding toevoegen"
+  },
+  "device": {
+    "connect": "Apparaat verbinden",
+    "disconnect": "Verbinding verbreken",
+    "connected": "Verbonden",
+    "disconnected": "Verbinding verbroken",
+    "connectionFailed": "Verbinding mislukt",
+    "retry": "Opnieuw proberen",
+    "deviceInfo": "Apparaatinformatie",
+    "deviceName": "Apparaatnaam",
+    "deviceModel": "Model",
+    "deviceOS": "Besturingssysteemversie",
+    "batteryLevel": "Batterij",
+    "storage": "Opslag",
+    "memory": "Geheugen"
+  },
+  "notification": {
+    "noNotifications": "Geen meldingen",
+    "clearAll": "Alles wissen",
+    "markAsRead": "Markeer als gelezen",
+    "markAsUnread": "Markeer als ongelezen",
+    "delete": "Verwijderen",
+    "reply": "Beantwoorden",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd!",
+    "expand": "Meer weergeven",
+    "collapse": "Minder weergeven"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Venster minimaliseren mislukt"
+  }
+}

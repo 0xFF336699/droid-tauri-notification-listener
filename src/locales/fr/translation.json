@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Écouteur de notifications",
+    "description": "Écouter et gérer les notifications des appareils"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "back": "Retour",
+    "delete": "Supprimer",
+    "confirm": "Confirmer",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "connect": "Se connecter",
+    "connecting": "Connexion...",
+    "disconnect": "Se déconnecter",
+    "disconnecting": "Déconnexion...",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "connectionFailed": "Échec de la connexion",
+    "minimize": "Réduire",
+    "unread": "Non lu",
+    "total": "Total",
+    "errorOccurred": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "settings": "Paramètres",
+    "close": "Fermer",
+    "maximize": "Agrandir",
+    "restore": "Restaurer"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "appearance": "Apparence",
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
+    "notifications": "Notifications",
+    "enableNotifications": "Activer les notifications",
+    "notificationSound": "Son de notification",
+    "about": "À propos",
+    "version": "Version",
+    "checkForUpdates": "Vérifier les mises à jour",
+    "clearAllDevices": "Effacer tous les appareils"
+  },
+  "connection": {
+    "add": "Ajouter une connexion"
+  },
+  "device": {
+    "connect": "Connecter l'appareil",
+    "disconnect": "Déconnecter",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "connectionFailed": "Échec de la connexion",
+    "retry": "Réessayer",
+    "deviceInfo": "Informations sur l'appareil",
+    "deviceName": "Nom de l'appareil",
+    "deviceModel": "Modèle",
+    "deviceOS": "Version du système d'exploitation",
+    "batteryLevel": "Batterie",
+    "storage": "Stockage",
+    "memory": "Mémoire"
+  },
+  "notification": {
+    "noNotifications": "Aucune notification",
+    "clearAll": "Tout effacer",
+    "markAsRead": "Marquer comme lu",
+    "markAsUnread": "Marquer comme non lu",
+    "delete": "Supprimer",
+    "reply": "Répondre",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "expand": "Afficher plus",
+    "collapse": "Réduire"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Impossible de réduire la fenêtre"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "app": {
+    "title": "Оповещения",
+    "description": "Прослушивание и управление уведомлениями устройства"
+  },
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "back": "Назад",
+    "delete": "Удалить",
+    "confirm": "Подтвердить",
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "connect": "Подключиться",
+    "connecting": "Подключение...",
+    "disconnect": "Отключиться",
+    "disconnecting": "Отключение...",
+    "connected": "Подключено",
+    "disconnected": "Отключено",
+    "connectionFailed": "Ошибка подключения",
+    "minimize": "Свернуть",
+    "unread": "Непрочитано",
+    "total": "Всего",
+    "errorOccurred": "Произошла ошибка",
+    "retry": "Повторить",
+    "settings": "Настройки",
+    "close": "Закрыть",
+    "maximize": "Развернуть",
+    "restore": "Восстановить"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "appearance": "Внешний вид",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Темная",
+    "system": "Системная",
+    "notifications": "Уведомления",
+    "enableNotifications": "Включить уведомления",
+    "notificationSound": "Звук уведомления",
+    "about": "О программе",
+    "version": "Версия",
+    "checkForUpdates": "Проверить обновления",
+    "clearAllDevices": "Очистить все устройства"
+  },
+  "connection": {
+    "add": "Добавить подключение"
+  },
+  "device": {
+    "connect": "Подключить устройство",
+    "disconnect": "Отключиться",
+    "connected": "Подключено",
+    "disconnected": "Отключено",
+    "connectionFailed": "Ошибка подключения",
+    "retry": "Повторить",
+    "deviceInfo": "Информация об устройстве",
+    "deviceName": "Название устройства",
+    "deviceModel": "Модель",
+    "deviceOS": "Версия ОС",
+    "batteryLevel": "Заряд батареи",
+    "storage": "Хранилище",
+    "memory": "Память"
+  },
+  "notification": {
+    "noNotifications": "Нет уведомлений",
+    "clearAll": "Очистить все",
+    "markAsRead": "Пометить как прочитанное",
+    "markAsUnread": "Пометить как непрочитанное",
+    "delete": "Удалить",
+    "reply": "Ответить",
+    "copy": "Копировать",
+    "copied": "Скопировано!",
+    "expand": "Развернуть",
+    "collapse": "Свернуть"
+  },
+  "errors": {
+    "minimizeWindowFailed": "Не удалось свернуть окно"
+  }
+}
