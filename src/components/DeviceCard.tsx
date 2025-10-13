@@ -31,12 +31,14 @@ export function DeviceCard({ connection }: DeviceCardProps) {
   // 控制过滤器面板的显示/隐藏
   const [showFilterSettings, setShowFilterSettings] = useState(false);
 
+  // 控制地址、过滤器、删除按钮区域的折叠/展开
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <div className="device-card" style={styles.card}>
       <div className="device-header" style={styles.header}>
         <div style={styles.headerLeft}>
           <h3 style={styles.hostname}>{connection.device.hostname}</h3>
-          <span style={styles.uuid}>{connection.device.uuid}</span>
         </div>
         <div style={styles.headerRight}>
           <span
@@ -48,27 +50,77 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           >
             {state === 'connected' ? '● 已连接' : '○ 未连接'}
           </span>
+
+          {/* 未连接时显示重连按钮 */}
+          {state === 'disconnected' && (
+            <button
+              onClick={async () => {
+                console.log('[DeviceCard] Reconnect button clicked');
+                await manualReconnectDevice(connection, connection.device.uuid);
+              }}
+              style={styles.reconnectButton}
+              title="重新连接"
+            >
+              🔄 重连
+            </button>
+          )}
+
+          {/* 折叠/展开按钮 */}
           <button
-            onClick={() => {
-              if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
-                mainModelController.removeDevice(connection.device.uuid);
-              }
-            }}
-            style={styles.deleteButton}
-            title="删除设备"
+            onClick={() => setIsExpanded(!isExpanded)}
+            style={styles.expandButton}
+            title={isExpanded ? "折叠" : "展开详情"}
           >
-            🗑️
+            {isExpanded ? '▼' : '▶'}
           </button>
         </div>
       </div>
 
-      <div className="device-info" style={styles.info}>
-        <div style={styles.infoItem}>
-          <span style={styles.infoLabel}>地址:</span>
-          <span style={styles.infoValue}>{connection.device.url}</span>
-        </div>
-      </div>
+      {/* 可折叠的详细信息区域 */}
+      {isExpanded && (
+        <>
+          <div className="device-info" style={styles.info}>
+            <div style={styles.infoItem}>
+              <span style={styles.infoLabel}>地址:</span>
+              <span style={styles.infoValue}>{connection.device.url}</span>
+            </div>
+          </div>
 
+          {/* 过滤器按钮 */}
+          <div style={styles.filterButtonContainer}>
+            <button
+              onClick={() => setShowFilterSettings(!showFilterSettings)}
+              style={styles.filterButton}
+            >
+              {showFilterSettings ? '🔽 隐藏过滤器' : '🔼 显示过滤器'}
+            </button>
+          </div>
+
+          {/* 过滤器设置面板 */}
+          {showFilterSettings && (
+            <div style={{ marginBottom: '12px' }}>
+              <FilterSettings />
+            </div>
+          )}
+
+          {/* 删除设备按钮 */}
+          <div style={{ marginBottom: '12px' }}>
+            <button
+              onClick={() => {
+                if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
+                  mainModelController.removeDevice(connection.device.uuid);
+                }
+              }}
+              style={styles.deleteButton}
+              title="删除设备"
+            >
+              🗑️ 删除设备
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* 错误信息和通知列表始终显示 */}
       {errorMessage && state === 'disconnected' && (
         <div style={styles.errorBanner}>
           <span style={styles.errorIcon}>⚠️</span>
@@ -86,23 +138,6 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           >
             🔄 重连
           </button>
-        </div>
-      )}
-
-      {/* 过滤器按钮 */}
-      <div style={styles.filterButtonContainer}>
-        <button
-          onClick={() => setShowFilterSettings(!showFilterSettings)}
-          style={styles.filterButton}
-        >
-          {showFilterSettings ? '🔽 隐藏过滤器' : '🔼 显示过滤器'}
-        </button>
-      </div>
-
-      {/* 过滤器设置面板 */}
-      {showFilterSettings && (
-        <div style={{ marginBottom: '12px' }}>
-          <FilterSettings />
         </div>
       )}
 
@@ -145,13 +180,6 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           }
         }}
       />
-
-      {/* 调试信息 - 显示过滤统计 */}
-      {allNotifications.length > 0 && (
-        <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#f0f7ff', borderRadius: '4px', fontSize: '12px', color: '#666' }}>
-          <span>显示 {filteredNotifications.length} / {allNotifications.length} 条通知</span>
-        </div>
-      )}
     </div>
   );
 }
