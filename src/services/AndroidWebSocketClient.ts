@@ -286,6 +286,11 @@ export class AndroidWebSocketClient {
 
         if (data.success !== false || data.pending) {
           pending.resolve(data);
+        } else if (data.message === 'Authentication required') {
+          // 特殊处理：Authentication required 视为 pending（等待用户授权）
+          console.log('[AndroidWebSocketClient.handleMessage] Authentication required, treating as pending');
+          data.pending = true;
+          pending.resolve(data);
         } else {
           pending.reject(new Error(data.message || 'Request failed'));
         }
