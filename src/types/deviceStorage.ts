@@ -3,7 +3,7 @@ export interface AndroidDeviceInfo {
   uuid: string;           // 安卓设备 UUID
   hostname: string;       // 安卓设备名称
   url: string;            // WebSocket 地址 (ws://192.168.1.101:6001)
-  token: string;          // 授权 token
+  token?: string;         // 授权 token（可选，手动输入时可能没有）
   createdAt: number;      // 创建时间戳（毫秒）
   lastUsedAt: number;     // 最后使用时间戳（毫秒）
   enabled: boolean;       // 是否启用自动连接

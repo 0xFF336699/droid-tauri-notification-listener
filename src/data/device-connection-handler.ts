@@ -1,6 +1,7 @@
 import { AndroidWebSocketClient } from '../services/AndroidWebSocketClient';
 import { DeviceConnection, ConnectionState } from './main-model-controller';
 import { handleWebSocketMessage } from './notification-message-handler';
+import { saveDevice } from '../utils/deviceStorage';
 
 // WebSocket 客户端管理
 const clientMap = new Map<string, AndroidWebSocketClient>();
@@ -154,15 +155,35 @@ async function handleConnectionChange(
 
     try {
       // 获取 token
-      const token = connection.device.token;
+      let token = connection.device.token;
+
       if (!token) {
-        console.error('[DeviceConnectionHandler] No token available for device:', uuid);
-        connection.errorMessage = '登录失败: 缺少授权 token';
-        connection.state = ConnectionState.Disconnected;
-        client.disconnect();
-        return;
+        // 没有 token，请求授权
+        console.log('[DeviceConnectionHandler] No token available, requesting authorization...');
+
+        try {
+          token = await client.requestToken({
+            uuid: connection.device.uuid,
+            hostname: connection.device.hostname,
+          });
+
+          // 保存 token 到设备信息
+          connection.device.token = token;
+
+          // 保存到 LocalStorage
+          saveDevice(connection.device);
+
+          console.log('[DeviceConnectionHandler] Token received and saved:', uuid);
+        } catch (error) {
+          console.error('[DeviceConnectionHandler] Failed to request token:', error);
+          connection.errorMessage = `授权失败: ${error}`;
+          connection.state = ConnectionState.Disconnected;
+          client.disconnect();
+          return;
+        }
       }
 
+      // 登录
       console.log('[DeviceConnectionHandler] Logging in with token...');
       await client.login(token);
 
