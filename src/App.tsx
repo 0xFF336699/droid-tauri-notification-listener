@@ -43,6 +43,7 @@ function App() {
       console.log('[App] ===== onPairingReceived callback =====');
       log('New device paired', { data: device });
 
+      
       // 添加设备
       mainModelController.addDevice(device);
 

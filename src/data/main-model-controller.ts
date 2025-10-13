@@ -110,6 +110,7 @@ watchUpdates(filterConfigController.config.rules, () => {
 });
 
 // ========== 设备管理方法 ==========
+// 扫码或手动输入连接后添加设备使用，其它地方切勿使用。
 
 function addDevice(device: AndroidDeviceInfo) {
   console.log('[mainModelController] addDevice:', device.uuid);
@@ -136,6 +137,7 @@ function addDevice(device: AndroidDeviceInfo) {
 
   saveDevice(device);
   console.log('[mainModelController] Device added:', device.uuid);
+  connectDevice(device.uuid);
 }
 
 function removeDevice(uuid: string) {
