@@ -1,4 +1,5 @@
 import { Connection } from './connection';
+import i18n from '../i18n';
 
 const STORAGE_KEY = 'socket_connections';
 
@@ -93,7 +94,7 @@ export class ConnectionStorage {
         // 创建一个新连接来保存旧配置
         const connection: Connection = {
           id: `migrated-${Date.now()}`,
-          name: '已迁移的连接',
+          name: i18n.t('connection.migratedConnection', 'Migrated Connection'),
           host: oldHost,
           token: oldToken || undefined,
           enabled: true,

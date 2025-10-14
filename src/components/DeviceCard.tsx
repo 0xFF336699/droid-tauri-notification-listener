@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useProxyWatch } from 'fanfanlo-deep-watcher';
 import { DeviceConnection } from '../data/main-model-controller';
 import { mainModelController } from '../data/main-model-controller';
@@ -11,6 +12,7 @@ interface DeviceCardProps {
 }
 
 export function DeviceCard({ connection }: DeviceCardProps) {
+  const { t } = useTranslation();
   const [state] = useProxyWatch(connection, 'state', connection.state);
   const [filteredNotifications] = useProxyWatch(
     connection,
@@ -48,7 +50,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
               ...(state === 'connected' ? styles.statusConnected : styles.statusDisconnected),
             }}
           >
-            {state === 'connected' ? '● 已连接' : '○ 未连接'}
+            {state === 'connected' ? t('connection.connected') : t('connection.disconnected')}
           </span>
 
           {/* 未连接时显示重连按钮 */}
@@ -59,9 +61,9 @@ export function DeviceCard({ connection }: DeviceCardProps) {
                 await manualReconnectDevice(connection, connection.device.uuid);
               }}
               style={styles.reconnectButton}
-              title="重新连接"
+              title={t('common.actions.reconnect')}
             >
-              🔄 重连
+              {t('common.actions.reconnect')}
             </button>
           )}
 
@@ -69,7 +71,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             style={styles.expandButton}
-            title={isExpanded ? "折叠" : "展开详情"}
+            title={isExpanded ? t('common.actions.collapse') : t('common.actions.expandDetails')}
           >
             {isExpanded ? '▼' : '▶'}
           </button>
@@ -81,7 +83,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
         <>
           <div className="device-info" style={styles.info}>
             <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>地址:</span>
+              <span style={styles.infoLabel}>{t('common.labels.address')}:</span>
               <span style={styles.infoValue}>{connection.device.url}</span>
             </div>
           </div>
@@ -92,7 +94,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
               onClick={() => setShowFilterSettings(!showFilterSettings)}
               style={styles.filterButton}
             >
-              {showFilterSettings ? '🔽 隐藏过滤器' : '🔼 显示过滤器'}
+              {showFilterSettings ? t('filter.actions.hide') : t('filter.actions.show')}
             </button>
           </div>
 
@@ -107,14 +109,14 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           <div style={{ marginBottom: '12px' }}>
             <button
               onClick={() => {
-                if (window.confirm(`确定要删除设备 "${connection.device.hostname}" 吗？`)) {
+                if (window.confirm(t('device.confirmDelete', { name: connection.device.hostname }))) {
                   mainModelController.removeDevice(connection.device.uuid);
                 }
               }}
               style={styles.deleteButton}
-              title="删除设备"
+              title={t('device.actions.delete')}
             >
-              🗑️ 删除设备
+              {t('device.actions.delete')}
             </button>
           </div>
         </>
@@ -125,7 +127,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
         <div style={styles.errorBanner}>
           <span style={styles.errorIcon}>⚠️</span>
           <div style={styles.errorContent}>
-            <div style={styles.errorTitle}>连接失败</div>
+            <div style={styles.errorTitle}>{t('errors.connectionFailed')}</div>
             <div style={styles.errorText}>{errorMessage}</div>
           </div>
           <button
@@ -134,9 +136,9 @@ export function DeviceCard({ connection }: DeviceCardProps) {
               await manualReconnectDevice(connection, connection.device.uuid);
             }}
             style={styles.reconnectButton}
-            title="手动重连"
+            title={t('common.actions.manualReconnect')}
           >
-            🔄 重连
+            {t('common.actions.reconnect')}
           </button>
         </div>
       )}
@@ -160,13 +162,13 @@ export function DeviceCard({ connection }: DeviceCardProps) {
 
             if (!wsClient) {
               console.error('[DeviceCard] WebSocket client not available for device:', connection.device.uuid);
-              alert('WebSocket 客户端未初始化，无法删除通知');
+              alert(t('errors.websocketNotInitialized'));
               return;
             }
 
             if (!wsClient.isConnected()) {
               console.error('[DeviceCard] WebSocket not connected');
-              alert('WebSocket 未连接，无法删除通知');
+              alert(t('errors.websocketNotConnected'));
               return;
             }
 
@@ -176,7 +178,7 @@ export function DeviceCard({ connection }: DeviceCardProps) {
           } catch (error) {
             console.error('[DeviceCard] Failed to delete notification:', error);
             console.error('[DeviceCard] Error stack:', (error as Error).stack);
-            alert('删除失败: ' + (error as Error).message);
+            alert(t('errors.deleteFailed') + (error as Error).message);
           }
         }}
       />

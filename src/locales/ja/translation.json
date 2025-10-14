@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "システムアプリのホワイトリスト",
+        "description": "これらのアプリからの通知は、システムアプリであってもフィルタリングされません",
+        "items": {
+          "mms": "SMS",
+          "phone": "電話"
+        },
+        "addCustom": "カスタムシステムアプリをホワイトリストに追加",
+        "example": "例: 'com.android.mms' はSMSをフィルタリングできます"
+      },
+      "blacklist": {
+        "title": "システムアプリのブラックリスト",
+        "description": "これらのアプリからの通知は強制的にフィルタリングされます（最高優先度）",
+        "addCustom": "カスタムシステムアプリをブラックリストに追加"
+      }
+    },
+    "actions": {
+      "show": "フィルタ設定を表示",
+      "hide": "フィルタ設定を非表示"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "継続中の通知をフィルタ（FLAG_ONGOING_EVENT）",
+        "system": "システム通知をフィルタ",
+        "emptyContent": "コンテンツなしの通知をフィルタ",
+        "lowPriority": "低優先度の通知をフィルタ",
+        "runningService": "実行中サービスの通知をフィルタ"
+      },
+      "status": {
+        "filteringOngoing": "継続中の通知をフィルタリング中...",
+        "filteringSystem": "システム通知をフィルタリング中...",
+        "filteringEmptyContent": "コンテンツなしの通知をフィルタリング中...",
+        "filteringLowPriority": "低優先度の通知をフィルタリング中...",
+        "filteringRunningService": "実行中サービスの通知をフィルタリング中...",
+        "filteringForegroundService": "フォアグラウンドサービスの通知をフィルタリング中...",
+        "filteringGroupSummary": "グループサマリー通知をフィルタリング中..."
+      },
+      "empty": "コンテンツなしの通知",
+      "emptyDesc": "タイトルとコンテンツが空の通知をフィルタ",
+      "foreground": "フォアグラウンドサービス通知",
+      "foregroundDesc": "channelIdに「foreground」を含む通知をフィルタ",
+      "groupSummary": "グループサマリー通知",
+      "groupSummaryDesc": "タイトルに「GroupSummary」を含む通知をフィルタ",
+      "lowPriority": "低優先度の通知",
+      "lowPriorityDesc": "低優先度および重要度の通知をフィルタ",
+      "ongoing": "継続中の通知",
+      "ongoingDesc": "継続中の通知をフィルタ（FLAG_ONGOING_EVENT）",
+      "packageBlacklist": "パッケージ名のブラックリスト",
+      "packageBlacklistDesc": "指定されたパッケージ名からの通知をフィルタ（regex対応）",
+      "packageWhitelist": "パッケージ名のホワイトリスト",
+      "packageWhitelistDesc": "指定されたパッケージ名からの通知のみ表示（regex対応）",
+      "runningService": "実行中の通知",
+      "runningServiceDesc": "「実行中」 + 「詳細をタップ」通知をフィルタ",
+      "system": "システム通知",
+      "systemDesc": "Androidシステム通知をフィルタ（android, com.android.*）"
+    },
+    "ui": {
+      "runningService": "実行中",
+      "tapForDetails": "詳細をタップ"
+    },
+    "errors": {
+      "filterError": "通知フィルタリングエラー: {{error}}",
+      "invalidRegex": "無効なregex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "設定読み込みエラー: {{error}}",
+      "configReset": "デフォルト設定にリセット",
+      "configSaved": "設定を保存しました",
+      "configSaveError": "設定保存エラー: {{error}}",
+      "modeChanged": "{{mode}}に切り替え",
+      "patternAdded": "パターンを追加: {{pattern}}",
+      "patternRemoved": "パターンを削除: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "すべてのデバイスを削除しますか？",
+      "confirmMessage": "これにより保存されたすべてのデバイスが削除されますが、ウィンドウ設定は保持されます。",
+      "irreversible": "この操作は取り消せません！",
+      "success": "デバイスデータを削除しました！\nアプリをリロードします。",
+      "error": "削除に失敗",
+      "logs": {
+        "clearing": "[appReset] デバイスデータをクリア中...",
+        "cleared": "[appReset] デバイスデータをクリアしました"
+      }
+    },
+    "confirmTitle": "アプリを初期状態にリセットしますか？",
+    "confirmMessage": "これにより削除されます：\n- すべての保存デバイス\n- ウィンドウ位置とサイズ設定\n- すべてのフィルタ設定\n- すべてのアプリ設定\n\nアプリを閉じて再起動し、変更を適用します。\n\nこの操作は取り消せません！",
+    "confirmButton": "確認",
+    "cancelButton": "キャンセル",
+    "logs": {
+      "starting": "[appReset] アプリリセットを開始...",
+      "clearingLocalStorage": "[appReset] localStorageをクリア中...",
+      "localStorageCleared": "[appReset] localStorageをクリアしました",
+      "creatingResetMarker": "[appReset] リセットマーカーファイルを作成中...",
+      "resetMarkerCreated": "[appReset] リセットマーカーファイルを作成しました",
+      "resettingAppData": "[appReset] アプリデータをリセット中...",
+      "appDataReset": "[appReset] アプリデータをリセットしました",
+      "exitingApp": "[appReset] アプリを終了中...",
+      "error": "[appReset] アプリリセットエラー:"
+    },
+    "comments": {
+      "resetFunction": "アプリをデフォルト状態にリセット",
+      "resetDescription": "すべてのデータを削除：\n- LocalStorage (デバイスリスト、フィルタ設定などフロントエンドデータ)\n- Tauriローカルデータフォルダ（ウィンドウ状態などバックエンドデータ）",
+      "resetStrategy": "Windowsファイルロック問題を解決するためのマーカーファイル戦略を使用：\n1. LocalStorageをクリア\n2. リセットマーカーファイルを作成\n3. アプリを終了\n4. 次回起動時にデータファイルを自動削除"
+    }
+  },
   "app": {
     "title": "通知リスナー",
-    "description": "デバイスの通知を聞いて管理する"
+    "description": "デバイス通知をリッスンおよび管理",
+    "loading": "読み込み中..."
   },
   "common": {
+    "labels": {
+      "address": "アドレス"
+    },
+    "actions": {
+      "reconnect": "🔄 再接続",
+      "manualReconnect": "手動再接続",
+      "collapse": "折りたたむ",
+      "expandDetails": "詳細を展開",
+      "label": "アクション",
+      "addToBlacklist": "ブラックリストに追加",
+      "addToWhitelist": "ホワイトリストに追加"
+    },
+    "unknown": "不明",
+    "optional": "オプション",
+    "unknownSender": "不明な送信者",
+    "noTitle": "タイトルなし",
+    "content": "コンテンツ",
+    "bigText": "大きなテキスト",
+    "textLines": "テキスト行",
+    "additionalInfo": "追加情報",
+    "packageName": "パッケージ名",
+    "timeSent": "送信時間",
+    "notificationId": "通知ID",
+    "tag": "タグ",
+    "messages": "メッセージ",
+    "sender": "送信者",
+    "time": "時間",
     "save": "保存",
     "cancel": "キャンセル",
     "back": "戻る",
@@ -16,65 +153,423 @@
     "disconnect": "切断",
     "disconnecting": "切断中...",
     "connected": "接続済み",
-    "disconnected": "切断されました",
-    "connectionFailed": "接続に失敗しました",
+    "disconnected": "切断済み",
+    "connectionFailed": "接続失敗",
     "minimize": "最小化",
     "unread": "未読",
     "total": "合計",
     "errorOccurred": "エラーが発生しました",
     "retry": "再試行",
     "settings": "設定",
-    "close": "閉じる",
     "maximize": "最大化",
-    "restore": "元に戻す"
+    "restore": "復元",
+    "enabled": "有効",
+    "disabled": "無効"
   },
   "settings": {
     "title": "設定",
-    "language": "言語",
-    "appearance": "外観",
-    "theme": "テーマ",
-    "light": "ライト",
-    "dark": "ダーク",
-    "system": "システム",
-    "notifications": "通知",
-    "enableNotifications": "通知を有効にする",
-    "notificationSound": "通知音",
-    "about": "バージョン情報",
+    "appearance": {
+      "title": "外観",
+      "theme": "テーマ",
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム",
+      "language": "言語"
+    },
+    "notifications": {
+      "title": "通知",
+      "enableNotifications": "通知を有効化",
+      "enableSounds": "サウンドを有効化",
+      "enableBadge": "バッジを表示"
+    },
+    "websocketDevices": "WebSocketデバイス",
+    "about": "について",
     "version": "バージョン",
-    "checkForUpdates": "アップデートを確認",
-    "clearAllDevices": "すべてのデバイスをクリア"
+    "checkForUpdates": "更新を確認",
+    "clearAllDevices": "すべてのデバイスをクリア",
+    "language": "言語",
+    "resetWarning": "リセットすると保存デバイス、ウィンドウ位置とサイズ、フィルタ設定、アプリデータが削除されます。この操作は取り消せません。注意してください。"
   },
   "connection": {
-    "add": "接続を追加"
-  },
-  "device": {
-    "connect": "デバイスに接続",
+    "manager": {
+      "deleteConfirm": "接続「{{name}}」を削除しますか？",
+      "noConnections": "保存された接続なし",
+      "addConnectionPrompt": "「接続を追加」ボタンをクリックして開始",
+      "totalConnections": "合計{{count}}接続",
+      "connectionDetails": {
+        "address": "アドレス",
+        "token": "トークン",
+        "none": "なし",
+        "createdAt": "作成日",
+        "lastConnected": "最終接続"
+      },
+,
+      "actions": {
+        "enable": "有効化",
+        "delete": "削除",
+        "label": "接続アクション"
+      }
+    },
+    "add": "接続を追加",
+    "migratedConnection": "移行された接続",
+    "socketSettings": "ソケット接続設定",
+    "serverAddress": "サーバーアドレス",
+    "serverAddressPlaceholder": "例:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "サーバーアドレスを入力",
+    "connectionFailedCheckAddress": "接続失敗、サーバーアドレスを確認",
+    "supportedFormats": "IP+ポート、ws://、wss://ドメインなどをサポート",
+    "authToken": "認証トークン",
+    "enterAuthToken": "認証トークンを入力",
+    "connecting": "接続中...",
+    "connect": "接続",
+    "connectionFailed": "接続失敗",
+    "testing": "テスト中...",
+    "startSocketTest": "ソケットテストを開始",
+    "socketTestTitle": "ソケットテスト",
+    "clickToStartTest": "ボタンをクリックしてテストを開始...",
     "disconnect": "切断",
     "connected": "接続済み",
-    "disconnected": "切断されました",
-    "connectionFailed": "接続に失敗しました",
+    "disconnected": "切断済み",
+    "failed": "接続失敗",
     "retry": "再試行",
-    "deviceInfo": "デバイス情報",
+    "lost": "接続が失われました",
+    "reconnecting": "再接続中...",
+    "reconnect": "再接続",
+    "reconnectIn": "{{count}}秒後に再試行",
+    "reconnectNow": "今すぐ再試行",
+    "reconnectFailed": "再接続失敗",
+    "reconnectSuccessful": "再接続成功",
+    "reconnectAttempt": "試行{{current}}/{{max}}",
+    "reconnectLimitReached": "再接続試行制限に達しました",
+    "timeout": "接続タイムアウト",
+    "refused": "接続拒否",
+    "reset": "接続リセット",
+    "aborted": "接続中止",
+    "closed": "接続閉鎖",
+    "error": "接続エラー",
+    "backendConnectionFailed": "バックエンド接続失敗",
+    "unknownConnectionError": "不明な接続エラー",
+    "status": "接続ステータス",
+    "type": "接続タイプ",
+    "name": "接続名",
+    "settings": "接続設定",
+    "details": "接続詳細",
+    "history": "接続履歴",
+    "log": "接続ログ",
+    "stats": "接続統計",
+    "test": "接続テスト",
+    "testSuccessful": "接続テスト成功",
+    "testFailed": "接続テスト失敗",
+    "edit": "接続を編集",
+    "delete": "接続を削除",
+    "addTitle": "接続を追加",
+    "tabs": {
+      "qrcode": "スキャンで追加",
+      "manual": "手動入力"
+    },
+    "server": {
+      "starting": "サーバー開始中...",
+      "started": "サーバー開始、ポート: {{port}}",
+      "startFailed": "サーバー開始失敗: {{error}}",
+      "stopping": "サーバー停止中...",
+      "stopped": "サーバー停止"
+    },
+    "qrcode": {
+      "title": "コードスキャンで接続",
+      "status": {
+        "preparing": "サーバー開始準備中...",
+        "stoppingServer": "既存サーバーを停止中...",
+        "startingServer": "サーバー開始中（（ポート{{port}}）...",
+        "fetchingDeviceInfo": "デバイス情報を取得中...",
+        "gettingLocalIp": "ローカルIPを取得中...",
+        "generatingQrCode": "QRコード生成中...",
+        "ready": "デバイスを接続するためにQRコードをスキャン"
+      },
+      "connectionInfo": "電話でQRコードをスキャンして接続",
+      "serverPort": "サーバーがポートで実行中: {{port}}",
+      "error": {
+        "title": "サーバー開始エラー、再試行",
+        "retryButton": "再試行"
+      },
+      "steps": {
+        "stoppingServer": "ステップ1/4: 既存サーバーを停止",
+        "startingServer": "ステップ2/4: サーバー開始",
+        "fetchingDeviceInfo": "ステップ3/4: デバイス情報取得",
+        "gettingLocalIp": "ステップ4/5: ローカルIP取得",
+        "generatingQrCode": "ステップ5/5: QRコード生成"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] コンポーネントマウント",
+        "componentUnmounting": "[QR-STABLE] コンポーネントアンマウントクリーン",
+        "serverStarting": "[QR-STABLE] サーバー開始",
+        "serverStopping": "[QR-STABLE] サーバー停止中...",
+        "serverStopped": "[QR-STABLE] サーバー停止",
+        "serverError": "[QR-STABLE] サーバー停止エラー:",
+        "serverStarted": "[QR-STABLE] サーバー開始、ポート:",
+        "startServerError": "[QR-STABLE] サーバー開始エラー:",
+        "componentUnmounted": "[QR-STABLE] コンポーネントアンマウント、サーバー開始キャンセル",
+        "componentRendered": "コンポーネントレンダリング"
+      }
+    },
+    "title": "デバイスを接続",
+    "qrCode": "QRコードをスキャン",
+    "manualInput": "手動入力",
+    "scanQRCode": "デバイスを接続するためにQRコードをスキャン",
+    "scanQRCodeDescription": "Androidデバイスでアプリを開き、「PCに接続」をクリックし、このQRコードをスキャン",
+    "enterIPAddress": "デバイスIPアドレスを入力",
+    "enterIPAddressDescription": "AndroidデバイスでIPアドレスを見つけ、ここに入力",
+    "ipAddress": "IPアドレス",
+    "port": "ポート",
+    "disconnecting": "切断中...",
+    "connectionFailedDescription": "デバイスに接続できません。デバイスとコンピュータが同じネットワークにあり、Androidアプリが実行中であることを確認してください。",
+    "tryAgain": "再試行",
+    "cancel": "キャンセル",
+    "connectionSuccessful": "接続成功",
+    "connectionSuccessfulDescription": "デバイスに正常に接続しました",
+    "continue": "続行",
+    "noDevicesFound": "デバイスが見つかりません",
+    "searchingForDevices": "デバイスを検索中...",
+    "selectDevice": "デバイスを選択",
+    "selectDeviceDescription": "接続するデバイスを選択",
+    "refresh": "更新",
     "deviceName": "デバイス名",
-    "deviceModel": "モデル",
-    "deviceOS": "OSバージョン",
-    "batteryLevel": "バッテリー",
+    "deviceStatus": "ステータス",
+    "deviceLastConnected": "最終接続",
+    "deviceActions": "アクション",
+    "deviceConnect": "接続",
+    "deviceDisconnect": "切断",
+    "deviceRemove": "削除",
+    "deviceEdit": "編集",
+    "deviceDetails": "詳細",
+    "addDevice": "デバイスを追加",
+    "editDevice": "デバイスを編集",
+    "removeDevice": "デバイスを削除",
+    "removeDeviceConfirmation": "このデバイスを削除しますか？",
+    "removeDeviceConfirmationDescription": "この操作によりデバイスが保存リストから削除されます。QRコードスキャンまたは手動IP入力で再接続可能です。",
+    "remove": "削除",
+    "keepDevice": "保持",
+    "deviceRemoved": "デバイスを削除",
+    "deviceAdded": "デバイスを追加",
+    "deviceUpdated": "デバイスを更新",
+    "deviceConnected": "デバイス接続済み",
+    "deviceDisconnected": "デバイス切断済み",
+    "allDevicesDisconnected": "すべてのデバイス切断済み",
+    "connectionLost": "接続が失われました",
+    "connectionHistory": "接続履歴",
+    "connectionLog": "接続ログ",
+    "connectionStats": "接続統計",
+    "connectionTest": "接続テスト",
+    "connectionTestSuccessful": "接続テスト成功",
+    "connectionTestFailed": "接続テスト失敗",
+    "connectionError": "接続エラー",
+    "requestingToken": "トークンを要求中...",
+    "authFailed": "認証失敗",
+    "loginSuccess": "ログイン成功",
+    "missingToken": "トークン欠落",
+    "tokenReceived": "トークン受信",
+    "loginFailed": "ログイン失敗"
+  },
+  "device": {
+    "title": "デバイス",
+    "actions": {
+      "delete": "🗑️ デバイスを削除",
+      "label": "デバイスアクション"
+    },
+    "confirmDelete": "デバイス「{{name}}」を削除しますか？",
+    "add": "デバイスを追加",
+    "edit": "デバイスを編集",
+    "tokenRequestFailed": "承認トークン取得失敗",
+    "loginInProgress": "ログイン中...",
+    "loginSuccess": "ログイン成功",
+    "disconnected": "デバイス切断済み",
+    "allDevicesDisconnected": "すべてのデバイス切断済み",
+    "missingUuid": "デバイスUUIDを指定",
+    "noDevices": "デバイスなし",
+    "noEnabledDevices": "有効デバイスなし",
+    "notConnectedOrUnavailable": "デバイス{{deviceUuid}}が接続されていないか利用不可",
+    "clickToAddDevice": "「+ 接続を追加」をクリックしてスキャンしデバイスを追加",
+    "info": "デバイス情報",
+    "name": "デバイス名",
+    "model": "モデル",
+    "os": "システムバージョン",
+    "batteryLevel": "バッテリーレベル",
     "storage": "ストレージ",
     "memory": "メモリ"
   },
+  "manualInput": {
+    "title": "手動接続入力",
+    "deviceName": {
+      "label": "デバイス名（オプション）:",
+      "placeholder": "例: Xiaomi電話",
+      "hint": "未入力の場合、自動生成"
+    },
+    "socketAddress": {
+      "label": "ソケットアドレス *: ",
+      "placeholder": "例: 192.168.1.100:6001",
+      "hint": "サポート形式: IP:ポート、ドメイン:ポート"
+    },
+    "validation": {
+      "socketRequired": "ソケットアドレスを入力"
+    },
+    "status": {
+      "adding": "デバイスを追加中...",
+      "added": "デバイスを追加しました！"
+    },
+    "error": {
+      "addFailed": "追加失敗: {{error}}"
+    },
+    "hint": {
+      "title": "ヒント:",
+      "description": "デバイスのソケットアドレスを入力、以下の形式をサポート:",
+      "formats": [
+        "IP:ポート、例 127.0.0.1:10035",
+        "完全ws://またはwss://アドレス、例 ws://localhost:10035",
+        "ドメイン:ポート、例 example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "デバイスを追加",
+      "adding": "追加中..."
+    }
+  },
   "notification": {
-    "noNotifications": "通知はありません",
+    "title": "通知",
+    "noNotifications": "通知なし",
     "clearAll": "すべてクリア",
-    "markAsRead": "既読にする",
-    "markAsUnread": "未読にする",
+    "clearAllConfirm": "すべての通知をクリアしますか？",
+    "clearAllSuccess": "すべての通知をクリアしました",
+    "clearAllFailed": "通知クリア失敗",
     "delete": "削除",
-    "reply": "返信",
+    "deleteConfirm": "この通知を削除しますか？",
+    "deleteSuccess": "通知を削除しました",
+    "deleteFailed": "通知削除失敗",
     "copy": "コピー",
+    "copySuccess": "クリップボードにコピー",
+    "copyFailed": "コピー失敗",
+    "details": "詳細",
+    "close": "閉じる",
+    "markAsRead": "既読としてマーク",
+    "markAsUnread": "未読としてマーク",
+    "markAsReadSuccess": "既読としてマーク",
+    "markAsReadFailed": "既読マーク失敗",
+    "markAsUnreadSuccess": "未読としてマーク",
+    "markAsUnreadFailed": "未読マーク失敗",
+    "markAllAsRead": "すべてを既読としてマーク",
+    "markAllAsReadConfirm": "すべての通知を既読としてマークしますか？",
+    "markAllAsReadSuccess": "すべての通知を既読としてマーク",
+    "markAllAsReadFailed": "すべて既読マーク失敗",
+    "filter": "フィルタ",
+    "filterByApp": "アプリでフィルタ",
+    "filterByKeyword": "キーワードでフィルタ",
+    "filterByTime": "時間でフィルタ",
+    "filterByStatus": "ステータスでフィルタ",
+    "filterByPriority": "優先度でフィルタ",
+    "filterByCategory": "カテゴリでフィルタ",
+    "filterByChannel": "チャネルでフィルタ",
+    "filterByDevice": "デバイスでフィルタ",
+    "reply": "返信",
     "copied": "コピーしました！",
-    "expand": "もっと見る",
-    "collapse": "折りたたむ"
+    "expand": "さらに表示",
+    "collapse": "折りたたむ",
+    "totalCount": "合計{{count}}通知",
+    "selectedCount": "（{{count}}選択）",
+    "markSelectedAsRead": "既読としてマーク",
+    "selectToMarkAsRead": "既読マークするために選択",
+    "noNotificationsMessage": "通知なし",
+    "unknownSender": "不明な送信者",
+    "noTitle": "タイトルなし",
+    "noContent": "コンテンツなし",
+    "subText": "サブテキスト",
+    "summary": "サマリー",
+    "textLines": "複数行テキスト",
+    "time": "時間",
+    "channelId": "チャネルID",
+    "action": "アクション",
+    "isInitialized": "初期化済み",
+    "readStatus": "読書ステータス",
+    "unread": "未読",
+    "templateType": "テンプレートタイプ",
+    "conversationTitle": "会話タイトル",
+    "additionalInfo": "追加情報",
+    "participants": "参加者",
+    "isResident": "継続中",
+    "priority": "優先度",
+    "importance": "重要度",
+    "addToBlacklist": "ブラックリストに追加",
+    "addToWhitelist": "ホワイトリストに追加"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 フィルタを表示",
+      "hide": "🔽 フィルタを非表示",
+      "addPattern": "パターンを追加",
+      "removePattern": "削除",
+      "reset": "デフォルトにリセット",
+      "save": "設定を保存"
+    },
+    "title": "フィルタリングルール",
+    "basicRulesTitle": "基本フィルタリングルール",
+    "rules": {
+      "ongoing": "継続中の通知",
+      "ongoingDesc": "継続中の通知をフィルタ（FLAG_ONGOING_EVENT）",
+      "system": "システム通知",
+      "systemDesc": "Androidシステム通知をフィルタ（android, com.android.*）",
+      "empty": "コンテンツなしの通知",
+      "emptyDesc": "タイトルとコンテンツが空の通知をフィルタ",
+      "lowPriority": "低優先度の通知",
+      "lowPriorityDesc": "低優先度および重要度の通知をフィルタ",
+      "foreground": "フォアグラウンドサービス通知",
+      "foregroundDesc": "channelIdに「foreground」を含む通知をフィルタ",
+      "groupSummary": "グループサマリー通知",
+      "groupSummaryDesc": "タイトルに「GroupSummary」を含む通知をフィルタ",
+      "runningService": "実行中の通知",
+      "runningServiceDesc": "「実行中」 + 「詳細をタップ」通知をフィルタ",
+      "packageBlacklist": "パッケージ名のブラックリスト",
+      "packageBlacklistDesc": "指定されたパッケージ名からの通知をフィルタ（regex対応）",
+      "packageWhitelist": "パッケージ名のホワイトリスト",
+      "packageWhitelistDesc": "指定されたパッケージ名からの通知のみ表示（regex対応）",
+      "systemWhitelist": "システムアプリのホワイトリスト",
+      "systemWhitelistDesc": "com.android.*もフィルタリングされません"
+    },
+    "hint": {
+      "title": "ヒント:",
+      "exact": "正確一致: com.tencent.mm",
+      "wildcard": "ワイルドカード: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "ブラックリストモード",
+      "whitelist": "ホワイトリストモード"
+    },
+    "messages": {
+      "patternAdded": "パターンを追加: {{pattern}}",
+      "patternRemoved": "パターンを削除: {{pattern}}",
+      "modeChanged": "{{mode}}に切り替え",
+      "configReset": "デフォルト設定にリセット",
+      "configSaved": "設定を保存しました",
+      "configLoadError": "設定読み込みエラー: {{error}}",
+      "configSaveError": "設定保存エラー: {{error}}"
+    },
+    "enterPackageOrRegex": "パッケージ名またはregexを入力",
+    "enterPackageOrRegexPlaceholder": "パッケージ名またはregexを入力",
+    "invalidRegex": "無効なregex",
+    "confirmReset": "デフォルト設定にリセットしますか？",
+    "confirmRemovePattern": "{{rule}}から「{{pattern}}」を削除しますか？"
   },
   "errors": {
-    "minimizeWindowFailed": "ウィンドウの最小化に失敗しました"
-  }
+    "connectionFailed": "接続失敗",
+    "deleteFailed": "削除失敗",
+    "websocketNotConnected": "WebSocket未接続",
+    "websocketNotInitialized": "WebSocket未初期化",
+    "minimizeWindowFailed": "ウィンドウ最小化失敗"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "無効なregex"
+    }
+  },
+  "login": "ログイン",
+  "request_token": "トークンを要求",
+  "clear_messages": "メッセージをクリア",
+  "get_package_icon": "アプリアイコンを取得"
 }

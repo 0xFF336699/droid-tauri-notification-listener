@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Whitelist voor systeemapps",
+        "description": "Notificaties van deze apps worden niet gefilterd, zelfs als ze systeemapps zijn",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telefoon"
+        },
+        "addCustom": "Aangepaste systeemapp toevoegen aan whitelist",
+        "example": "Bijv.: 'com.android.mms' kan SMS filteren"
+      },
+      "blacklist": {
+        "title": "Blacklist voor systeemapps",
+        "description": "Notificaties van deze apps worden geforceerd gefilterd (hoogste prioriteit)",
+        "addCustom": "Aangepaste systeemapp toevoegen aan blacklist"
+      }
+    },
+    "actions": {
+      "show": "Filterinstellingen tonen",
+      "hide": "Filterinstellingen verbergen"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filter lopende notificaties (FLAG_ONGOING_EVENT)",
+        "system": "Filter systeemnotificaties",
+        "emptyContent": "Filter notificaties zonder inhoud",
+        "lowPriority": "Filter lage prioriteit notificaties",
+        "runningService": "Filter lopende service notificaties"
+      },
+      "status": {
+        "filteringOngoing": "Lopende notificaties filteren...",
+        "filteringSystem": "Systeemnotificaties filteren...",
+        "filteringEmptyContent": "Notificaties zonder inhoud filteren...",
+        "filteringLowPriority": "Lage prioriteit notificaties filteren...",
+        "filteringRunningService": "Lopende service notificaties filteren...",
+        "filteringForegroundService": "Voorgrondservice notificaties filteren...",
+        "filteringGroupSummary": "Groepsamenvatting notificaties filteren..."
+      },
+      "empty": "Notificaties zonder inhoud",
+      "emptyDesc": "Filter notificaties met lege titel en inhoud",
+      "foreground": "Voorgrondservice notificaties",
+      "foregroundDesc": "Filter notificaties waar channelId \"foreground\" bevat",
+      "groupSummary": "Groepsamenvatting notificaties",
+      "groupSummaryDesc": "Filter notificaties waar titel \"GroupSummary\" bevat",
+      "lowPriority": "Lage prioriteit notificaties",
+      "lowPriorityDesc": "Filter lage prioriteit en importantie notificaties",
+      "ongoing": "Lopende notificaties",
+      "ongoingDesc": "Filter lopende notificaties (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Blacklist pakketnamen",
+      "packageBlacklistDesc": "Filter notificaties van gespecificeerde pakketnamen (regex ondersteund)",
+      "packageWhitelist": "Whitelist pakketnamen",
+      "packageWhitelistDesc": "Toon alleen notificaties van gespecificeerde pakketnamen (regex ondersteund)",
+      "runningService": "Lopende notificaties",
+      "runningServiceDesc": "Filter \"Lopend\" + \"Tik voor details\" notificaties",
+      "system": "Systeemnotificaties",
+      "systemDesc": "Filter Android systeemnotificaties (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Lopend",
+      "tapForDetails": "Tik voor details"
+    },
+    "errors": {
+      "filterError": "Fout bij filteren notificaties: {{error}}",
+      "invalidRegex": "Ongeldige regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Fout bij laden configuratie: {{error}}",
+      "configReset": "Teruggezet naar standaardinstellingen",
+      "configSaved": "Instellingen opgeslagen",
+      "configSaveError": "Fout bij opslaan configuratie: {{error}}",
+      "modeChanged": "Geschakeld naar {{mode}}",
+      "patternAdded": "Patroon toegevoegd: {{pattern}}",
+      "patternRemoved": "Patroon verwijderd: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Weet u zeker dat u alle apparaten wilt verwijderen?",
+      "confirmMessage": "Dit verwijdert alle opgeslagen apparaten maar behoudt vensterinstellingen.",
+      "irreversible": "Deze actie kan niet ongedaan worden gemaakt!",
+      "success": "Apparaatgegevens verwijderd!\nApp wordt herladen.",
+      "error": "Verwijderen mislukt",
+      "logs": {
+        "clearing": "[appReset] Apparaatgegevens wissen...",
+        "cleared": "[appReset] Apparaatgegevens gewist"
+      }
+    },
+    "confirmTitle": "Weet u zeker dat u de app wilt resetten naar initiële staat?",
+    "confirmMessage": "Dit verwijdert:\n- Alle opgeslagen apparaten\n- Vensterpositie en grootte instellingen\n- Alle filterinstellingen\n- Alle app instellingen\n\nDe app sluit en herstart om wijzigingen toe te passen.\n\nDeze actie kan niet ongedaan worden gemaakt!",
+    "confirmButton": "Bevestigen",
+    "cancelButton": "Annuleren",
+    "logs": {
+      "starting": "[appReset] App reset starten...",
+      "clearingLocalStorage": "[appReset] localStorage wissen...",
+      "localStorageCleared": "[appReset] localStorage gewist",
+      "creatingResetMarker": "[appReset] Reset marker bestand aanmaken...",
+      "resetMarkerCreated": "[appReset] Reset marker bestand aangemaakt",
+      "resettingAppData": "[appReset] App gegevens resetten...",
+      "appDataReset": "[appReset] App gegevens gereset",
+      "exitingApp": "[appReset] App afsluiten...",
+      "error": "[appReset] Fout bij app reset:"
+    },
+    "comments": {
+      "resetFunction": "Reset app naar standaardstaat",
+      "resetDescription": "Verwijder alle gegevens:\n- LocalStorage (apparaatlijst, filterconfiguraties etc. frontend gegevens)\n- Tauri lokale data map (vensterstaat etc. backend gegevens)",
+      "resetStrategy": "Gebruik marker bestand strategie om Windows bestandsvergrendeling problemen op te lossen:\n1. Wis LocalStorage\n2. Maak reset marker bestand\n3. Sluit app\n4. Verwijder automatisch data bestanden bij volgende start"
+    }
+  },
   "app": {
-    "title": "Notificatieluisteraar",
-    "description": "Luister naar en beheer apparaatmeldingen"
+    "title": "Notificatie Monitor",
+    "description": "Luister en beheer apparaat notificaties",
+    "loading": "Laden..."
   },
   "common": {
+    "labels": {
+      "address": "Adres"
+    },
+    "actions": {
+      "reconnect": "🔄 Herverbinden",
+      "manualReconnect": "Handmatige herverbinding",
+      "collapse": "Inklappen",
+      "expandDetails": "Details uitklappen",
+      "label": "Actie",
+      "addToBlacklist": "Toevoegen aan blacklist",
+      "addToWhitelist": "Toevoegen aan whitelist"
+    },
+    "unknown": "Onbekend",
+    "optional": "Optioneel",
+    "unknownSender": "Onbekende afzender",
+    "noTitle": "Geen titel",
+    "content": "Inhoud",
+    "bigText": "Grote tekst",
+    "textLines": "Tekstregels",
+    "additionalInfo": "Aanvullende info",
+    "packageName": "Pakketnaam",
+    "timeSent": "Verzendtijd",
+    "notificationId": "Notificatie ID",
+    "tag": "Tag",
+    "messages": "Berichten",
+    "sender": "Afzender",
+    "time": "Tijd",
     "save": "Opslaan",
     "cancel": "Annuleren",
     "back": "Terug",
@@ -24,57 +161,414 @@
     "errorOccurred": "Er is een fout opgetreden",
     "retry": "Opnieuw proberen",
     "settings": "Instellingen",
-    "close": "Sluiten",
     "maximize": "Maximaliseren",
-    "restore": "Herstellen"
+    "restore": "Herstellen",
+    "enabled": "Ingeschakeld",
+    "disabled": "Uitgeschakeld"
   },
   "settings": {
     "title": "Instellingen",
-    "language": "Taal",
-    "appearance": "Uiterlijk",
-    "theme": "Thema",
-    "light": "Licht",
-    "dark": "Donker",
-    "system": "Systeem",
-    "notifications": "Meldingen",
-    "enableNotifications": "Meldingen inschakelen",
-    "notificationSound": "Meldingsgeluid",
+    "appearance": {
+      "title": "Uiterlijk",
+      "theme": "Thema",
+      "light": "Licht",
+      "dark": "Donker",
+      "system": "Systeem",
+      "language": "Taal"
+    },
+    "notifications": {
+      "title": "Notificaties",
+      "enableNotifications": "Notificaties inschakelen",
+      "enableSounds": "Geluiden inschakelen",
+      "enableBadge": "Badge tonen"
+    },
+    "websocketDevices": "WebSocket Apparaten",
     "about": "Over",
     "version": "Versie",
     "checkForUpdates": "Controleren op updates",
-    "clearAllDevices": "Alle apparaten wissen"
+    "clearAllDevices": "Alle apparaten wissen",
+    "language": "Taal",
+    "resetWarning": "Reset verwijdert opgeslagen apparaten, vensterpositie en grootte, filterconfiguraties en app gegevens. Deze actie kan niet ongedaan worden gemaakt, wees voorzichtig."
   },
   "connection": {
-    "add": "Verbinding toevoegen"
-  },
-  "device": {
-    "connect": "Apparaat verbinden",
+    "manager": {
+      "deleteConfirm": "Weet u zeker dat u de verbinding \"{{name}}\" wilt verwijderen?",
+      "noConnections": "Geen opgeslagen verbindingen",
+      "addConnectionPrompt": "Klik op de knop \"Verbinding toevoegen\" om te beginnen",
+      "totalConnections": "Totaal {{count}} verbindingen",
+      "connectionDetails": {
+        "address": "Adres",
+        "token": "Token",
+        "none": "Geen",
+        "createdAt": "Aangemaakt op",
+        "lastConnected": "Laatst verbonden"
+      },
+      "actions": {
+        "enable": "Inschakelen",
+        "delete": "Verwijderen",
+        "label": "Verbindingsacties"
+      }
+    },
+    "add": "Verbinding toevoegen",
+    "migratedConnection": "Gemigreerde verbinding",
+    "socketSettings": "Socket verbindingsinstellingen",
+    "serverAddress": "Serveradres",
+    "serverAddressPlaceholder": "Bijv.:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Voer serveradres in",
+    "connectionFailedCheckAddress": "Verbinding mislukt, controleer serveradres",
+    "supportedFormats": "Ondersteunt IP+poort, ws://, wss:// domein etc.",
+    "authToken": "Authenticatietoken",
+    "enterAuthToken": "Voer authenticatietoken in",
+    "connecting": "Verbinden...",
+    "connect": "Verbinden",
+    "connectionFailed": "Verbinding mislukt",
+    "testing": "Testen...",
+    "startSocketTest": "Socket test starten",
+    "socketTestTitle": "Socket Test",
+    "clickToStartTest": "Klik op de knop om test te starten...",
     "disconnect": "Verbinding verbreken",
     "connected": "Verbonden",
     "disconnected": "Verbinding verbroken",
-    "connectionFailed": "Verbinding mislukt",
+    "failed": "Verbinding mislukt",
     "retry": "Opnieuw proberen",
-    "deviceInfo": "Apparaatinformatie",
+    "lost": "Verbinding verloren",
+    "reconnecting": "Her verbinden...",
+    "reconnect": "Her verbinden",
+    "reconnectIn": "Opnieuw proberen over {{count}} seconden",
+    "reconnectNow": "Nu opnieuw proberen",
+    "reconnectFailed": "Her verbinden mislukt",
+    "reconnectSuccessful": "Her verbinden geslaagd",
+    "reconnectAttempt": "Poging {{current}}/{{max}}",
+    "reconnectLimitReached": "Her verbindingslimiet bereikt",
+    "timeout": "Verbinding timeout",
+    "refused": "Verbinding geweigerd",
+    "reset": "Verbinding gereset",
+    "aborted": "Verbinding afgebroken",
+    "closed": "Verbinding gesloten",
+    "error": "Verbindingsfout",
+    "backendConnectionFailed": "Backend verbinding mislukt",
+    "unknownConnectionError": "Onbekende verbindingsfout",
+    "status": "Verbindingsstatus",
+    "type": "Verbindingstype",
+    "name": "Verbindingsnaam",
+    "settings": "Verbindingsinstellingen",
+    "details": "Verbindingsdetails",
+    "history": "Verbindingsgeschiedenis",
+    "log": "Verbindingslog",
+    "stats": "Verbindingsstatistieken",
+    "test": "Verbinding testen",
+    "testSuccessful": "Verbinding test geslaagd",
+    "testFailed": "Verbinding test mislukt",
+    "edit": "Verbinding bewerken",
+    "delete": "Verbinding verwijderen",
+    "addTitle": "Verbinding toevoegen",
+    "tabs": {
+      "qrcode": "Toevoegen via scannen",
+      "manual": "Handmatige invoer"
+    },
+    "server": {
+      "starting": "Server starten...",
+      "started": "Server gestart, poort: {{port}}",
+      "startFailed": "Server starten mislukt: {{error}}",
+      "stopping": "Server stoppen...",
+      "stopped": "Server gestopt"
+    },
+    "qrcode": {
+      "title": "Verbinden via code scannen",
+      "status": {
+        "preparing": "Voorbereiden op server start...",
+        "stoppingServer": "Bestaande server stoppen...",
+        "startingServer": "Server starten (poort {{port}})...",
+        "fetchingDeviceInfo": "Apparaatinformatie ophalen...",
+        "gettingLocalIp": "Lokale IP ophalen...",
+        "generatingQrCode": "QR code genereren...",
+        "ready": "Scan QR code om apparaat te verbinden"
+      },
+      "connectionInfo": "Gebruik je telefoon om de QR code te scannen en te verbinden",
+      "serverPort": "Server draait op poort: {{port}}",
+      "error": {
+        "title": "Fout bij server start, probeer opnieuw",
+        "retryButton": "Opnieuw proberen"
+      },
+      "steps": {
+        "stoppingServer": "Stap 1/4: Bestaande server stoppen",
+        "startingServer": "Stap 2/4: Server starten",
+        "fetchingDeviceInfo": "Stap 3/4: Apparaatinformatie ophalen",
+        "gettingLocalIp": "Stap 4/5: Lokale IP ophalen",
+        "generatingQrCode": "Stap 5/5: QR code genereren"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Component gemount",
+        "componentUnmounting": "[QR-STABLE] Component unmount opruimen",
+        "serverStarting": "[QR-STABLE] Server starten",
+        "serverStopping": "[QR-STABLE] Server stoppen...",
+        "serverStopped": "[QR-STABLE] Server gestopt",
+        "serverError": "[QR-STABLE] Fout bij server stoppen:",
+        "serverStarted": "[QR-STABLE] Server gestart, poort:",
+        "startServerError": "[QR-STABLE] Fout bij server starten:",
+        "componentUnmounted": "[QR-STABLE] Component unmounted, annuleer server start",
+        "componentRendered": "Component gerenderd"
+      }
+    },
+    "title": "Apparaat verbinden",
+    "qrCode": "Scan QR code",
+    "manualInput": "Handmatige invoer",
+    "scanQRCode": "Scan QR code om apparaat te verbinden",
+    "scanQRCodeDescription": "Op je Android apparaat, open de app, klik \"Verbinden met PC\", scan vervolgens deze QR code",
+    "enterIPAddress": "Voer apparaat IP adres in",
+    "enterIPAddressDescription": "Vind het IP adres op je Android apparaat, voer het hier in",
+    "ipAddress": "IP adres",
+    "port": "Poort",
+    "disconnecting": "Verbinding verbreken...",
+    "connectionFailedDescription": "Kan niet verbinden met apparaat. Zorg ervoor dat apparaat en computer op hetzelfde netwerk zijn en de Android app draait.",
+    "tryAgain": "Opnieuw proberen",
+    "cancel": "Annuleren",
+    "connectionSuccessful": "Verbinding geslaagd",
+    "connectionSuccessfulDescription": "Succesvol verbonden met apparaat",
+    "continue": "Doorgaan",
+    "noDevicesFound": "Geen apparaten gevonden",
+    "searchingForDevices": "Zoeken naar apparaten...",
+    "selectDevice": "Selecteer apparaat",
+    "selectDeviceDescription": "Selecteer het apparaat om te verbinden",
+    "refresh": "Vernieuwen",
     "deviceName": "Apparaatnaam",
-    "deviceModel": "Model",
-    "deviceOS": "Besturingssysteemversie",
-    "batteryLevel": "Batterij",
+    "deviceStatus": "Status",
+    "deviceLastConnected": "Laatst verbonden",
+    "deviceActions": "Acties",
+    "deviceConnect": "Verbinden",
+    "deviceDisconnect": "Verbinding verbreken",
+    "deviceRemove": "Verwijderen",
+    "deviceEdit": "Bewerken",
+    "deviceDetails": "Details",
+    "addDevice": "Apparaat toevoegen",
+    "editDevice": "Apparaat bewerken",
+    "removeDevice": "Apparaat verwijderen",
+    "removeDeviceConfirmation": "Weet u zeker dat u dit apparaat wilt verwijderen?",
+    "removeDeviceConfirmationDescription": "Deze actie verwijdert het apparaat uit de lijst opgeslagen apparaten. Je kunt nog steeds herverbinden door QR code te scannen of IP handmatig in te voeren.",
+    "remove": "Verwijderen",
+    "keepDevice": "Behouden",
+    "deviceRemoved": "Apparaat verwijderd",
+    "deviceAdded": "Apparaat toegevoegd",
+    "deviceUpdated": "Apparaat bijgewerkt",
+    "deviceConnected": "Apparaat verbonden",
+    "deviceDisconnected": "Apparaat verbinding verbroken",
+    "allDevicesDisconnected": "Alle apparaten verbinding verbroken",
+    "connectionLost": "Verbinding verloren",
+    "connectionHistory": "Verbindingsgeschiedenis",
+    "connectionLog": "Verbindingslog",
+    "connectionStats": "Verbindingsstatistieken",
+    "connectionTest": "Verbinding testen",
+    "connectionTestSuccessful": "Verbinding test geslaagd",
+    "connectionTestFailed": "Verbinding test mislukt",
+    "connectionError": "Verbindingsfout",
+    "requestingToken": "Token aanvragen...",
+    "authFailed": "Authenticatie mislukt",
+    "loginSuccess": "Login geslaagd",
+    "missingToken": "Token ontbreekt",
+    "tokenReceived": "Token ontvangen",
+    "loginFailed": "Login mislukt"
+  },
+  "device": {
+    "title": "Apparaten",
+    "actions": {
+      "delete": "🗑️ Apparaat verwijderen",
+      "label": "Apparaat acties"
+    },
+    "confirmDelete": "Weet u zeker dat u het apparaat \"{{name}}\" wilt verwijderen?",
+    "add": "Apparaat toevoegen",
+    "edit": "Apparaat bewerken",
+    "tokenRequestFailed": "Fout bij ophalen autorisatietoken",
+    "loginInProgress": "Inloggen...",
+    "loginSuccess": "Login geslaagd",
+    "disconnected": "Apparaat verbinding verbroken",
+    "allDevicesDisconnected": "Alle apparaten verbinding verbroken",
+    "missingUuid": "Specificeer apparaat UUID",
+    "noDevices": "Geen apparaten",
+    "noEnabledDevices": "Geen ingeschakelde apparaten",
+    "notConnectedOrUnavailable": "Apparaat {{deviceUuid}} niet verbonden of niet beschikbaar",
+    "clickToAddDevice": "Klik \"+ Verbinding toevoegen\" om te scannen en apparaat toe te voegen",
+    "info": "Apparaatinformatie",
+    "name": "Apparaatnaam",
+    "model": "Model",
+    "os": "Systeemversie",
+    "batteryLevel": "Batterijniveau",
     "storage": "Opslag",
     "memory": "Geheugen"
   },
+  "manualInput": {
+    "title": "Handmatige verbindingsinvoer",
+    "deviceName": {
+      "label": "Apparaatnaam (optioneel):",
+      "placeholder": "Bijv.: Xiaomi telefoon",
+      "hint": "Indien niet ingevuld, automatisch gegenereerd"
+    },
+    "socketAddress": {
+      "label": "Socket adres *: ",
+      "placeholder": "Bijv.: 192.168.1.100:6001",
+      "hint": "Ondersteunde formaten: IP:poort, domein:poort"
+    },
+    "validation": {
+      "socketRequired": "Voer socket adres in"
+    },
+    "status": {
+      "adding": "Apparaat toevoegen...",
+      "added": "Apparaat toegevoegd!"
+    },
+    "error": {
+      "addFailed": "Toevoegen mislukt: {{error}}"
+    },
+    "hint": {
+      "title": "Hint:",
+      "description": "Voer het socket adres van het apparaat in, ondersteunt de volgende formaten:",
+      "formats": [
+        "IP:poort, bijv. 127.0.0.1:10035",
+        "Volledig ws:// of wss:// adres, bijv. ws://localhost:10035",
+        "Domein:poort, bijv. example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Apparaat toevoegen",
+      "adding": "Toevoegen..."
+    }
+  },
   "notification": {
-    "noNotifications": "Geen meldingen",
+    "title": "Notificaties",
+    "noNotifications": "Geen notificaties",
     "clearAll": "Alles wissen",
-    "markAsRead": "Markeer als gelezen",
-    "markAsUnread": "Markeer als ongelezen",
+    "clearAllConfirm": "Weet u zeker dat u alle notificaties wilt wissen?",
+    "clearAllSuccess": "Alle notificaties gewist",
+    "clearAllFailed": "Wissen notificaties mislukt",
     "delete": "Verwijderen",
-    "reply": "Beantwoorden",
+    "deleteConfirm": "Weet u zeker dat u deze notificatie wilt verwijderen?",
+    "deleteSuccess": "Notificatie verwijderd",
+    "deleteFailed": "Verwijderen notificatie mislukt",
     "copy": "Kopiëren",
+    "copySuccess": "Gekopieerd naar klembord",
+    "copyFailed": "Kopiëren mislukt",
+    "details": "Details",
+    "close": "Sluiten",
+    "markAsRead": "Markeren als gelezen",
+    "markAsUnread": "Markeren als ongelezen",
+    "markAsReadSuccess": "Gemarkeerd als gelezen",
+    "markAsReadFailed": "Markeren als gelezen mislukt",
+    "markAsUnreadSuccess": "Gemarkeerd als ongelezen",
+    "markAsUnreadFailed": "Markeren als ongelezen mislukt",
+    "markAllAsRead": "Alles markeren als gelezen",
+    "markAllAsReadConfirm": "Weet u zeker dat u alle notificaties als gelezen wilt markeren?",
+    "markAllAsReadSuccess": "Alle notificaties gemarkeerd als gelezen",
+    "markAllAsReadFailed": "Alles markeren als gelezen mislukt",
+    "filter": "Filter",
+    "filterByApp": "Filter op app",
+    "filterByKeyword": "Filter op trefwoord",
+    "filterByTime": "Filter op tijd",
+    "filterByStatus": "Filter op status",
+    "filterByPriority": "Filter op prioriteit",
+    "filterByCategory": "Filter op categorie",
+    "filterByChannel": "Filter op kanaal",
+    "filterByDevice": "Filter op apparaat",
+    "reply": "Antwoorden",
     "copied": "Gekopieerd!",
-    "expand": "Meer weergeven",
-    "collapse": "Minder weergeven"
+    "expand": "Meer tonen",
+    "collapse": "Inklappen",
+    "totalCount": "Totaal {{count}} notificaties",
+    "selectedCount": "({{count}} geselecteerd)",
+    "markSelectedAsRead": "Markeren als gelezen",
+    "selectToMarkAsRead": "Selecteer om als gelezen te markeren",
+    "noNotificationsMessage": "Geen notificaties",
+    "unknownSender": "Onbekende afzender",
+    "noTitle": "Geen titel",
+    "noContent": "Geen inhoud",
+    "subText": "Subtekst",
+    "summary": "Samenvatting",
+    "textLines": "Multiregel tekst",
+    "time": "Tijd",
+    "channelId": "Kanaal ID",
+    "action": "Actie",
+    "isInitialized": "Geïnitialiseerd",
+    "readStatus": "Leesstatus",
+    "unread": "Ongelezen",
+    "templateType": "Template type",
+    "conversationTitle": "Conversatietitel",
+    "additionalInfo": "Aanvullende info",
+    "participants": "Deelnemers",
+    "isResident": "Lopend",
+    "priority": "Prioriteit",
+    "importance": "Belang",
+    "addToBlacklist": "Toevoegen aan blacklist",
+    "addToWhitelist": "Toevoegen aan whitelist"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Filter tonen",
+      "hide": "🔽 Filter verbergen",
+      "addPattern": "Patroon toevoegen",
+      "removePattern": "Verwijderen",
+      "reset": "Reset naar standaard",
+      "save": "Instellingen opslaan"
+    },
+    "title": "Filterregels",
+    "basicRulesTitle": "Basis filterregels",
+    "rules": {
+      "ongoing": "Lopende notificaties",
+      "ongoingDesc": "Filter lopende notificaties (FLAG_ONGOING_EVENT)",
+      "system": "Systeemnotificaties",
+      "systemDesc": "Filter Android systeemnotificaties (android, com.android.*)",
+      "empty": "Notificaties zonder inhoud",
+      "emptyDesc": "Filter notificaties met lege titel en inhoud",
+      "lowPriority": "Lage prioriteit notificaties",
+      "lowPriorityDesc": "Filter lage prioriteit en importantie notificaties",
+      "foreground": "Voorgrondservice notificaties",
+      "foregroundDesc": "Filter notificaties waar channelId \"foreground\" bevat",
+      "groupSummary": "Groepsamenvatting notificaties",
+      "groupSummaryDesc": "Filter notificaties waar titel \"GroupSummary\" bevat",
+      "runningService": "Lopende notificaties",
+      "runningServiceDesc": "Filter \"Lopend\" + \"Tik voor details\" notificaties",
+      "packageBlacklist": "Blacklist pakketnamen",
+      "packageBlacklistDesc": "Filter notificaties van gespecificeerde pakketnamen (regex ondersteund)",
+      "packageWhitelist": "Whitelist pakketnamen",
+      "packageWhitelistDesc": "Toon alleen notificaties van gespecificeerde pakketnamen (regex ondersteund)",
+      "systemWhitelist": "Whitelist systeemapps",
+      "systemWhitelistDesc": "Zelfs com.android.* niet gefilterd"
+    },
+    "hint": {
+      "title": "Hint:",
+      "exact": "Exacte match: com.tencent.mm",
+      "wildcard": "Wildcard: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Blacklist modus",
+      "whitelist": "Whitelist modus"
+    },
+    "messages": {
+      "patternAdded": "Patroon toegevoegd: {{pattern}}",
+      "patternRemoved": "Patroon verwijderd: {{pattern}}",
+      "modeChanged": "Geschakeld naar {{mode}}",
+      "configReset": "Teruggezet naar standaard configuratie",
+      "configSaved": "Instellingen opgeslagen",
+      "configLoadError": "Fout bij laden configuratie: {{error}}",
+      "configSaveError": "Fout bij opslaan configuratie: {{error}}"
+    },
+    "enterPackageOrRegex": "Voer pakketnaam of regex in",
+    "enterPackageOrRegexPlaceholder": "Voer pakketnaam of regex in",
+    "invalidRegex": "Ongeldige regex",
+    "confirmReset": "Weet u zeker dat u naar standaard configuratie wilt resetten?",
+    "confirmRemovePattern": "Weet u zeker dat u \"{{pattern}}\" uit {{rule}} wilt verwijderen?"
   },
   "errors": {
+    "connectionFailed": "Verbinding mislukt",
+    "deleteFailed": "Verwijderen mislukt",
+    "websocketNotConnected": "WebSocket niet verbonden",
+    "websocketNotInitialized": "WebSocket niet geïnitialiseerd",
     "minimizeWindowFailed": "Venster minimaliseren mislukt"
-  }
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Ongeldige regex"
+    }
+  },
+  "login": "Inloggen",
+  "request_token": "Token aanvragen",
+  "clear_messages": "Berichten wissen",
+  "get_package_icon": "App icoon ophalen"
 }

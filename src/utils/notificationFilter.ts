@@ -1,16 +1,28 @@
 import { filterConfigController } from '../data/notification-filter-config';
+import i18n from 'i18next';
 
-// 重要的系统应用白名单 - 即使是 com.android.* 也不过滤
+/**
+ * 系统应用白名单 - 这些应用的通知将不会被过滤，即使它们是系统应用
+ * 格式: packageName
+ */
 const SYSTEM_APP_WHITELIST = [
   'com.android.mms',      // 短信
   'com.android.phone',    // 电话
 ];
 
-// 系统应用黑名单 - 强制过滤这些系统应用（优先级最高）
+// 系统应用白名单描述
+const SYSTEM_APP_WHITELIST_DESC = i18n.t('notificationFilter.systemApps.whitelist.description');
+
+/**
+ * 系统应用黑名单 - 这些应用的通知将被强制过滤（优先级最高）
+ * 用户可以在这里添加想要过滤的系统应用
+ */
 const SYSTEM_APP_BLACKLIST: string[] = [
-  // 用户可以在这里添加想要过滤的系统应用
-  // 例如：'com.android.mms' 如果想过滤短信
+  // 示例：'com.android.mms' 可以过滤短信
 ];
+
+// 系统应用黑名单描述
+const SYSTEM_APP_BLACKLIST_DESC = i18n.t('notificationFilter.systemApps.blacklist.description');
 
 function matchesPackagePattern(packageName: string, pattern: string): boolean {
   try {
@@ -28,7 +40,7 @@ function matchesPackagePattern(packageName: string, pattern: string): boolean {
     const regex = new RegExp(regexPattern);
     return regex.test(packageName);
   } catch (e) {
-    console.warn('[notificationFilter] Invalid regex pattern:', pattern, e);
+    console.warn(i18n.t('filtering.errors.invalidRegex', { pattern }), e);
     return false;
   }
 }
@@ -66,6 +78,7 @@ export function isVisibleNotification(notification: any): boolean {
 
   // 1. 过滤常驻通知 (FLAG_ONGOING_EVENT)
   if (filterConfigController.isRuleEnabled('ongoing-notification')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringOngoing'));
     const flags = notification.flags || 0;
     const FLAG_ONGOING_EVENT = 0x00000002; // Android Notification.FLAG_ONGOING_EVENT
     if ((flags & FLAG_ONGOING_EVENT) !== 0) {
@@ -75,6 +88,7 @@ export function isVisibleNotification(notification: any): boolean {
 
   // 2. 过滤系统通知
   if (filterConfigController.isRuleEnabled('system-notification')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringSystem'));
     const packageName = notification.packageName || '';
 
     // 优先检查黑名单，如果在黑名单中，直接过滤
@@ -98,6 +112,7 @@ export function isVisibleNotification(notification: any): boolean {
 
   // 3. 过滤无内容通知
   if (filterConfigController.isRuleEnabled('empty-content')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringEmptyContent'));
     const title = (notification.title || '').trim();
     const text = (notification.text || '').trim();
     if (!title && !text) {
@@ -107,6 +122,7 @@ export function isVisibleNotification(notification: any): boolean {
 
   // 4. 过滤低优先级通知
   if (filterConfigController.isRuleEnabled('low-priority')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringLowPriority'));
     // Android priority: -2 (MIN), -1 (LOW), 0 (DEFAULT), 1 (HIGH), 2 (MAX)
     const priority = notification.priority ?? 0;
     // Android importance: 0 (NONE), 1 (MIN), 2 (LOW), 3 (DEFAULT), 4 (HIGH), 5 (MAX)
@@ -119,6 +135,7 @@ export function isVisibleNotification(notification: any): boolean {
   }
 
   if (filterConfigController.isRuleEnabled('foreground-service')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringForegroundService'));
     const channelId = notification.channelId || '';
     if (channelId.toLowerCase().includes('foreground') ||
         channelId.toLowerCase().includes('hide_foreground')) {
@@ -127,6 +144,7 @@ export function isVisibleNotification(notification: any): boolean {
   }
 
   if (filterConfigController.isRuleEnabled('group-summary')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringGroupSummary'));
     const title = notification.title || '';
     if (title.includes('GroupSummary')) {
       return false;
@@ -134,9 +152,11 @@ export function isVisibleNotification(notification: any): boolean {
   }
 
   if (filterConfigController.isRuleEnabled('running-service')) {
+    console.debug(i18n.t('notificationFilter.rules.status.filteringRunningService'));
     const title = notification.title || '';
     const text = notification.text || '';
-    if (title.includes('正在运行') && text.includes('点按即可了解详情')) {
+    if (title.includes(i18n.t('notificationFilter.ui.runningService')) && 
+        text.includes(i18n.t('notificationFilter.ui.tapForDetails'))) {
       return false;
     }
   }
@@ -145,5 +165,20 @@ export function isVisibleNotification(notification: any): boolean {
 }
 
 export function filterNotifications(notifications: any[]): any[] {
-  return notifications.filter(isVisibleNotification);
+  try {
+    return notifications.filter(isVisibleNotification);
+  } catch (error) {
+    console.error(i18n.t('notificationFilter.errors.filterError', { 
+      error: error instanceof Error ? error.message : String(error) 
+    }));
+    return [];
+  }
 }
+
+// 导出常量供其他模块使用
+export const notificationFilterConstants = {
+  SYSTEM_APP_WHITELIST,
+  SYSTEM_APP_WHITELIST_DESC,
+  SYSTEM_APP_BLACKLIST,
+  SYSTEM_APP_BLACKLIST_DESC
+};

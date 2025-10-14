@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Hvidliste for systemapps",
+        "description": "Disse apps' notifikationer vil ikke blive filtreret, selvom de er systemapps",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telefon"
+        },
+        "addCustom": "Tilføj brugerdefineret systemapp til hvidlisten",
+        "example": "For eksempel: 'com.android.mms' kan filtrere SMS"
+      },
+      "blacklist": {
+        "title": "Sortliste for systemapps",
+        "description": "Disse apps' notifikationer vil blive tvunget filtreret (højeste prioritet)",
+        "addCustom": "Tilføj brugerdefineret systemapp til sortlisten"
+      }
+    },
+    "actions": {
+      "show": "Vis filtreringsindstillinger",
+      "hide": "Skjul filtreringsindstillinger"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filtrer vedvarende notifikationer (FLAG_ONGOING_EVENT)",
+        "system": "Filtrer systemnotifikationer",
+        "emptyContent": "Filtrer notifikationer uden indhold",
+        "lowPriority": "Filtrer lavprioriterede notifikationer",
+        "runningService": "Filtrer kørende tjenestenotifikationer"
+      },
+      "status": {
+        "filteringOngoing": "Filtrerer vedvarende notifikationer...",
+        "filteringSystem": "Filtrerer systemnotifikationer...",
+        "filteringEmptyContent": "Filtrerer notifikationer uden indhold...",
+        "filteringLowPriority": "Filtrerer lavprioriterede notifikationer...",
+        "filteringRunningService": "Filtrerer kørende tjenestenotifikationer...",
+        "filteringForegroundService": "Filtrerer forgrundstjenestenotifikationer...",
+        "filteringGroupSummary": "Filtrerer gruppeoversigtsnotifikationer..."
+      },
+      "empty": "Notifikationer uden indhold",
+      "emptyDesc": "Filtrer notifikationer med tom titel og indhold",
+      "foreground": "Forgrundstjenestenotifikationer",
+      "foregroundDesc": "Filtrer notifikationer hvor channelId indeholder \"foreground\"",
+      "groupSummary": "Gruppeoversigtsnotifikationer",
+      "groupSummaryDesc": "Filtrer notifikationer hvor titel indeholder \"GroupSummary\"",
+      "lowPriority": "Lavprioriterede notifikationer",
+      "lowPriorityDesc": "Filtrer lavprioriterede og lavvigtige notifikationer",
+      "ongoing": "Vedvarende notifikationer",
+      "ongoingDesc": "Filtrer vedvarende notifikationer (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Pakkenavn sortliste",
+      "packageBlacklistDesc": "Filtrer notifikationer fra specificerede pakkenavne (understøtter regex)",
+      "packageWhitelist": "Pakkenavn hvidliste",
+      "packageWhitelistDesc": "Vis kun notifikationer fra specificerede pakkenavne (understøtter regex)",
+      "runningService": "Kørende notifikationer",
+      "runningServiceDesc": "Filtrer \"Kører\" + \"Tryk for detaljer\" notifikationer",
+      "system": "Systemnotifikationer",
+      "systemDesc": "Filtrer Android systemnotifikationer (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Kører",
+      "tapForDetails": "Tryk for detaljer"
+    },
+    "errors": {
+      "filterError": "Fejl under filtrering af notifikationer: {{error}}",
+      "invalidRegex": "Ugyldig regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Fejl ved indlæsning af konfiguration: {{error}}",
+      "configReset": "Nulstillet til standardindstillinger",
+      "configSaved": "Indstillinger gemt",
+      "configSaveError": "Fejl ved gemning af konfiguration: {{error}}",
+      "modeChanged": "Skiftet til {{mode}}",
+      "patternAdded": "Mønster tilføjet: {{pattern}}",
+      "patternRemoved": "Mønster fjernet: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Er du sikker på at slette alle enheder?",
+      "confirmMessage": "Dette vil slette alle gemte enheder, men bevare vinduesindstillinger.",
+      "irreversible": "Denne handling kan ikke fortrydes!",
+      "success": "Enhedsdata slettet!\nAppen genindlæses.",
+      "error": "Sletning mislykkedes",
+      "logs": {
+        "clearing": "[appReset] Sletter enhedsdata...",
+        "cleared": "[appReset] Enhedsdata slettet"
+      }
+    },
+    "confirmTitle": "Er du sikker på at nulstille appen til initial tilstand?",
+    "confirmMessage": "Dette vil slette:\n- Alle gemte enheder\n- Vinduesposition og størrelsesindstillinger\n- Alle filterindstillinger\n- Alle appindstillinger\n\nAppen lukkes og genstartes for at anvende ændringer.\n\nDenne handling kan ikke fortrydes!",
+    "confirmButton": "Bekræft",
+    "cancelButton": "Annuller",
+    "logs": {
+      "starting": "[appReset] Starter nulstilling af app...",
+      "clearingLocalStorage": "[appReset] Rydder localStorage...",
+      "localStorageCleared": "[appReset] LocalStorage ryddet",
+      "creatingResetMarker": "[appReset] Opretter nulstillingsmarkørfil...",
+      "resetMarkerCreated": "[appReset] Nulstillingsmarkørfil oprettet",
+      "resettingAppData": "[appReset] Nulstiller appdata...",
+      "appDataReset": "[appReset] Appdata nulstillet",
+      "exitingApp": "[appReset] Lukker app...",
+      "error": "[appReset] Fejl under nulstilling af app:"
+    },
+    "comments": {
+      "resetFunction": "Nulstil app til standardtilstand",
+      "resetDescription": "Slet alle data:\n- LocalStorage (enhedsliste, filterkonfigurationer osv. frontend-data)\n- Tauri lokal datamappe (vinduestilstand osv. backend-data)",
+      "resetStrategy": "Brug markørfilstrategi til at løse Windows fil-lås problemer:\n1. Ryd LocalStorage\n2. Opret nulstillingsmarkørfil\n3. Luk app\n4. Ved næste start, slet datafiler automatisk"
+    }
+  },
   "app": {
     "title": "Notifikationslytter",
-    "description": "Lyt til og administrer enhedsnotifikationer"
+    "description": "Lyt og administrer enhedsnotifikationer",
+    "loading": "Indlæser..."
   },
   "common": {
+    "labels": {
+      "address": "Adresse"
+    },
+    "actions": {
+      "reconnect": "🔄 Genforbind",
+      "manualReconnect": "Manuel genforbindelse",
+      "collapse": "Kollaps",
+      "expandDetails": "Udrul detaljer",
+      "label": "Handling",
+      "addToBlacklist": "Tilføj til sortliste",
+      "addToWhitelist": "Tilføj til hvidliste"
+    },
+    "unknown": "Ukendt",
+    "optional": "Valgfri",
+    "unknownSender": "Ukendt afsender",
+    "noTitle": "Ingen titel",
+    "content": "Indhold",
+    "bigText": "Stor tekst",
+    "textLines": "Tekstlinjer",
+    "additionalInfo": "Yderligere information",
+    "packageName": "Pakkenavn",
+    "timeSent": "Sendetid",
+    "notificationId": "Notifikations-ID",
+    "tag": "Tag",
+    "messages": "Beskeder",
+    "sender": "Afsender",
+    "time": "Tid",
     "save": "Gem",
     "cancel": "Annuller",
     "back": "Tilbage",
@@ -12,65 +149,426 @@
     "loading": "Indlæser...",
     "error": "Der opstod en fejl",
     "connect": "Forbind",
-    "connecting": "Opretter forbindelse...",
-    "disconnect": "Afbryd forbindelse",
-    "disconnecting": "Afbryder forbindelse...",
+    "connecting": "Forbinder...",
+    "disconnect": "Afbryd",
+    "disconnecting": "Afbryder...",
     "connected": "Forbundet",
-    "disconnected": "Ikke forbundet",
-    "connectionFailed": "Forbindelsen mislykkedes",
+    "disconnected": "Afbrudt",
+    "connectionFailed": "Forbindelse mislykkedes",
     "minimize": "Minimer",
     "unread": "Ulæst",
-    "total": "I alt",
+    "total": "Total",
     "errorOccurred": "Der opstod en fejl",
     "retry": "Prøv igen",
     "settings": "Indstillinger",
-    "close": "Luk",
     "maximize": "Maksimer",
-    "restore": "Gendan"
+    "restore": "Gendan",
+    "enabled": "Aktiveret",
+    "disabled": "Deaktiveret"
   },
   "settings": {
     "title": "Indstillinger",
-    "language": "Sprog",
-    "appearance": "Udseende",
-    "theme": "Tema",
-    "light": "Lyst",
-    "dark": "Mørkt",
-    "system": "System",
-    "notifications": "Notifikationer",
-    "enableNotifications": "Aktiver notifikationer",
-    "notificationSound": "Notifikationslyd",
+    "appearance": {
+      "title": "Udseende",
+      "theme": "Tema",
+      "light": "Lys",
+      "dark": "Mørk",
+      "system": "System",
+      "language": "Sprog"
+    },
+    "notifications": {
+      "title": "Notifikationer",
+      "enableNotifications": "Aktiver notifikationer",
+      "enableSounds": "Aktiver lyde",
+      "enableBadge": "Vis badge"
+    },
+    "websocketDevices": "WebSocket enheder",
     "about": "Om",
     "version": "Version",
-    "checkForUpdates": "Søg efter opdateringer"
+    "checkForUpdates": "Tjek for opdateringer",
+    "clearAllDevices": "Slet alle enheder",
+    "language": "Sprog",
+    "resetWarning": "Nulstilling vil slette gemte enheder, vinduesposition og størrelse, filterkonfigurationer og appdata. Denne handling kan ikke fortrydes, vær forsigtig."
   },
-  "device": {
-    "connect": "Forbind enhed",
+  "connection": {
+    "manager": {
+      "deleteConfirm": "Er du sikker på at slette forbindelsen \"{{name}}\"?",
+      "noConnections": "Ingen gemte forbindelser",
+      "addConnectionPrompt": "Klik på \"Tilføj forbindelse\" knappen for at starte",
+      "totalConnections": "{{count}} forbindelser i alt",
+      "connectionDetails": {
+        "address": "Adresse",
+        "token": "Token",
+        "none": "Ingen",
+        "createdAt": "Oprettet den",
+        "lastConnected": "Sidst forbundet"
+      },
+      "actions": {
+        "enable": "Aktiver",
+        "delete": "Slet",
+        "label": "Forbindelseshandlinger"
+      }
+    },
+    "add": "Tilføj forbindelse",
+    "migratedConnection": "Migreret forbindelse",
+    "socketSettings": "Socket forbindelsesindstillinger",
+    "serverAddress": "Serveradresse",
+    "serverAddressPlaceholder": "For eksempel:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Indtast serveradresse",
+    "connectionFailedCheckAddress": "Forbindelse mislykkedes, tjek serveradressen",
+    "supportedFormats": "Understøtter IP+port, ws://, wss:// domæne osv.",
+    "authToken": "Godkendelsestoken",
+    "enterAuthToken": "Indtast godkendelsestoken",
+    "connecting": "Forbinder...",
+    "connect": "Forbind",
+    "connectionFailed": "Forbindelse mislykkedes",
+    "testing": "Tester...",
+    "startSocketTest": "Start Socket test",
+    "socketTestTitle": "Socket test",
+    "clickToStartTest": "Klik på knappen for at starte testen...",
     "disconnect": "Afbryd forbindelse",
     "connected": "Forbundet",
-    "disconnected": "Ikke forbundet",
-    "connectionFailed": "Forbindelsen mislykkedes",
+    "disconnected": "Afbrudt",
+    "failed": "Forbindelse mislykkedes",
     "retry": "Prøv igen",
-    "deviceInfo": "Enhedsoplysninger",
+    "lost": "Forbindelse tabt",
+    "reconnecting": "Genforbinder...",
+    "reconnect": "Genforbind",
+    "reconnectIn": "Prøv igen om {{count}} sekunder",
+    "reconnectNow": "Prøv igen nu",
+    "reconnectFailed": "Genforbindelse mislykkedes",
+    "reconnectSuccessful": "Genforbindelse lykkedes",
+    "reconnectAttempt": "Forsøg {{current}}/{{max}}",
+    "reconnectLimitReached": "Nået grænse for genforbindelsesforsøg",
+    "timeout": "Forbindelsestimeout",
+    "refused": "Forbindelse nægtet",
+    "reset": "Forbindelse nulstillet",
+    "aborted": "Forbindelse afbrudt",
+    "closed": "Forbindelse lukket",
+    "error": "Forbindelsesfejl",
+    "backendConnectionFailed": "Backend forbindelse mislykkedes",
+    "unknownConnectionError": "Ukendt forbindelsesfejl",
+    "status": "Forbindelsesstatus",
+    "type": "Forbindelsestype",
+    "name": "Forbindelsesnavn",
+    "settings": "Forbindelsesindstillinger",
+    "details": "Forbindelsesdetaljer",
+    "history": "Forbindelseshistorik",
+    "log": "Forbindelseslog",
+    "stats": "Forbindelsesstatistik",
+    "test": "Test forbindelse",
+    "testSuccessful": "Forbindelsestest lykkedes",
+    "testFailed": "Forbindelsestest mislykkedes",
+    "edit": "Rediger forbindelse",
+    "delete": "Slet forbindelse",
+    "addTitle": "Tilføj forbindelse",
+    "tabs": {
+      "qrcode": "Tilføj ved scanning",
+      "manual": "Manuel indtastning"
+    },
+    "server": {
+      "starting": "Starter server...",
+      "started": "Server startet, port: {{port}}",
+      "startFailed": "Start af server mislykkedes: {{error}}",
+      "stopping": "Stopper server...",
+      "stopped": "Server stoppet"
+    },
+    "qrcode": {
+      "title": "Forbind ved scanning af kode",
+      "status": {
+        "preparing": "Forbereder start af server...",
+        "stoppingServer": "Stopper eksisterende server...",
+        "stashStartingServer": "Starter server (port {{port}})...",
+        "fetchingDeviceInfo": "Henter enhedsinformation...",
+        "gettingLocalIp": "Henter lokal IP...",
+        "generatingQrCode": "Genererer QR-kode...",
+        "ready": "Scan QR-koden for at forbinde enheden"
+      },
+      "connectionInfo": "Brug din telefon til at scanne QR-koden og forbinde",
+      "serverPort": "Server kører på port: {{port}}",
+      "error": {
+        "title": "Fejl ved start af server, prøv igen",
+        "retryButton": "Prøv igen"
+      },
+      "steps": {
+        "stoppingServer": "Trin 1/4: Stopper eksisterende server",
+        "startingServer": "Trin 2/4: Starter server",
+        "fetchingDeviceInfo": "Trin 3/4: Henter enhedsinformation",
+        "gettingLocalIp": "Trin 4/5: Henter lokal IP",
+        "generatingQrCode": "Trin 5/5: Genererer QR-kode"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Komponent monteret",
+        "componentUnmounting": "[QR-STABLE] Komponent afmontering oprydning",
+        "serverStarting": "[QR-STABLE] Starter server",
+        "serverStopping": "[QR-STABLE] Stopper server...",
+        "serverStopped": "[QR-STABLE] Server stoppet",
+        "serverError": "[QR-STABLE] Fejl ved stop af server:",
+        "serverStarted": "[QR-STABLE] Server startet, port:",
+        "startServerError": "[QR-STABLE] Fejl ved start af server:",
+        "componentUnmounted": "[QR-STABLE] Komponent afmonteret, annullerer serverstart",
+        "componentRendered": "Komponent renderet"
+      }
+    },
+    "title": "Forbind enhed",
+    "qrCode": "Scan QR-kode",
+    "manualInput": "Manuel indtastning",
+    "scanQRCode": "Scan QR-kode for at forbinde enhed",
+    "scanQRCodeDescription": "På din Android-enhed, åbn appen, klik på \"Forbind til PC\", scan derefter denne QR-kode",
+    "enterIPAddress": "Indtast enhedens IP-adresse",
+    "enterIPAddressDescription": "Find IP-adressen på din Android-enhed, indtast den her",
+    "ipAddress": "IP-adresse",
+    "port": "Port",
+    "disconnecting": "Afbryder...",
+    "connectionFailedDescription": "Kunne ikke forbinde til enheden. Sørg for at enheden og computeren er på samme netværk, og at Android-appen kører.",
+    "tryAgain": "Prøv igen",
+    "cancel": "Annuller",
+    "connectionSuccessful": "Forbindelse lykkedes",
+    "connectionSuccessfulDescription": "Forbundet til enheden succesfuldt",
+    "continue": "Fortsæt",
+    "noDevicesFound": "Ingen enheder fundet",
+    "searchingForDevices": "Søger efter enheder...",
+    "selectDevice": "Vælg enhed",
+    "selectDeviceDescription": "Vælg enheden at forbinde til",
+    "refresh": "Opdater",
     "deviceName": "Enhedsnavn",
-    "deviceModel": "Model",
-    "deviceOS": "OS-version",
+    "deviceStatus": "Status",
+    "deviceLastConnected": "Sidst forbundet",
+    "deviceActions": "Handlinger",
+    "deviceConnect": "Forbind",
+    "deviceDisconnect": "Afbryd",
+    "deviceRemove": "Fjern",
+    "deviceEdit": "Rediger",
+    "deviceDetails": "Detaljer",
+    "addDevice": "Tilføj enhed",
+    "editDevice": "Rediger enhed",
+    "removeDevice": "Fjern enhed",
+    "removeDeviceConfirmation": "Er du sikker på at fjerne denne enhed?",
+    "removeDeviceConfirmationDescription": "Denne handling fjerner enheden fra gemte enhedsliste. Du kan stadig genforbinde ved at scanne QR-kode eller indtaste IP manuelt.",
+    "remove": "Fjern",
+    "keepDevice": "Bevar",
+    "deviceRemoved": "Enhed fjernet",
+    "deviceAdded": "Enhed tilføjet",
+    "deviceUpdated": "Enhed opdateret",
+    "deviceConnected": "Enhed forbundet",
+    "deviceDisconnected": "Enhed afbrudt",
+    "allDevicesDisconnected": "Alle enheder afbrudt",
+    "connectionLost": "Forbindelse tabt",
+    "connectionHistory": "Forbindelseshistorik",
+    "connectionLog": "Forbindelseslog",
+    "connectionStats": "Forbindelsesstatistik",
+    "connectionTest": "Test forbindelse",
+    "connectionTestSuccessful": "Forbindelsestest lykkedes",
+    "connectionTestFailed": "Forbindelsestest mislykkedes",
+    "connectionError": "Forbindelsesfejl",
+    "requestingToken": "Anmoder om token...",
+    "authFailed": "Godkendelse mislykkedes",
+    "loginSuccess": "Login succesfuld",
+    "missingToken": "Manglende token",
+    "tokenReceived": "Token modtaget",
+    "loginFailed": "Login mislykkedes"
+  },
+  "device": {
+    "title": "Enheder",
+    "actions": {
+      "delete": "🗑️ Slet enhed",
+      "label": "Enhedshandlinger"
+    },
+    "confirmDelete": "Er du sikker på at slette enheden \"{{name}}\"?",
+    "add": "Tilføj enhed",
+    "edit": "Rediger enhed",
+    "tokenRequestFailed": "Fejl ved hentning af autorisationstoken",
+    "loginInProgress": "Logger ind...",
+    "loginSuccess": "Login succesfuld",
+    "disconnected": "Enhed afbrudt",
+    "allDevicesDisconnected": "Alle enheder afbrudt",
+    "missingUuid": "Angiv enheds UUID",
+    "noDevices": "Ingen enheder",
+    "noEnabledDevices": "Ingen aktiverede enheder",
+    "notConnectedOrUnavailable": "Enhed {{deviceUuid}} ikke forbundet eller utilgængelig",
+    "clickToAddDevice": "Klik på \"+ Tilføj forbindelse\" for at scanne og tilføje enhed",
+    "info": "Enhedsinformation",
+    "name": "Enhedsnavn",
+    "model": "Model",
+    "os": "Systemversion",
     "batteryLevel": "Batteriniveau",
-    "storage": "Lagerplads",
+    "storage": "Lagring",
     "memory": "Hukommelse"
   },
+  "manualInput": {
+    "title": "Manuel forbindelsesindtastning",
+    "deviceName": {
+      "label": "Enhedsnavn (valgfrit):",
+      "placeholder": "For eksempel: Xiaomi telefon",
+      "hint": "Hvis ikke udfyldt, genereres automatisk"
+    },
+    "socketAddress": {
+      "label": "Socket adresse *: ",
+      "placeholder": "For eksempel: 192.168.1.100:6001",
+      "hint": "Understøttede formater: IP:port, domæne:port"
+    },
+    "validation": {
+      "socketRequired": "Indtast socket adresse"
+    },
+    "status": {
+      "adding": "Tilføjer enhed...",
+      "added": "Enhed tilføjet!"
+    },
+    "error": {
+      "addFailed": "Tilføjelse mislykkedes: {{error}}"
+    },
+    "hint": {
+      "title": "Tip:",
+      "description": "Indtast enhedens socket adresse, understøtter følgende formater:",
+      "formats": [
+        "IP:port, for eksempel 127.0.0.1:10035",
+        "Fuld ws:// eller wss:// adresse, for eksempel ws://localhost:10035",
+        "Domæne:port, for eksempel example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Tilføj enhed",
+      "adding": "Tilføjer..."
+    }
+  },
   "notification": {
+    "title": "Notifikationer",
     "noNotifications": "Ingen notifikationer",
-    "clearAll": "Ryd alt",
-    "markAsRead": "Marker som læst",
-    "markAsUnread": "Marker som ulæst",
+    "clearAll": "Slet alle",
+    "clearAllConfirm": "Er du sikker på at slette alle notifikationer?",
+    "clearAllSuccess": "Alle notifikationer slettet",
+    "clearAllFailed": "Sletning af notifikationer mislykkedes",
     "delete": "Slet",
-    "reply": "Svar",
+    "deleteConfirm": "Er du sikker på at slette denne notifikation?",
+    "deleteSuccess": "Notifikation slettet",
+    "deleteFailed": "Sletning af notifikation mislykkedes",
     "copy": "Kopier",
+    "copySuccess": "Kopieret til udklipsholder",
+    "copyFailed": "Kopiering mislykkedes",
+    "details": "Detaljer",
+    "close": "Luk",
+    "markAsRead": "Markér som læst",
+    "markAsUnread": "Markér som ulæst",
+    "markAsReadSuccess": "Markéret som læst",
+    "markAsReadFailed": "Markering som læst mislykkedes",
+    "markAsUnreadSuccess": "Markéret som ulæst",
+    "markAsUnreadFailed": "Markering som ulæst mislykkedes",
+    "markAllAsRead": "Markér alle som læst",
+    "markAllAsReadConfirm": "Er du sikker på at markere alle notifikationer som læst?",
+    "markAllAsReadSuccess": "Alle notifikationer markéret som læst",
+    "markAllAsReadFailed": "Markering af alle som læst mislykkedes",
+    "filter": "Filter",
+    "filterByApp": "Filter efter app",
+    "filterByKeyword": "Filter efter nøgleord",
+    "filterByTime": "Filter efter tid",
+    "filterByStatus": "Filter efter status",
+    "filterByPriority": "Filter efter prioritet",
+    "filterByCategory": "Filter efter kategori",
+    "filterByChannel": "Filter efter kanal",
+    "filterByDevice": "Filter efter enhed",
+    "reply": "Svar",
     "copied": "Kopieret!",
     "expand": "Vis mere",
-    "collapse": "Vis mindre"
+    "collapse": "Kollaps",
+    "totalCount": "{{count}} notifikationer i alt",
+    "selectedCount": "(Valgt {{count}})",
+    "markSelectedAsRead": "Markér som læst",
+    "selectToMarkAsRead": "Vælg for at markere som læst",
+    "noNotificationsMessage": "Ingen notifikationer",
+    "unknownSender": "Ukendt afsender",
+    "noTitle": "Ingen titel",
+    "noContent": "Intet indhold",
+    "subText": "Undertekst",
+    "summary": "Oversigt",
+    "textLines": "Multilinje tekst",
+    "time": "Tid",
+    "channelId": "Kanal-ID",
+    "action": "Handling",
+    "isInitialized": "Initialiseret",
+    "readStatus": "Læsestatus",
+    "unread": "Ulæst",
+    "templateType": "Skabelontype",
+    "conversationTitle": "Samtaletitel",
+    "additionalInfo": "Yderligere information",
+    "participants": "Deltagere",
+    "isResident": "Vedvarende",
+    "priority": "Prioritet",
+    "importance": "Vigtighed",
+    "addToBlacklist": "Tilføj til sortliste",
+    "addToWhitelist": "Tilføj til hvidliste"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Vis filter",
+      "hide": "🔽 Skjul filter",
+      "addPattern": "Tilføj mønster",
+      "removePattern": "Fjern",
+      "reset": "Nulstil til standard",
+      "save": "Gem indstillinger"
+    },
+    "title": "Filtreringsregler",
+    "basicRulesTitle": "Grundlæggende filtreringsregler",
+    "rules": {
+      "ongoing": "Vedvarende notifikationer",
+      "ongoingDesc": "Filtrer vedvarende notifikationer (FLAG_ONGOING_EVENT)",
+      "system": "Systemnotifikationer",
+      "systemDesc": "Filtrer Android systemnotifikationer (android, com.android.*)",
+      "empty": "Notifikationer uden indhold",
+      "emptyDesc": "Filtrer notifikationer med tom titel og indhold",
+      "lowPriority": "Lavprioriterede notifikationer",
+      "lowPriorityDesc": "Filtrer lavprioriterede og lavvigtige notifikationer",
+      "foreground": "Forgrundstjenestenotifikationer",
+      "foregroundDesc": "Filtrer notifikationer hvor channelId indeholder \"foreground\"",
+      "groupSummary": "Gruppeoversigtsnotifikationer",
+      "groupSummaryDesc": "Filtrer notifikationer hvor titel indeholder \"GroupSummary\"",
+      "runningService": "Kørende notifikationer",
+      "runningServiceDesc": "Filtrer \"Kører\" + \"Tryk for detaljer\" notifikationer",
+      "packageBlacklist": "Pakkenavn sortliste",
+      "packageBlacklistDesc": "Filtrer notifikationer fra specificerede pakkenavne (understøtter regex)",
+      "packageWhitelist": "Pakkenavn hvidliste",
+      "packageWhitelistDesc": "Vis kun notifikationer fra specificerede pakkenavne (understøtter regex)",
+      "systemWhitelist": "Systemapps hvidliste",
+      "systemWhitelistDesc": "Selv com.android.* filtrer ikke"
+    },
+    "hint": {
+      "title": "Tip:",
+      "exact": "Præcis match: com.tencent.mm",
+      "wildcard": "Wildcard: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Sortliste tilstand",
+      "whitelist": "Hvidliste tilstand"
+    },
+    "messages": {
+      "patternAdded": "Mønster tilføjet: {{pattern}}",
+      "patternRemoved": "Mønster fjernet: {{pattern}}",
+      "modeChanged": "Skiftet til {{mode}}",
+      "configReset": "Nulstillet til standardkonfiguration",
+      "configSaved": "Indstillinger gemt",
+      "configLoadError": "Fejl ved indlæsning af konfiguration: {{error}}",
+      "configSaveError": "Fejl ved gemning af konfiguration: {{error}}"
+    },
+    "enterPackageOrRegex": "Indtast pakkenavn eller regex",
+    "enterPackageOrRegexPlaceholder": "Indtast pakkenavn eller regex",
+    "invalidRegex": "Ugyldig regex",
+    "confirmReset": "Er du sikker på at nulstille til standardkonfiguration?",
+    "confirmRemovePattern": "Er du sikker på at fjerne \"{{pattern}}\" fra {{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "Kunne ikke minimere vinduet"
-  }
+    "connectionFailed": "Forbindelse mislykkedes",
+    "deleteFailed": "Sletning mislykkedes",
+    "websocketNotConnected": "WebSocket ikke forbundet",
+    "websocketNotInitialized": "WebSocket ikke initialiseret",
+    "minimizeWindowFailed": "Minimering af vindue mislykkedes"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Ugyldig regex"
+    }
+  },
+  "login": "Log ind",
+  "request_token": "Anmod om token",
+  "clear_messages": "Slet beskeder",
+  "get_package_icon": "Hent app ikon"
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AndroidDeviceInfo } from '../types/deviceStorage';
 import { mainModelController } from '../data/main-model-controller';
 
@@ -7,6 +8,7 @@ interface ManualInputModeProps {
 }
 
 const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) => {
+  const { t } = useTranslation();
   const [host, setHost] = useState<string>('');
   const [deviceName, setDeviceName] = useState<string>('');
   const [status, setStatus] = useState<string>('');
@@ -37,12 +39,12 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
 
   const handleConnect = async () => {
     if (!host.trim()) {
-      setError('请输入Socket地址');
+      setError(t('manualInput.validation.socketRequired'));
       return;
     }
 
     setError('');
-    setStatus('正在添加设备...');
+    setStatus(t('manualInput.status.adding'));
     setConnecting(true);
 
     try {
@@ -65,14 +67,14 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
       // 添加设备到全局状态
       mainModelController.addDevice(deviceInfo);
 
-      setStatus('设备已添加！');
+      setStatus(t('manualInput.status.added'));
       setTimeout(() => {
         onConnectionAdded(uuid);
       }, 500);
 
     } catch (err) {
       const errorMsg = err as string;
-      setError(`添加失败: ${errorMsg}`);
+      setError(t('manualInput.error.addFailed', { error: errorMsg }));
       setStatus('');
     } finally {
       setConnecting(false);
@@ -83,13 +85,13 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
     <div>
       <div style={{ marginBottom: '20px' }}>
         <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-          设备名称（可选）:
+          {t('manualInput.deviceName.label')}
         </label>
         <input
           type="text"
           value={deviceName}
           onChange={(e) => setDeviceName(e.target.value)}
-          placeholder="例如: 小米手机"
+          placeholder={t('manualInput.deviceName.placeholder')}
           disabled={connecting}
           style={{
             width: '100%',
@@ -100,19 +102,19 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
           }}
         />
         <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-          不填写则自动生成
+          {t('manualInput.deviceName.hint')}
         </div>
       </div>
 
       <div style={{ marginBottom: '20px' }}>
         <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-          Socket地址 *:
+          {t('manualInput.socketAddress.label')}
         </label>
         <input
           type="text"
           value={host}
           onChange={(e) => setHost(e.target.value)}
-          placeholder="例如: 192.168.1.100:6001"
+          placeholder={t('manualInput.socketAddress.placeholder')}
           disabled={connecting}
           required
           style={{
@@ -124,7 +126,7 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
           }}
         />
         <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-          支持格式: IP:端口、域名:端口
+          {t('manualInput.socketAddress.hint')}
         </div>
       </div>
 
@@ -165,11 +167,11 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
         color: '#555',
         lineHeight: '1.6'
       }}>
-        <strong>提示:</strong><br/>
-        输入设备的 Socket 地址，支持以下格式：<br/>
-        • IP地址:端口 (如 192.168.1.100:6001)<br/>
-        • 域名:端口 (如 example.com:6001)<br/>
-        • ws://地址 或 wss://地址 (手动指定协议)
+        <strong>{t('manualInput.hint.title')}</strong><br/>
+        {t('manualInput.hint.description')}<br/>
+        • {t('manualInput.hint.formats.0')}<br/>
+        • {t('manualInput.hint.formats.1')}<br/>
+        • {t('manualInput.hint.formats.2')}
       </div>
 
       <button
@@ -187,7 +189,7 @@ const ManualInputMode: React.FC<ManualInputModeProps> = ({ onConnectionAdded }) 
           fontWeight: 'bold'
         }}
       >
-        {connecting ? '添加中...' : '添加设备'}
+        {connecting ? t('manualInput.button.adding') : t('manualInput.button.add')}
       </button>
     </div>
   );

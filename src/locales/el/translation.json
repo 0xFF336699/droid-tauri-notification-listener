@@ -1,16 +1,153 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Λευκή λίστα για εφαρμογές συστήματος",
+        "description": "Οι ειδοποιήσεις αυτών των εφαρμογών δεν θα φιλτραριστούν, ακόμα κι αν είναι εφαρμογές συστήματος",
+        "items": {
+          "mms": "Μηνύματα SMS",
+          "phone": "Τηλέφωνο"
+        },
+        "addCustom": "Προσθήκη προσαρμοσμένης εφαρμογής συστήματος στη λευκή λίστα",
+        "example": "Παράδειγμα: 'com.android.mms' μπορεί να φιλτράρει SMS"
+      },
+      "blacklist": {
+        "title": "Μαύρη λίστα για εφαρμογές συστήματος",
+        "description": "Οι ειδοποιήσεις αυτών των εφαρμογών θα φιλτραριστούν υποχρεωτικά (υψηλότερη προτεραιότητα)",
+        "addCustom": "Προσθήκη προσαρμοσμένης εφαρμογής συστήματος στη μαύρη λίστα"
+      }
+    },
+    "actions": {
+      "show": "Εμφάνιση ρυθμίσεων φιλτραρίσματος",
+      "hide": "Απόκρυψη ρυθμίσεων φιλτραρίσματος"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Φιλτράρισμα μόνιμων ειδοποιήσεων (FLAG_ONGOING_EVENT)",
+        "system": "Φιλτράρισμα ειδοποιήσεων συστήματος",
+        "emptyContent": "Φιλτράρισμα ειδοποιήσεων χωρίς περιεχόμενο",
+        "lowPriority": "Φιλτράρισμα ειδοποιήσεων χαμηλής προτεραιότη alvor",
+        "runningService": "Φιλτράρισμα ειδοποιήσεων τρεχουσών υπηρεσιών"
+      },
+      "status": {
+        "filteringOngoing": "Φιλτράρισμα μόνιμων ειδοποιήσεων...",
+        "filteringSystem": "Φιλτράρισμα ειδοποιήσεων συστήματος...",
+        "filteringEmptyContent": "Φιλτράρισμα ειδοποιήσεων χωρίς περιεχόμενο...",
+        "filteringLowPriority": "Φιλτράρισμα ειδοποιήσεων χαμηλής προτεραιότητας...",
+        "filteringRunningService": "Φιλτράρισμα ειδοποιήσεων τρεχουσών υπηρεσιών...",
+        "filteringForegroundService": "Φιλτράρισμα ειδοποιήσεων υπηρεσιών προσκήνιου...",
+        "filteringGroupSummary": "Φιλτράρισμα ειδοποιήσεων σύνοψης ομάδας..."
+      },
+      "empty": "Empty notifications",
+      "emptyDesc": "Φιλτράρισμα ειδοποιήσεων με άδειο τίτλο και περιεχόμενο",
+      "foreground": "Ειδοποιήσεις υπηρεσιών προσκήνιου",
+      "foregroundDesc": "Φιλτράρισμα ειδοποιήσεων όπου το channelId περιέχει \"foreground\"",
+      "groupSummary": "Ειδοποιήσεις σύνοψης ομάδας",
+      "groupSummaryDesc": "Φιλτράρισμα ειδοποιήσεων όπου ο τίτλος περιέχει \"GroupSummary\"",
+      "lowPriority": "Ειδοποιήσεις χαμηλής προτεραιότητας",
+      "lowPriorityDesc": "Φιλτράρισμα ειδοποιήσεων χαμηλής προτεραιότητας και σημασίας",
+      "ongoing": "Μόνιμες ειδοποιήσεις",
+      "ongoingDesc": "Φιλτράρισμα μόνιμων ειδοποιήσεων (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Μαύρη λίστα ονομάτων πακέτων",
+      "packageBlacklistDesc": "Φιλτράρισμα ειδοποιήσεων από συγκεκριμένα ονόματα πακέτων (υποστηρίζει regex)",
+      "packageWhitelist": "Λευκή λίστα ονομάτων πακέτων",
+      "packageWhitelistDesc": "Εμφάνιση μόνο ειδοποιήσεων από συγκεκριμένα ονόματα πακέτων (υποστηρίζει regex)",
+      "runningService": "Τρέχουσες ειδοποιήσεις",
+      "runningServiceDesc": "Φιλτράρισμα ειδοποιήσεων \"Εκτελείται\" + \"Πατήστε για λεπτομέρειες\"",
+      "system": "Ειδοποιήσεις συ Pr",
+      "systemDesc": "Φιλτράρισμα ειδοποιήσεων συστήματος Android (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Εκτελείται",
+      "tapForDetails": "Πατήστε για λεπτομέρειες"
+    },
+    "errors": {
+      "filterError": "Σφάλμα κατά το φιλτράρισμα ειδοποιήσεων: {{error}}",
+      "invalidRegex": "Άκυρο regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Αποτυχία φόρτωσης διαμόρφωσης: {{error}}",
+      "configReset": "Επαναφορά στις προεπιλεγμένες ρυθμίσεις",
+      "configSaved": "Οι ρυθμίσεις αποθηκεύτηκαν",
+      "configSaveError": "Αποτυχία αποθήκευσης διαμόρφωσης: {{error}}",
+      "modeChanged": "Μετάβαση σε {{mode}}",
+      "patternAdded": "Προστέθηκε μοτίβο: {{pattern}}",
+      "patternRemoved": "Αφαιρέθηκε μοτίβο: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Είστε σίγουροι ότι θέλετε να διαγράψετε όλες τις συσκευές;",
+      "confirmMessage": "Αυτό θα διαγράψει όλες τις αποθηκευμένες συσκευές, αλλά θα διατηρήσει τις ρυθμίσεις παραθύρου.",
+      "irreversible": "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί!",
+      "success": "Δεδομένα συσκευών διαγράφηκαν!\nΗ εφαρμογή θα επαναφορτωθεί.",
+      "error": "Η διαγραφή απέτυχε",
+      "logs": {
+        "clearing": "[appReset] Διαγραφή δεδομένων συσκευών...",
+        "cleared": "[appReset] Δεδομένα συσκευών διαγράφηκαν"
+      }
+    },
+    "confirmTitle": "Είστε σίγουροι ότι θέλετε να επαναφέρετε την εφαρμογή στην αρχική κατάσταση;",
+    "confirmMessage": "Αυτό θα διαγράψει:\n- Όλες τις αποθηκευμένες συσκευές\n- Ρυθμίσεις θέσης και μεγέθους παραθύρου\n- Όλες τις ρυθμίσεις φιλτραρίσματος\n- Όλες τις ρυθμίσεις εφαρμογής\n\nΗ εφαρμο irradi θα κλείσει και θα επανεκκινηθεί για εφαρμογή αλλαγών.\n\nΑυτή η ενέργεια δεν μπορεί να αναιρεθεί!",
+    "confirmButton": "Επιβεβαίωση",
+    "cancelButton": "Ακύρωση",
+    "logs": {
+      "starting": "[appReset] Έναρξη επαναφοράς εφαρμογής...",
+      "clearingLocalStorage": "[appReset] Εκκαθάριση localStorage...",
+      "localStorageCleared": "[appReset] LocalStorage εκκαθαρίστηκε",
+      "creatingResetMarker": "[appReset] Δημιουργία αρχείου δείκτη επαναφοράς...",
+      "resetMarkerCreated": "[appReset] Αρχείο δείκτη επαναφοράς δημιουργήθηκε",
+      "resettingAppData": "[appReset] Επαναφορά δεδομένων εφαρμογής...",
+      "appDataReset": "[appReset] Δεδομένα εφαρμογής επαναφέρθηκαν",
+      "exitingApp": "[appReset] Έξοδος από εφαρμογή...",
+      "error": "[appReset] Σφάλμα κατά την επαναφορά εφαρμογής:"
+    },
+    "comments": {
+      "resetFunction": "Επαναφορά εφαρμογής στην προεπιλεγμένη κατάσταση",
+      "resetDescription": "Διαγραφή όλων των δεδομένων:\n- LocalStorage (λίστα συσκευών, διαμορφώσεις φίλτρων κ.λπ. δεδομένα frontend)\n- Τοπικός φάκελος δεδομένων Tauri (κατάσταση παραθύρου κ.λπ. δεδομένα backend)",
+      "resetStrategy": "Χρήση στρατηγικής αρχείου δείκτη για επίλυση προβλημάτων κλειδώματος αρχείων σε Windows:\n1. Εκκαθάριση LocalStorage\n2. Δημιουργία αρχείου δείκτη επαναφοράς\n3. Έξοδος από εφαρμογή\n4. Στην επόμενη εκκίνηση, αυτόματη διαγραφή αρχείων δεδομένων"
+    }
+  },
   "app": {
     "title": "Ακροατής Ειδοποιήσεων",
-    "description": "Ακούστε και διαχειριστείτε τις ειδοποιήσεις συσκευής"
+    "description": "Ακούστε και διαχειριστείτε ειδοποιήσεις συσκευών",
+    "loading": "Φόρτωση..."
   },
   "common": {
+    "labels": {
+      "address": "Διεύθυνση"
+    },
+    "actions": {
+      "reconnect": "🔄 Επανασύνδεση",
+      "manualReconnect": "Χειροκίνητη επανασύνδεση",
+      "collapse": "Σύμπτυξη",
+      "expandDetails": "Επέκταση λεπτομερειών",
+      "label": "Ενέργεια",
+      "addToBlacklist": "Προσθήκη στη μαύρη λίστα",
+      "addToWhitelist": "Προσθήκη στη λευκή λίστα"
+    },
+    "unknown": "Άγνωστο",
+    "optional": "Προαιρετικό",
+    "unknownSender": "Άγνωστος αποστολέας",
+    "noTitle": "Χω f τίτλο",
+    "content": "Περιεχόμενο",
+    "bigText": "Μεγάλο κείμενο",
+    "textLines": "Γραμμές κειμένου",
+    "additionalInfo": "Πρόσθετες πληροφορίες",
+    "packageName": "Όνομα πακέτου",
+    "timeSent": "Ώρα αποστολής",
+    "notificationId": "ID ειδοποίησης",
+    "tag": "Ετικέτα",
+    "messages": "Μηνύματα",
+    "sender": "Αποστολέας",
+    "time": "Ώρα",
     "save": "Αποθήκευση",
     "cancel": "Ακύρωση",
     "back": "Πίσω",
     "delete": "Διαγραφή",
     "confirm": "Επιβεβαίωση",
     "loading": "Φόρτωση...",
-    "error": "Παρουσιάστηκε σφάλμα",
+    "error": "Προέκυψε σφάλμα",
     "connect": "Σύνδεση",
     "connecting": "Σύνδεση...",
     "disconnect": "Αποσύνδεση",
@@ -19,58 +156,419 @@
     "disconnected": "Αποσυνδεδεμένο",
     "connectionFailed": "Η σύνδεση απέτυχε",
     "minimize": "Ελαχιστοποίηση",
-    "unread": "Αδιάβαστα",
+    "unread": "Μη αναγνωσμένο",
     "total": "Σύνολο",
-    "errorOccurred": "Παρουσιάστηκε σφάλμα",
-    "retry": "Δοκιμή ξανά",
+    "errorOccurred": "Προέκυψε σφάλμα",
+    "retry": "Επανάληψη",
     "settings": "Ρυθμίσεις",
-    "close": "Κλείσιμο",
     "maximize": "Μεγιστοποίηση",
-    "restore": "Επαναφορά"
+    "restore": "Επαναφορά",
+    "enabled": "Ενεργό",
+    "disabled": "Ανεπιτυχές"
   },
   "settings": {
     "title": "Ρυθμίσεις",
-    "language": "Γλώσσα",
-    "appearance": "Εμφάνιση",
-    "theme": "Θέμα",
-    "light": "Φωτεινό",
-    "dark": "Σκούρο",
-    "system": "Σύστημα",
-    "notifications": "Ειδοποιήσεις",
-    "enableNotifications": "Ενεργοποίηση ειδοποιήσεων",
-    "notificationSound": "Ήχος ειδοποίησης",
+    "appearance": {
+      "title": "Εμφάνιση",
+      "theme": "Θέμα",
+      "light": "Φωτεινό",
+      "dark": "Σκοτεινό",
+      "system": "Σύστημα",
+      "language": "Γλώσσα"
+    },
+    "notifications": {
+      "title": "Ειδοποιήσεις",
+      "enableNotifications": "Ενεργοποίηση ειδοποιήσεων",
+      "enableSounds": "Ενεργοποίηση ήχων",
+      "enableBadge": "Εμφάνιση σήματος"
+    },
+    "websocketDevices": "Συσκευές WebSocket",
     "about": "Σχετικά",
     "version": "Έκδοση",
-    "checkForUpdates": "Έλεγχος για ενημερώσεις"
+    "checkForUpdates": "Έλεγχος για ενημερώσεις",
+    "clearAllDevices": "Διαγραφή όλων των συσκευών",
+    "language": "Γλώσσα",
+    "resetWarning": "Η επαναφορά θα διαγράψει αποθηκευμένες συσκευές, θέση και μέγεθ-le παραθύρου, διαμορφώσεις φί lτρα και δεδομένα εφαρμογής. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί, να είστε προετοιμασμένοι."
   },
-  "device": {
-    "connect": "Σύνδεση συσκευής",
+  "connection": {
+    "manager": {
+      "deleteConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε τη σύνδεση \"{{name}}\";",
+      "noConnections": "Δεν υπάρχουν αποθηκευμένες συνδέσεις",
+      "addConnectionPrompt": "Κάντε κλικ στο κουμπί \"Προσθήκη σύνδεσης\" για έναρξη",
+      "totalConnections": "{{count}} συνδέσεις συνολικά",
+      "connectionDetails": {
+        "address": "Διεύθυνση",
+        "token": "Token",
+        "none": "Κανένα",
+        "createdAt": "Δημιουργήθηκε στις",
+        "lastConnected": "Τελευταία σύνδεση"
+      },
+      "actions": {
+        "enable": "Ενεργοποίηση",
+        "delete": "Διαγραφή",
+        "label": "Ενέργειες σύνδεσης"
+      }
+    },
+    "add": "Προσθήκη σύνδεσης",
+    "migratedConnection": "Μεταναστευμένη σύνδεση",
+    "socketSettings": "Ρυθμίσεις σύνδεσης Socket",
+    "serverAddress": "Διεύθυνση διακομιστή",
+    "serverAddressPlaceholder": "Παράδειγμα:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Εισαγάγετε διεύθυνση διακομιστή",
+    "connectionFailedCheckAddress": "Η σύνδεση απέτυχε, ελέγξτε τη διεύθυνση διακομιστή",
+    "supportedFormats": "Υποστηρίζει μορφές IP+θύρα, ws://, wss:// domain κ.λπ.",
+    "authToken": "Token ελέγχου ταυτότητας",
+    "enterAuthToken": "Εισαγάγετε token ελέγχου ταυτότητας",
+    "connecting": "Σύνδεση...",
+    "connect": "Σύνδεση",
+    "connectionFailed": "Η σύνδεση απέτυχε",
+    "testing": "Δοκιμή...",
+    "startSocketTest": "Έναρξη δοκιμής Socket",
+    "socketTestTitle": "Δοκιμή Socket",
+    "clickToStartTest": "Κάντε κλικ στο κουμπί για έναρξη δοκιμής...",
     "disconnect": "Αποσύνδεση",
     "connected": "Συνδεδεμένο",
     "disconnected": "Αποσυνδεδεμένο",
-    "connectionFailed": "Η σύνδεση απέτυχε",
-    "retry": "Δοκιμή ξανά",
-    "deviceInfo": "Πληροφορίες συσκευής",
+    "failed": "Η σύνδεση απέτυχε",
+    "retry": "Επανάληψη",
+    "lost": "Η σύνδεση χάθηκε",
+    "reconnecting": "Επανασύνδεση...",
+    "reconnect": "Επανασύνδεση",
+    "reconnectIn": "Επανάληψη σε {{count}} δευτερόλεπτα",
+    "reconnectNow": "Επανάληψη τώρα",
+    "reconnectFailed": "Η επανασύνδεση απέτυχε",
+    "reconnectSuccessful": "Η επανασύνδεση πέτυχε",
+    "reconnectAttempt": "Προσπάθεια {{current}}/{{max}}",
+    "reconnectLimitReached": "Έφτασε το όριο προσπαθειών επανασύνδεσης",
+    "timeout": "Λήξη χρόνου σύνδεσης",
+    "refused": "Η σύνδεση απορρίφθηκε",
+    "reset": "Η σύνδεση επαναφέρθηκε",
+    "aborted": "Η σύνδεση ακυρώθηκε",
+    "closed": "Η σύνδεση έκλεισε",
+    "error": "Σφάλμα σύνδεσης",
+    "backendConnectionFailed": "Η σύνδεση backend απέτυχε",
+    "unknownConnectionError": "Άγνωστο σφάλμα σύνδεσης",
+    "status": "Κατάσταση σύνδεσης",
+    "type": "Τύπος σύνδεσης",
+    "name": "Όνομα σύνδεσης",
+    "settings": "Ρυθμίσεις σύνδεσης",
+    "details": "Λεπτομέρειες σύνδεσης",
+    "history": "Ιστορικό σύνδεσης",
+    "log": "Αρχείο καταγραφής σύνδεσης",
+    "stats": "Στατιστικά σύνδε possibly",
+    "test": "Δοκιμή σύνδεσης",
+    "testSuccessful": "Η δοκιμή σύνδεσης πέτυχε",
+    "testFailed": "Η δοκιμή σύνδεσης απέτυχε",
+    "edit": "Επεξεργασία σύνδεσης",
+    "delete": "Διαγραφή σύνδεσης",
+    "addTitle": "Προσθήκη σύνδεσης",
+    "tabs": {
+      "qrcode": "Προσθήκη με σάρωση",
+      "manual": "Χειροκίνητη εισαγωγή"
+    },
+    "server": {
+      "starting": "Έναρξη διακομιστή...",
+      "started": "Ο διακομιστής ξεκίνησε, θύρα: {{port}}",
+      "startFailed": "Η έναρξη διακομιστή απέτυχε: {{error}}",
+      "stopping": "Διακοπή διακομιστή...",
+      "stopped": "Ο διακομιστής στα stopped"
+    },
+    "qrcode": {
+      "title": "Σύνδεση με σάρωση κώδικα",
+      "status": {
+        "preparing": "Προετοιμασία έναρξης διακομιστή...",
+        "stoppingServer": "Διακοπή υπάρχοντος διακομιστή...",
+        "startingServer": "Έναρξη διακομιστή (θύρα {{port}})...",
+        "fetchingDeviceInfo": "Τρέχουσα λήψη πληροφοριών συσκευής...",
+        "gettingLocalIp": "Λήψη τοπικής IP...",
+        "generatingQrCode": "Δημιουργία κώδικα QR...",
+        "ready": "Σαρώστε τον κώδικα QR για σύνδεση συσκευής"
+      },
+      "connectionInfo": "Χρησιμοποιήστε το τηλέφωνό σας για σάρωση κώδικα QR και σύνδεση",
+      "serverPort": "Ο διακομιστής εκτελείται στη θύρα: {{port}}",
+      "error": {
+        "title": "Σφάλμα κατά την έναρξη διακομιστή, δοκιμάστε ξανά",
+        "retryButton": "Επανάληψη"
+      },
+      "steps": {
+        "stoppingServer": "Βήμα 1/4: Διακοπή υπάρχοντος διακομιστή",
+        "startingServer": "Βήμα 2/4: Έναρξη διακομιστή",
+        "fetchingDeviceInfo": "Βήμα 3/4: Λήψη πληροφοριών συσκευής",
+        "gettingLocalIp": "Βήμα 4/5: Λήψη τοπικής IP",
+        "generatingQrCode": "Βήμα 5/5: Δημιουργία κώδικα QR"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Το στοιχείο τοποθετήθηκε",
+        "componentUnmounting": "[QR-STABLE] Καθαρισμός αποτοποθέτησης στοιχείου",
+        "serverStarting": "[QR-STABLE] Έναρξη διακομιστή",
+        "serverStopping": "[QR-STABLE] Διακοπή διακομιστή...",
+        "serverStopped": "[QR-STABLE] Ο διακομιστής σταμάτησε",
+        "serverError": "[QR-STABLE] Σφάλμα κατά ο διακοπή διακομιστή:",
+        "serverStarted": "[QR-STABLE] Ο διακομιστής ξεκίνησε, θύρα:",
+        "startServerError": "[QR-STABLE] Σφάλμα κατά την έναρξη διακομιστή:",
+        "componentUnmounted": "[QR-STABLE] Το στοιχείο αποτοποθετήθηκε, ακύρωση έναρξης διακομιστή",
+        "componentRendered": "Το στοιχείο αποδόθηκε"
+      }
+    },
+    "title": "Σύνδεση συσκευής",
+    "qrCode": "Σάρωση κώδικα QR",
+    "manualInput": "Χειροκίνητη εισαγωγή",
+    "scanQRCode": "Σαρώστε κώδικα QR για σύνδεση συσκευής",
+    "scanQRCodeDescription": "Στη συσκευή Android σας, ανοίξτε την εφαρμογή, κάντε κλικ στο \"Σύνδεση με PC\", μετά σαρώστε αυτόν τον κώδικα QR",
+    "enterIPAddress": "Εισαγάγετε διεύθυνση IP συσκευής",
+    "enterIPAddressDescription": "Βρείτε τη διεύθυνση IP στη συσκευή Android σας, εισαγάγετέ την εδώ",
+    "ipAddress": "Διεύθυνση IP",
+    "port": "Θύρα",
+    "disconnecting": "Αποσύνδεση...",
+    "connectionFailedDescription": "Δεν ήταν δυνατή η σύνδεση με τη συσκευή. Βεβαιωθείτε ότι η συσκευή και ο υπολογιστής είναι στο ίδιο δίκτυο και η εφαρμογή Android εκτελείται.",
+    "tryAgain": "Δοκιμάστε ξανά",
+    "cancel": "Ακύρωση",
+    "connectionSuccessful": "Η σύνδεση πέτυχε",
+    "connectionSuccessfulDescription": "Συνδεθήκατε επιτυχώς με τη συσκευή",
+    "continue": "Συνέχεια",
+    "noDevicesFound": "Δεν βρέθηκαν συσκευές",
+    "searchingForDevices": "Αναζήτηση συσκευών...",
+    "selectDevice": "Επιλογή συσκευής",
+    "selectDeviceDescription": "Επιλέξτε τη συσκευή για σύνδεση",
+    "refresh": "Ανανέωση",
     "deviceName": "Όνομα συσκευής",
-    "deviceModel": "Μοντέλο",
-    "deviceOS": "Έκδοση λειτουργικού συστήματος",
-    "batteryLevel": "Μπαταρία",
+    "deviceStatus": "Κατάσταση",
+    "deviceLastConnected": "Τελευταία σύνδεση",
+    "deviceActions": "Ενέργειες",
+    "deviceConnect": "Σύνδεση",
+    "deviceDisconnect": "Αποσύνδεση",
+    "deviceRemove": "Αφαίρεση",
+    "deviceEdit": "Επεξεργασία",
+    "deviceDetails": "Λεπτομέρειες",
+    "addDevice": "Προσθήκη συσκευής",
+    "editDevice": "Επεξεργασία συσκευής",
+    "removeDevice": "Αφαίρεση συσκευής",
+    "removeDeviceConfirmation": "Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτή τη συσκευή;",
+    "removeDeviceConfirmationDescription": "Αυτή η ενέργεια αφαιρεί τη συσκευή από τη λίστα αποθηκευμένων συσκευών. Μπορείτε ακόμα να επανασυνδεθείτε σαρώνοντας κώδικα QR ή εισάγοντας IP χειροκίνητα.",
+    "remove": "Αφαίρεση",
+    "keepDevice": "Διατήρηση",
+    "deviceRemoved": "Η συσκευή αφαιρέθηκε",
+    "deviceAdded": "Η συσκευή προστέθηκε",
+    "deviceUpdated": "Η συσκευή ενημερώθηκε",
+    "deviceConnected": "Η συσκευή συνδέθηκε",
+    "deviceDisconnected": "Η συσκευή αποσυνδέθηκε",
+    "allDevicesDisconnected": "Όλες οι συσκευές αποσυνδέθηκαν",
+    "connectionLost": "Η σύνδεση χάθηκε",
+    "connectionHistory": "Ιστορικό σύνδεσης",
+    "connectionLog": "Αρχείο καταγραφής σύνδεσης",
+    "connectionStats": "Στατιστικά σύνδεσης",
+    "connectionTest": "Δοκιμή σύνδεσης",
+    "connectionTestSuccessful": "Η δοκιμή σύνδεσης πέτυχε",
+    "connectionTestFailed": "Η δοκιμή σύνδεσης απέτυχε",
+    "connectionError": "Σφάλμα σύνδεσης",
+    "requestingToken": "Αίτηση token...",
+    "authFailed": "Ο έλεγχος ταυτότητας απέτυχε",
+    "loginSuccess": "Επιτυχής σύνδεση",
+    "missingToken": "Λείπει token",
+    "tokenReceived": "Το token ελήφθη",
+    "loginFailed": "Η σύνδεση απέτυχε"
+  },
+  "device": {
+    "title": "Συσκευές",
+    "actions": {
+      "delete": "🗑️ Διαγραφή συσκευής",
+      "label": "Ενέργειες συσκευής"
+    },
+    "confirmDelete": "Είστε σίγουροι ότι θέλετε να διαγράψετε τη συσκευή \"{{name}}\";",
+    "add": "Προσθήκη συσκευής",
+    "edit": "Επεξεργασία συσκευής",
+    "tokenRequestFailed": "Αποτυχία λήψης token εξουσιοδότησης",
+    "loginInProgress": "Σύνδεση σε εξέλιξη...",
+    "loginSuccess": "Επιτυχής σύνδεση",
+    "disconnected": "Η συσκευή αποσυνδέθηκε",
+    "allDevicesDisconnected": "Όλες οι συσκευές αποσυνδέθηκαν",
+    "missingUuid": "Παρακαλώ καθορίστε UUID συσκευής",
+    "noDevices": "Δεν υπάρχουν συσκευές",
+    "noEnabledDevices": "Δεν υπάρχουν ενεργοποιημένες συσκευές",
+    "notConnectedOrUnavailable": "Η συσκευή {{deviceUuid}} δεν είναι συνδεδεμένη ή μη διαθέσιμη",
+    "clickToAddDevice": "Κάντε κλικ στο \"+ Προσθήκη σύνδεσης\" για σάρωση και προσθήκη συσκευής",
+    "info": "Πληροφορίες συσκευής",
+    "name": "Ό/vmα συσκευής",
+    "model": "Μοντέλο",
+    "os": "Έκδοση συστήματος",
+    "batteryLevel": "Επίπεδο μπαταρίας",
     "storage": "Αποθήκευση",
     "memory": "Μνήμη"
   },
+  "manualInput": {
+    "title": "Χειροκίνητη εισαγωγή σύνδεσης",
+    "deviceName": {
+      "label": "Όνομα συσκευής (προαιρετικό):",
+      "placeholder": "Παράδειγμα: Τηλέφωνο Xiaomi",
+      "hint": "Αν δεν συμπληρωθεί, θα δημιουργηθεί αυτόματα"
+    },
+    "socketAddress": {
+      "label": "Διεύθυνση Socket *: ",
+      "placeholder": "Παράδειγμα: 192.168.1.100:6001",
+      "hint": "Υποστηριζόμενες μορφές: IP:θύρα, domain:θύρα"
+    },
+    "validation": {
+      "socketRequired": "Εισαγάγετε διεύθυνση socket"
+    },
+    "status": {
+      "adding": "Προσθήκη συσκευής...",
+      "added": "Η συσκευή προστέθηκε!"
+    },
+    "error": {
+      "addFailed": "Η προσθήκη απέτυχε: {{error}}"
+    },
+    "hint": {
+      "title": "Υπόδειξη:",
+      "description": "Εισαγάγετε τη διεύθυνση socket της συσκευής, υποστηρίζει τις εξής μορφές:",
+      "formats": [
+        "IP:θύρα, παράδειγμα 127.0.0.1:10035",
+        "Πλήρης διεύθυνση ws:// ή wss://, παράδειγμα ws://localhost:10035",
+        "Domain:θύρα, παράδειγμα example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Προσθήκη συσκευής",
+      "adding": "Προσθήκη..."
+    }
+  },
   "notification": {
+    "title": "Ειδοποιήσεις",
     "noNotifications": "Δεν υπάρχουν ειδοποιήσεις",
-    "clearAll": "Καθαρισμός όλων",
-    "markAsRead": "Σήμανση ως διαβασμένο",
-    "markAsUnread": "Σήμανση ως μη διαβασμένο",
+    "clearAll": "Διαγραφή όλων",
+    "clearAllConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε όλες τις ειδοποιήσεις;",
+    "clearAllSuccess": "Όλες οι ειδοποιήσεις διαγράφηκαν",
+    "clearAllFailed": "Η διαγραφή ειδοποιήσεων απέτυχε",
     "delete": "Διαγραφή",
-    "reply": "Απάντηση",
+    "deleteConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή την ειδοποίηση;",
+    "deleteSuccess": "Η ειδοποίηση διαγράφηκε",
+    "deleteFailed": "Η διαγραφή ειδοποίησης απέτυχε",
     "copy": "Αντιγραφή",
-    "copied": "Αντιγράφτηκε!",
+    "copySuccess": "Αντιγράφηκε στο πρόχειρο",
+    "copyFailed": "Η αντιγραφή απέτυχε",
+    "details": "Λεπτομέρειες",
+    "close": "Κλείσιμο",
+    "markAsRead": "Σημείωση ως αναγνωσμένη",
+    "markAsUnread": "Σημείωση ως μη αναγνωσμένη",
+    "markAsReadSuccess": "Σημειώθηκε ως αναγνωσμένη",
+    "markAsReadFailed": "Η σήμανση ως αναγνωσμένη απέτυχε",
+    "markAsUnreadSuccess": "Σημειώθηκε ως μη αναγνωσμένη",
+    "markAsUnreadFailed": "Η σήμανση ως μη αναγνωσμένη απέτυχε",
+    "markAllAsRead": "Σημείωση όλων ως αναγνωσμένων",
+    "markAllAsReadConfirm": "Είστε σίγουροι ότι θέλετε να σημειώσετε όλες τις ειδοποιήσεις ως αναγνωσμένες;",
+    "markAllAsReadSuccess": "Όλες οι ειδοποιήσεις σημειώθηκαν ως αναγνωσμένες",
+    "markAllAsReadFailed": "Η σήμανση όλων ως αναγνωσμένων απέτυχε",
+    "filter": "Φίλτρο",
+    "filterByApp": "Φιλτράρισμα κατά εφαρμογή",
+    "filterByKeyword": "Φιλτράρισμα κατά λέξη-κλειδί",
+    "filterByTime": "Φιλτράρισμα κατά ώρα",
+    "filterByStatus": "Φιλτράρισμα κατά κατάσταση",
+    "filterByPriority": "Φιλτράρισμα κατά προτεραιότητα",
+    "filterByCategory": "Φιλτράρισμα κατά κατηγορία",
+    "filterByChannel": "Φιλτράρισμα κατά κανάλι",
+    "filterByDevice": "Φιλτράρισμα κατά συσκευή",
+    "reply": "Απάντηση",
+    "copied": "Αντιγράφηκε!",
     "expand": "Εμφάνιση περισσότερων",
-    "collapse": "Εμφάνιση λιγότερων"
+    "collapse": "Σύμπτυξη",
+    "totalCount": "{{count}} ειδοποιήσεις συνολικά",
+    "selectedCount": "(Επιλεγμένες {{count}})",
+    "markSelectedAsRead": "Σημείωση ως αναγνωσμένη",
+    "selectToMarkAsRead": "Επιλέξτε για σήμανση ως αναγνωσμένη",
+    "noNotificationsMessage": "Δεν υπάρχουν ειδοποιήσεις",
+    "unknownSender": "Άγνωστος αποστολέας",
+    "noTitle": "Χωρίς τίτλο",
+    "noContent": "Χωρίς περιεχόμενο",
+    "subText": "Υποκείμενο κείμενο",
+    "summary": "Σύνοψη",
+    "textLines": "Πολλαπλές γραμμές κειμένου",
+    "time": "Ώρα",
+    "channelId": "ID καναλιού",
+    "action": "Ενέργεια",
+    "isInitialized": "Αρχικοποιημένο",
+    "readStatus": "Κατάσταση ανάγνωσης",
+    "unread": "Μη αναγνωσμένο",
+    "templateType": "Τύπος προτύπου",
+    "conversationTitle": "Τίτλος συνομιλίας",
+    "additionalInfo": "Πρόσθετες πληροφορίες",
+    "participants": "Συμμετέχοντες",
+    "isResident": "Μόνιμο",
+    "priority": "Προτεραιότητα",
+    "importance": "Σημασία",
+    "addToBlacklist": "Προσθήκη στη μαύρη λίστα",
+    "addToWhitelist": "Προσθήκη στη λευκή λίστα"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Εμφάνιση φίλτρου",
+      "hide": "🔽 Απόκρυψη φίλτρου",
+      "addPattern": "Προσθήκη μοτίβου",
+      "removePattern": "Αφαίρεση",
+      "reset": "Επαναφορά σε προεπιλεγμένο",
+      "save": "Αποθήκευση ρυθμίσεων"
+    },
+    "title": "Κανόνες φιλτραρίσματος",
+    "basicRulesTitle": "Βασικοί κανόνες φιλτραρίσματος",
+    "rules": {
+      "ongoing": "Μόνιμες ειδοποιήσεις",
+      "ongoingDesc": "Φιλτράρισμα μόνιμων ειδοποιήσεων (FLAG_ONGOING_EVENT)",
+      "system": "Ειδοποιήσεις συστήματος",
+      "systemDesc": "Φιλτράρισμα ειδοποιήσεων συστήματος Android (android, com.android.*)",
+      "empty": "Ειδοποιήσεις χωρίς περιεχόμενο",
+      "emptyDesc": "Φιλτράρισμα ειδοποιήσεων με άδειο τίτλο και περιεχόμενο",
+      "lowPriority": "Ειδοποιήσεις χαμηλής προτεραιότητας",
+      "lowPriorityDesc": "Φιλτράρισμα ειδοποιήσεων χαμηλής προτεραιότητας και σημασίας",
+      "foreground": "Ειδοποιήσεις υπηρεσιών προσκήνιου",
+      "foregroundDesc": "Φιλτράρισμα ειδοποιήσεων όπου το channelId περιέχει \"foreground\"",
+      "groupSummary": "Ειδοποιήσεις σύνοψης ομά nano",
+      "groupSummaryDesc": "Φιλτράρισμα ειδοποιήσεων όπου ο τίτλος περιέχει \"GroupSummary\"",
+      "runningService": "Τρέχουσες ειδοποιήσεις",
+      "runningServiceDesc": "Φιλτράρισμα ειδοποιήσεων \"Εκτελείται\" + \"Πατήστε για λεπτομέρειες\"",
+      "packageBlacklist": "Μαύρη λίστα ονομάτων πακέτων",
+      "packageBlacklistDesc": "Φιλτράρισμα ειδοποιήσεων από συγκεκριμένα ονόματα πακέτων (υποστηρίζει regex)",
+      "packageWhitelist": "Λευκή λίστα ονομάτων πακέτων",
+      "packageWhitelistDesc": "Εμφάνιση μόνο ειδοποιήσεων από συγκεκριμένα ονόματα πακέτων (υποστηρίζει regex)",
+      "systemWhitelist": "Λευκή λίστα εφαρμογών συστήματος",
+      "systemWhitelistDesc": "Ακόμα και com.android.* μη φιλτράρισμα"
+    },
+    "hint": {
+      "title": "Υπόδειξη:",
+      "exact": "Ακριβής ταύτιση: com.tencent.mm",
+      "wildcard": "Μπαλαντέρ: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Λειτουργία μαύρης λίστας",
+      "whitelist": "Λειτουργία λευκής λίστας"
+    },
+    "messages": {
+      "patternAdded": "Προστέθηκε μοτίβο: {{pattern}}",
+      "patternRemoved": "Αφαιρέθηκε μοτίβο: {{pattern}}",
+      "modeChanged": "Μετάβαση σε {{mode}}",
+      "configReset": "Επαναφορά σε προεπιλεγμένη διαμόρφωση",
+      "configSaved": "Οι ρυθμίσεις αποθηκεύτηκαν",
+      "configLoadError": "Αποτυχία φόρτωσης διαμόρφωσης: {{error}}",
+      "configSaveError": "Αποτυχία αποθήκευσης διαμόρφωσης: {{error}}"
+    },
+    "enterPackageOrRegex": "Εισαγάγετε όνομα πακέτου ή regex",
+    "enterPackageOrRegexPlaceholder": "Εισαγάγετε όνομα πακέτου ή regex",
+    "invalidRegex": "Άκυρο regex",
+    "confirmReset": "Είστε σίγουροι ότι θέλετε να επαναφέρετε σε προεπιλεγμένη διαμόρφωση;",
+    "confirmRemovePattern": "Είστε σίγουροι ότι θέλετε να αφαιρέσετε \"{{pattern}}\" από {{rule}};"
   },
   "errors": {
-    "minimizeWindowFailed": "Αποτυχία ελαχιστοποίησης παραθύρου"
-  }
+    "connectionFailed": "Η σύνδεση απέτυχε",
+    "deleteFailed": "Η διαγραφή απέτυχε",
+    "websocketNotConnected": "WebSocket μη συνδεδεμένο",
+    "websocketNotInitialized": "WebSocket μη αρχικοποιημένο",
+    "minimizeWindowFailed": "Η ελαχιστοποίηση παραθύρου απέτυχε"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Άκυρο regex"
+    }
+  },
+  "login": "Σύνδεση",
+  "request_token": "Αίτηση token",
+  "clear_messages": "Διαγραφή μηνυμάτων",
+  "get_package_icon": "Λήψη εικονιδίου εφαρμογής"
 }

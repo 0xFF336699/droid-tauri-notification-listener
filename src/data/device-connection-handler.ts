@@ -2,6 +2,7 @@ import { AndroidWebSocketClient } from '../services/AndroidWebSocketClient';
 import { DeviceConnection, ConnectionState } from './main-model-controller';
 import { handleWebSocketMessage } from './notification-message-handler';
 import { saveDevice } from '../utils/deviceStorage';
+import i18n from 'i18next';
 
 // WebSocket 客户端管理
 const clientMap = new Map<string, AndroidWebSocketClient>();
@@ -32,7 +33,7 @@ export function connectDevice(connection: DeviceConnection, uuid: string) {
   // 创建 WebSocket 客户端
   const client = new AndroidWebSocketClient(connection, connection.device.url);
 
-  // 设置连接状态回调
+    // 设置连接状态回调
   client.onConnectionChange(async (connected) => {
     await handleConnectionChange(connected, connection, client, uuid);
   });
@@ -81,7 +82,7 @@ export async function manualReconnectDevice(connection: DeviceConnection, uuid: 
     const token = connection.device.token;
     if (!token) {
       console.error('[DeviceConnectionHandler] No token available for device:', uuid);
-      connection.errorMessage = '登录失败: 缺少授权 token';
+      connection.errorMessage = i18n.t('connection.loginFailed', { error: i18n.t('connection.missingToken') });
       connection.state = ConnectionState.Disconnected;
       return;
     }
@@ -91,11 +92,9 @@ export async function manualReconnectDevice(connection: DeviceConnection, uuid: 
 
     console.log('[DeviceConnectionHandler] Manual reconnect successful for device:', uuid);
     connection.state = ConnectionState.Connected;
-    connection.errorMessage = undefined;
-
   } catch (error) {
     console.error('[DeviceConnectionHandler] Manual reconnect failed:', error);
-    connection.errorMessage = `重连失败: ${error}`;
+    connection.errorMessage = i18n.t('connection.reconnectFailed', { error });
     connection.state = ConnectionState.Disconnected;
   }
 }
@@ -104,7 +103,6 @@ export async function manualReconnectDevice(connection: DeviceConnection, uuid: 
  * 断开设备连接
  */
 export function disconnectDevice(uuid: string, connection: DeviceConnection) {
-  console.log('[DeviceConnectionHandler] disconnectDevice:', uuid);
 
   // 断开连接并删除 client
   const client = clientMap.get(uuid);
@@ -129,6 +127,7 @@ export function disconnectAllDevices(connections: DeviceConnection[]) {
     const client = clientMap.get(conn.device.uuid);
     if (client) {
       client.disconnect();
+      conn.errorMessage = i18n.t('connection.disconnected');
     }
   });
 
@@ -160,6 +159,7 @@ async function handleConnectionChange(
       if (!token) {
         // 没有 token，请求授权
         console.log('[DeviceConnectionHandler] No token available, requesting authorization...');
+        connection.errorMessage = i18n.t('connection.requestingToken');
 
         try {
           token = await client.requestToken({
@@ -174,9 +174,10 @@ async function handleConnectionChange(
           saveDevice(connection.device);
 
           console.log('[DeviceConnectionHandler] Token received and saved:', uuid);
+          connection.errorMessage = i18n.t('connection.tokenReceived');
         } catch (error) {
           console.error('[DeviceConnectionHandler] Failed to request token:', error);
-          connection.errorMessage = `授权失败: ${error}`;
+          connection.errorMessage = i18n.t('connection.authFailed', { error });
           connection.state = ConnectionState.Disconnected;
           client.disconnect();
           return;
@@ -189,17 +190,18 @@ async function handleConnectionChange(
 
       console.log('[DeviceConnectionHandler] Login successful for device:', uuid);
       connection.state = ConnectionState.Connected;
-      connection.errorMessage = undefined;
+      connection.errorMessage = i18n.t('connection.loginSuccess');
 
     } catch (error) {
       console.error('[DeviceConnectionHandler] Login failed:', error);
-      connection.errorMessage = `登录失败: ${error}`;
+      connection.errorMessage = i18n.t('connection.loginFailed', { error });
       connection.state = ConnectionState.Disconnected;
       client.disconnect();
     }
   } else {
     // 连接断开
     connection.state = ConnectionState.Disconnected;
+    connection.errorMessage = i18n.t('connection.disconnected');
   }
 }
 
@@ -209,5 +211,10 @@ async function handleConnectionChange(
 function handleConnectionError(error: string, connection: DeviceConnection, uuid: string) {
   console.error('[DeviceConnectionHandler] WebSocket error:', uuid, error);
   connection.state = ConnectionState.Disconnected;
-  connection.errorMessage = error;
+  connection.errorMessage = i18n.t('connection.connectionError', { error });
 }
+
+export {
+  handleConnectionChange,
+  handleConnectionError
+};

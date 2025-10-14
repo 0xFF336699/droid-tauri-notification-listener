@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "系统应用白名单",
+        "description": "这些应用的通知将不会被过滤，即使它们是系统应用",
+        "items": {
+          "mms": "短信",
+          "phone": "电话"
+        },
+        "addCustom": "添加自定义系统应用到白名单",
+        "example": "例如：'com.android.mms' 可以过滤短信"
+      },
+      "blacklist": {
+        "title": "系统应用黑名单",
+        "description": "这些应用的通知将被强制过滤（优先级最高）",
+        "addCustom": "添加自定义系统应用到黑名单"
+      }
+    },
+    "actions": {
+      "show": "显示过滤设置",
+      "hide": "隐藏过滤设置"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "过滤常驻通知 (FLAG_ONGOING_EVENT)",
+        "system": "过滤系统通知",
+        "emptyContent": "过滤无内容通知",
+        "lowPriority": "过滤低优先级通知",
+        "runningService": "过滤后台服务通知"
+      },
+      "status": {
+        "filteringOngoing": "正在过滤常驻通知...",
+        "filteringSystem": "正在过滤系统通知...",
+        "filteringEmptyContent": "正在过滤无内容通知...",
+        "filteringLowPriority": "正在过滤低优先级通知...",
+        "filteringRunningService": "正在过滤后台服务通知...",
+        "filteringForegroundService": "正在过滤前台服务通知...",
+        "filteringGroupSummary": "正在过滤分组摘要通知..."
+      },
+      "empty": "无内容通知",
+      "emptyDesc": "过滤标题和内容都为空的通知",
+      "foreground": "前台服务通知",
+      "foregroundDesc": "过滤 channelId 包含 \"foreground\" 的通知",
+      "groupSummary": "分组摘要通知",
+      "groupSummaryDesc": "过滤 title 包含 \"GroupSummary\" 的通知",
+      "lowPriority": "低优先级通知",
+      "lowPriorityDesc": "过滤低优先级和低重要性的通知",
+      "ongoing": "常驻通知",
+      "ongoingDesc": "过滤常驻通知 (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "包名黑名单",
+      "packageBlacklistDesc": "过滤指定包名的通知 (支持正则)",
+      "packageWhitelist": "包名白名单",
+      "packageWhitelistDesc": "只显示指定包名的通知 (支持正则)",
+      "runningService": "正在运行通知",
+      "runningServiceDesc": "过滤 \"正在运行\" + \"点按即可了解详情\" 的通知",
+      "system": "系统通知",
+      "systemDesc": "过滤 Android 系统通知 (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "正在运行",
+      "tapForDetails": "点按即可了解详情"
+    },
+    "errors": {
+      "filterError": "过滤通知时出错: {{error}}",
+      "invalidRegex": "无效的正则表达式 {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "加载配置失败: {{error}}",
+      "configReset": "已重置为默认设置",
+      "configSaved": "设置已保存",
+      "configSaveError": "保存配置失败: {{error}}",
+      "modeChanged": "已切换为{{mode}}",
+      "patternAdded": "已添加模式: {{pattern}}",
+      "patternRemoved": "已移除模式: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "确定要清空所有设备吗？",
+      "confirmMessage": "这将清除所有已保存的设备，但保留窗口设置。",
+      "irreversible": "此操作不可撤销！",
+      "success": "设备数据已清空！\n应用将重新加载。",
+      "error": "清空失败",
+      "logs": {
+        "clearing": "[appReset] 正在清空设备数据...",
+        "cleared": "[appReset] 设备数据已清空"
+      }
+    },
+    "confirmTitle": "确定要重置应用到初始状态吗？",
+    "confirmMessage": "这将清除：\n- 所有已保存的设备\n- 窗口位置和大小设置\n- 所有过滤器设置\n- 所有应用设置\n\n应用将关闭，重新启动后生效。\n\n此操作不可撤销！",
+    "confirmButton": "确定",
+    "cancelButton": "取消",
+    "logs": {
+      "starting": "[appReset] 开始重置应用...",
+      "clearingLocalStorage": "[appReset] 正在清理 localStorage...",
+      "localStorageCleared": "[appReset] LocalStorage 已清理",
+      "creatingResetMarker": "[appReset] 创建重置标记文件...",
+      "resetMarkerCreated": "[appReset] 重置标记文件已创建",
+      "resettingAppData": "[appReset] 正在重置应用数据...",
+      "appDataReset": "[appReset] 应用数据已重置",
+      "exitingApp": "[appReset] 正在退出应用...",
+      "error": "[appReset] 重置应用时出错:"
+    },
+    "comments": {
+      "resetFunction": "重置应用到默认状态",
+      "resetDescription": "清除所有数据：\n- LocalStorage（设备列表、过滤配置等前端数据）\n- Tauri本地数据目录（窗口状态等后端数据）",
+      "resetStrategy": "使用标记文件策略解决Windows文件锁定问题：\n1. 清理LocalStorage\n2. 创建重置标记文件\n3. 退出应用\n4. 下次启动时自动删除数据文件"
+    }
+  },
   "app": {
     "title": "通知监听器",
-    "description": "监听和管理设备通知"
+    "description": "监听和管理设备通知",
+    "loading": "加载中..."
   },
   "common": {
+    "labels": {
+      "address": "地址"
+    },
+    "actions": {
+      "reconnect": "🔄 重连",
+      "manualReconnect": "手动重连",
+      "collapse": "折叠",
+      "expandDetails": "展开详情",
+      "label": "操作",
+      "addToBlacklist": "加入黑名单",
+      "addToWhitelist": "加入白名单"
+    },
+    "unknown": "未知",
+    "optional": "可选",
+    "unknownSender": "未知发送者",
+    "noTitle": "无标题",
+    "content": "内容",
+    "bigText": "大文本",
+    "textLines": "文本行",
+    "additionalInfo": "附加信息",
+    "packageName": "包名",
+    "timeSent": "发送时间",
+    "notificationId": "通知ID",
+    "tag": "标签",
+    "messages": "消息",
+    "sender": "发送者",
+    "time": "时间",
     "save": "保存",
     "cancel": "取消",
     "back": "返回",
@@ -24,57 +161,414 @@
     "errorOccurred": "发生错误",
     "retry": "重试",
     "settings": "设置",
-    "close": "关闭",
     "maximize": "最大化",
-    "restore": "还原"
+    "restore": "还原",
+    "enabled": "启用",
+    "disabled": "禁用"
   },
   "settings": {
     "title": "设置",
-    "language": "语言",
-    "appearance": "外观",
-    "theme": "主题",
-    "light": "浅色",
-    "dark": "深色",
-    "system": "系统",
-    "notifications": "通知",
-    "enableNotifications": "启用通知",
-    "notificationSound": "通知声音",
+    "appearance": {
+      "title": "外观",
+      "theme": "主题",
+      "light": "浅色",
+      "dark": "深色",
+      "system": "系统",
+      "language": "语言"
+    },
+    "notifications": {
+      "title": "通知",
+      "enableNotifications": "启用通知",
+      "enableSounds": "启用声音",
+      "enableBadge": "显示徽章"
+    },
+    "websocketDevices": "WebSocket 设备",
     "about": "关于",
     "version": "版本",
     "checkForUpdates": "检查更新",
-    "clearAllDevices": "清除所有设备"
+    "clearAllDevices": "清除所有设备",
+    "language": "语言",
+    "resetWarning": "重置会清除已保存的设备、窗口位置与大小、过滤配置以及应用数据，此操作不可逆，请谨慎执行。"
   },
   "connection": {
-    "add": "添加连接"
-  },
-  "device": {
-    "connect": "连接设备",
+    "manager": {
+      "deleteConfirm": "确定要删除连接 \"{{name}}\" 吗？",
+      "noConnections": "暂无已保存的连接",
+      "addConnectionPrompt": "点击\"添加连接\"按钮开始",
+      "totalConnections": "共 {{count}} 个连接",
+      "connectionDetails": {
+        "address": "地址",
+        "token": "Token",
+        "none": "无",
+        "createdAt": "创建于",
+        "lastConnected": "最后连接"
+      },
+      "actions": {
+        "enable": "启用",
+        "delete": "删除",
+        "label": "连接操作"
+      }
+    },
+    "add": "添加连接",
+    "migratedConnection": "已迁移的连接",
+    "socketSettings": "Socket连接设置",
+    "serverAddress": "服务器地址",
+    "serverAddressPlaceholder": "例如：\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "请输入服务器地址",
+    "connectionFailedCheckAddress": "连接失败，请检查服务器地址",
+    "supportedFormats": "支持IP+端口、ws://、wss://域名等格式",
+    "authToken": "认证令牌",
+    "enterAuthToken": "输入认证令牌",
+    "connecting": "连接中...",
+    "connect": "连接",
+    "connectionFailed": "连接失败",
+    "testing": "测试中...",
+    "startSocketTest": "开始 Socket 测试",
+    "socketTestTitle": "Socket 测试",
+    "clickToStartTest": "点击按钮开始测试...",
     "disconnect": "断开连接",
     "connected": "已连接",
     "disconnected": "已断开",
-    "connectionFailed": "连接失败",
+    "failed": "连接失败",
     "retry": "重试",
-    "deviceInfo": "设备信息",
+    "lost": "连接丢失",
+    "reconnecting": "重新连接中...",
+    "reconnect": "重新连接",
+    "reconnectIn": "{{count}}秒后重试",
+    "reconnectNow": "立即重试",
+    "reconnectFailed": "重新连接失败",
+    "reconnectSuccessful": "重新连接成功",
+    "reconnectAttempt": "重试 {{current}}/{{max}}",
+    "reconnectLimitReached": "达到重连次数上限",
+    "timeout": "连接超时",
+    "refused": "连接被拒绝",
+    "reset": "连接已重置",
+    "aborted": "连接已中止",
+    "closed": "连接已关闭",
+    "error": "连接错误",
+    "backendConnectionFailed": "后端连接失败",
+    "unknownConnectionError": "未知连接错误",
+    "status": "连接状态",
+    "type": "连接类型",
+    "name": "连接名称",
+    "settings": "连接设置",
+    "details": "连接详情",
+    "history": "连接历史",
+    "log": "连接日志",
+    "stats": "连接统计",
+    "test": "测试连接",
+    "testSuccessful": "连接测试成功",
+    "testFailed": "连接测试失败",
+    "edit": "编辑连接",
+    "delete": "删除连接",
+    "addTitle": "添加连接",
+    "tabs": {
+      "qrcode": "扫码添加",
+      "manual": "手动输入"
+    },
+    "server": {
+      "starting": "正在启动服务器...",
+      "started": "服务器已启动，端口: {{port}}",
+      "startFailed": "启动服务器失败: {{error}}",
+      "stopping": "正在停止服务器...",
+      "stopped": "服务器已停止"
+    },
+    "qrcode": {
+      "title": "扫码连接",
+      "status": {
+        "preparing": "准备启动服务器...",
+        "stoppingServer": "正在停止现有服务器...",
+        "startingServer": "正在启动服务器 (端口 {{port}})...",
+        "fetchingDeviceInfo": "正在获取设备信息...",
+        "gettingLocalIp": "正在获取本机IP...",
+        "generatingQrCode": "正在生成二维码...",
+        "ready": "扫描二维码连接设备"
+      },
+      "connectionInfo": "请使用手机扫描二维码连接",
+      "serverPort": "服务器运行在端口: {{port}}",
+      "error": {
+        "title": "启动服务器时出错，请重试",
+        "retryButton": "重试"
+      },
+      "steps": {
+        "stoppingServer": "步骤 1/4: 停止现有服务器",
+        "startingServer": "步骤 2/4: 启动服务器",
+        "fetchingDeviceInfo": "步骤 3/4: 获取设备信息",
+        "gettingLocalIp": "步骤 4/5: 获取本机IP",
+        "generatingQrCode": "步骤 5/5: 生成二维码"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] 组件挂载",
+        "componentUnmounting": "[QR-STABLE] 组件卸载清理",
+        "serverStarting": "[QR-STABLE] 开始启动服务器",
+        "serverStopping": "[QR-STABLE] 正在停止服务器...",
+        "serverStopped": "[QR-STABLE] 服务器已停止",
+        "serverError": "[QR-STABLE] 停止服务器时出错:",
+        "serverStarted": "[QR-STABLE] 服务器已启动，端口:",
+        "startServerError": "[QR-STABLE] 启动服务器时出错:",
+        "componentUnmounted": "[QR-STABLE] 组件已卸载，取消启动服务器",
+        "componentRendered": "组件已渲染"
+      }
+    },
+    "title": "连接设备",
+    "qrCode": "扫描二维码",
+    "manualInput": "手动输入",
+    "scanQRCode": "扫描二维码连接设备",
+    "scanQRCodeDescription": "在您的Android设备上打开应用，点击\"连接到PC\"，然后扫描此二维码",
+    "enterIPAddress": "输入设备IP地址",
+    "enterIPAddressDescription": "在您的Android设备上找到IP地址，然后在此处输入",
+    "ipAddress": "IP地址",
+    "port": "端口",
+    "disconnecting": "断开中...",
+    "connectionFailedDescription": "无法连接到设备。请确保设备和电脑在同一网络中，并且Android应用正在运行。",
+    "tryAgain": "重试",
+    "cancel": "取消",
+    "connectionSuccessful": "连接成功",
+    "connectionSuccessfulDescription": "已成功连接到设备",
+    "continue": "继续",
+    "noDevicesFound": "未找到设备",
+    "searchingForDevices": "正在搜索设备...",
+    "selectDevice": "选择设备",
+    "selectDeviceDescription": "选择要连接的设备",
+    "refresh": "刷新",
     "deviceName": "设备名称",
-    "deviceModel": "型号",
-    "deviceOS": "系统版本",
+    "deviceStatus": "状态",
+    "deviceLastConnected": "上次连接",
+    "deviceActions": "操作",
+    "deviceConnect": "连接",
+    "deviceDisconnect": "断开",
+    "deviceRemove": "移除",
+    "deviceEdit": "编辑",
+    "deviceDetails": "详情",
+    "addDevice": "添加设备",
+    "editDevice": "编辑设备",
+    "removeDevice": "移除设备",
+    "removeDeviceConfirmation": "确定要移除此设备吗？",
+    "removeDeviceConfirmationDescription": "此操作将从已保存设备列表中移除此设备。您仍然可以通过扫描二维码或手动输入IP地址重新连接。",
+    "remove": "移除",
+    "keepDevice": "保留",
+    "deviceRemoved": "设备已移除",
+    "deviceAdded": "设备已添加",
+    "deviceUpdated": "设备已更新",
+    "deviceConnected": "设备已连接",
+    "deviceDisconnected": "设备已断开",
+    "allDevicesDisconnected": "所有设备已断开连接",
+    "connectionLost": "连接丢失",
+    "connectionHistory": "连接历史",
+    "connectionLog": "连接日志",
+    "connectionStats": "连接统计",
+    "connectionTest": "测试连接",
+    "connectionTestSuccessful": "连接测试成功",
+    "connectionTestFailed": "连接测试失败",
+    "connectionError": "连接错误",
+    "requestingToken": "正在请求令牌...",
+    "authFailed": "认证失败",
+    "loginSuccess": "登录成功",
+    "missingToken": "缺少令牌",
+    "tokenReceived": "已收到令牌",
+    "loginFailed": "登录失败"
+  },
+  "device": {
+    "title": "设备",
+    "actions": {
+      "delete": "🗑️ 删除设备",
+      "label": "设备操作"
+    },
+    "confirmDelete": "确定要删除设备 \"{{name}}\" 吗？",
+    "add": "添加设备",
+    "edit": "编辑设备",
+    "tokenRequestFailed": "获取授权令牌失败",
+    "loginInProgress": "正在登录...",
+    "loginSuccess": "登录成功",
+    "disconnected": "设备已断开连接",
+    "allDevicesDisconnected": "所有设备已断开连接",
+    "missingUuid": "请指定设备 UUID",
+    "noDevices": "暂无设备",
+    "noEnabledDevices": "暂无启用的设备",
+    "notConnectedOrUnavailable": "设备 {{deviceUuid}} 未连接或不可用",
+    "clickToAddDevice": "请点击\"+ 添加连接\"扫码添加设备",
+    "info": "设备信息",
+    "name": "设备名称",
+    "model": "型号",
+    "os": "系统版本",
     "batteryLevel": "电量",
     "storage": "存储",
     "memory": "内存"
   },
+  "manualInput": {
+    "title": "手动输入连接",
+    "deviceName": {
+      "label": "设备名称（可选）:",
+      "placeholder": "例如: 小米手机",
+      "hint": "不填写则自动生成"
+    },
+    "socketAddress": {
+      "label": "Socket地址 *:",
+      "placeholder": "例如: 192.168.1.100:6001",
+      "hint": "支持格式: IP:端口、域名:端口"
+    },
+    "validation": {
+      "socketRequired": "请输入Socket地址"
+    },
+    "status": {
+      "adding": "正在添加设备...",
+      "added": "设备已添加！"
+    },
+    "error": {
+      "addFailed": "添加失败: {{error}}"
+    },
+    "hint": {
+      "title": "提示:",
+      "description": "输入设备的 Socket 地址，支持以下格式：",
+      "formats": [
+        "IP:端口，例如 127.0.0.1:10035",
+        "完整的 ws:// 或 wss:// 地址，例如 ws://localhost:10035",
+        "域名:端口，例如 example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "添加设备",
+      "adding": "添加中..."
+    }
+  },
   "notification": {
-    "noNotifications": "没有通知",
-    "clearAll": "全部清除",
+    "title": "通知",
+    "noNotifications": "暂无通知",
+    "clearAll": "清空所有",
+    "clearAllConfirm": "确定要清空所有通知吗？",
+    "clearAllSuccess": "已清空所有通知",
+    "clearAllFailed": "清空通知失败",
+    "delete": "删除",
+    "deleteConfirm": "确定要删除此通知吗？",
+    "deleteSuccess": "已删除通知",
+    "deleteFailed": "删除通知失败",
+    "copy": "复制",
+    "copySuccess": "已复制到剪贴板",
+    "copyFailed": "复制失败",
+    "details": "详情",
+    "close": "关闭",
     "markAsRead": "标记为已读",
     "markAsUnread": "标记为未读",
-    "delete": "删除",
+    "markAsReadSuccess": "已标记为已读",
+    "markAsReadFailed": "标记为已读失败",
+    "markAsUnreadSuccess": "已标记为未读",
+    "markAsUnreadFailed": "标记为未读失败",
+    "markAllAsRead": "全部标为已读",
+    "markAllAsReadConfirm": "确定要将所有通知标记为已读吗？",
+    "markAllAsReadSuccess": "已将所有通知标记为已读",
+    "markAllAsReadFailed": "标记所有通知为已读失败",
+    "filter": "筛选",
+    "filterByApp": "按应用筛选",
+    "filterByKeyword": "按关键词筛选",
+    "filterByTime": "按时间筛选",
+    "filterByStatus": "按状态筛选",
+    "filterByPriority": "按优先级筛选",
+    "filterByCategory": "按类别筛选",
+    "filterByChannel": "按通道筛选",
+    "filterByDevice": "按设备筛选",
     "reply": "回复",
-    "copy": "复制",
     "copied": "已复制!",
     "expand": "显示更多",
-    "collapse": "收起"
+    "collapse": "收起",
+    "totalCount": "共 {{count}} 条通知",
+    "selectedCount": "(已选 {{count}} 条)",
+    "markSelectedAsRead": "标记为已读",
+    "selectToMarkAsRead": "选择以标记为已读",
+    "noNotificationsMessage": "暂无通知",
+    "unknownSender": "未知发送者",
+    "noTitle": "无标题",
+    "noContent": "无内容",
+    "subText": "子文本",
+    "summary": "摘要",
+    "textLines": "多行文本",
+    "time": "时间",
+    "channelId": "通道ID",
+    "action": "动作",
+    "isInitialized": "是否初始化",
+    "readStatus": "已读状态",
+    "unread": "未读",
+    "templateType": "模板类型",
+    "conversationTitle": "会话标题",
+    "additionalInfo": "附加信息",
+    "participants": "参与者",
+    "isResident": "是否常驻",
+    "priority": "优先级",
+    "importance": "重要性",
+    "addToBlacklist": "加入黑名单",
+    "addToWhitelist": "加入白名单"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 显示过滤器",
+      "hide": "🔽 隐藏过滤器",
+      "addPattern": "添加模式",
+      "removePattern": "移除",
+      "reset": "重置为默认",
+      "save": "保存设置"
+    },
+    "title": "过滤规则",
+    "basicRulesTitle": "基础过滤规则",
+    "rules": {
+      "ongoing": "常驻通知",
+      "ongoingDesc": "过滤常驻通知 (FLAG_ONGOING_EVENT)",
+      "system": "系统通知",
+      "systemDesc": "过滤 Android 系统通知 (android, com.android.*)",
+      "empty": "无内容通知",
+      "emptyDesc": "过滤标题和内容都为空的通知",
+      "lowPriority": "低优先级通知",
+      "lowPriorityDesc": "过滤低优先级和低重要性的通知",
+      "foreground": "前台服务通知",
+      "foregroundDesc": "过滤 channelId 包含 \"foreground\" 的通知",
+      "groupSummary": "分组摘要通知",
+      "groupSummaryDesc": "过滤 title 包含 \"GroupSummary\" 的通知",
+      "runningService": "正在运行通知",
+      "runningServiceDesc": "过滤 \"正在运行\" + \"点按即可了解详情\" 的通知",
+      "packageBlacklist": "包名黑名单",
+      "packageBlacklistDesc": "过滤指定包名的通知 (支持正则)",
+      "packageWhitelist": "包名白名单",
+      "packageWhitelistDesc": "只显示指定包名的通知 (支持正则)",
+      "systemWhitelist": "系统应用白名单",
+      "systemWhitelistDesc": "即使是 com.android.* 也不过滤"
+    },
+    "hint": {
+      "title": "提示:",
+      "exact": "精确匹配: com.tencent.mm",
+      "wildcard": "通配符: com.jd.*, *.xiaomi.*",
+      "regex": "正则: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "黑名单模式",
+      "whitelist": "白名单模式"
+    },
+    "messages": {
+      "patternAdded": "已添加模式: {{pattern}}",
+      "patternRemoved": "已移除模式: {{pattern}}",
+      "modeChanged": "已切换为{{mode}}",
+      "configReset": "已重置为默认设置",
+      "configSaved": "设置已保存",
+      "configLoadError": "加载配置失败: {{error}}",
+      "configSaveError": "保存配置失败: {{error}}"
+    },
+    "enterPackageOrRegex": "请输入包名或正则表达式",
+    "enterPackageOrRegexPlaceholder": "输入包名或正则表达式",
+    "invalidRegex": "无效的正则表达式",
+    "confirmReset": "确定要重置为默认配置吗？",
+    "confirmRemovePattern": "确定要从 {{rule}} 中删除 \"{{pattern}}\" 吗？"
   },
   "errors": {
+    "connectionFailed": "连接失败",
+    "deleteFailed": "删除失败",
+    "websocketNotConnected": "WebSocket 未连接",
+    "websocketNotInitialized": "WebSocket 未初始化",
     "minimizeWindowFailed": "最小化窗口失败"
-  }
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "无效的正则表达式"
+    }
+  },
+  "login": "登录",
+  "request_token": "请求令牌",
+  "clear_messages": "清除消息",
+  "get_package_icon": "获取应用图标"
 }

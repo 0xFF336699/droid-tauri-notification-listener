@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "系統應用程式白名單",
+        "description": "這些應用程式的通知不會被過濾，即使它們是系統應用程式",
+        "items": {
+          "mms": "簡訊",
+          "phone": "電話"
+        },
+        "addCustom": "新增自訂系統應用程式至白名單",
+        "example": "例如：'com.android.mms' 可以過濾簡訊"
+      },
+      "blacklist": {
+        "title": "系統應用程式黑名單",
+        "description": "這些應用程式的通知將被強制過濾（最高優先級）",
+        "addCustom": "新增自訂系統應用程式至黑名單"
+      }
+    },
+    "actions": {
+      "show": "顯示過濾設定",
+      "hide": "隱藏過濾設定"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "過濾持續通知 (FLAG_ONGOING_EVENT)",
+        "system": "過濾系統通知",
+        "emptyContent": "過濾無內容通知",
+        "lowPriority": "過濾低優先級通知",
+        "runningService": "過濾運行中服務通知"
+      },
+      "status": {
+        "filteringOngoing": "正在過濾持續通知...",
+        "filteringSystem": "正在過濾系統通知...",
+        "filteringEmptyContent": "正在過濾無內容通知...",
+        "filteringLowPriority": "正在過濾低優先級通知...",
+        "filteringRunningService": "正在過濾運行中服務通知...",
+        "filteringForegroundService": "正在過濾前台服務通知...",
+        "filteringGroupSummary": "正在過濾群組摘要..."
+      },
+      "empty": "無內容通知",
+      "emptyDesc": "過濾標題和內容空白的通知",
+      "foreground": "前台服務通知",
+      "foregroundDesc": "過濾 channelId 包含 \"foreground\" 的通知",
+      "groupSummary": "群組摘要",
+      "groupSummaryDesc": "過濾標題包含 \"GroupSummary\" 的通知",
+      "lowPriority": "低優先級通知",
+      "lowPriorityDesc": "過濾優先級和重要性低的通知",
+      "ongoing": "持續通知",
+      "ongoingDesc": "過濾持續通知 (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "套件名稱黑名單",
+      "packageBlacklistDesc": "過濾指定套件名稱的通知（支援 regex）",
+      "packageWhitelist": "套件名稱白名單",
+      "packageWhitelistDesc": "僅顯示指定套件名稱的通知（支援 regex）",
+      "runningService": "運行中通知",
+      "runningServiceDesc": "過濾 \"運行中\" + \"點擊查看詳細資訊\" 通知",
+      "system": "系統通知",
+      "systemDesc": "過濾 Android 系統通知 (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "運行中",
+      "tapForDetails": "點擊查看詳細資訊"
+    },
+    "errors": {
+      "filterError": "通知過濾錯誤：{{error}}",
+      "invalidRegex": "無效 regex {{pattern}}：{{error}}"
+    },
+    "messages": {
+      "configLoadError": "載入設定錯誤：{{error}}",
+      "configReset": "重設為預設設定",
+      "configSaved": "設定已儲存",
+      "configSaveError": "儲存設定錯誤：{{error}}",
+      "modeChanged": "切換至 {{mode}}",
+      "patternAdded": "新增樣式：{{pattern}}",
+      "patternRemoved": "移除樣式：{{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "您確定要刪除所有裝置嗎？",
+      "confirmMessage": "此操作將刪除所有已儲存裝置，但保留視窗設定。",
+      "irreversible": "此操作無法復原！",
+      "success": "裝置資料已刪除！\n應用程式將重新載入。",
+      "error": "刪除失敗",
+      "logs": {
+        "clearing": "[appReset] 正在清除裝置資料...",
+        "cleared": "[appReset] 裝置資料已清除"
+      }
+    },
+    "confirmTitle": "您確定要將應用程式重設為初始狀態嗎？",
+    "confirmMessage": "此操作將刪除：\n- 所有已儲存裝置\n- 視窗位置與大小設定\n- 所有過濾設定\n- 所有應用程式設定\n\n應用程式將關閉並重新啟動以套用變更。\n\n此操作無法復原！",
+    "confirmButton": "確認",
+    "cancelButton": "取消",
+    "logs": {
+      "starting": "[appReset] 開始重設應用程式...",
+      "clearingLocalStorage": "[appReset] 正在清除 localStorage...",
+      "localStorageCleared": "[appReset] localStorage 已清除",
+      "creatingResetMarker": "[appReset] 建立重設標記檔案...",
+      "resetMarkerCreated": "[appReset] 重設標記檔案已建立",
+      "resettingAppData": "[appReset] 正在重設應用程式資料...",
+      "appDataReset": "[appReset] 應用程式資料已重設",
+      "exitingApp": "[appReset] 正在關閉應用程式...",
+      "error": "[appReset] 重設應用程式錯誤："
+    },
+    "comments": {
+      ": "將應用程式重設為預設狀態",
+      "resetDescription": "刪除所有資料：\n- LocalStorage (裝置清單、過濾設定等 前端資料)\n- Tauri 本機資料資料夾 (視窗狀態等 後端資料)",
+      "resetStrategy": "使用標記檔案策略解決 Windows 檔案鎖定問題：\n1. 清除 LocalStorage\n2. 建立重設標記檔案\n3. 關閉應用程式\n4. 下次啟動時自動刪除資料檔案"
+    }
+  },
   "app": {
     "title": "通知監聽器",
-    "description": "監聽和管理設備通知"
+    "description": "監聽並管理裝置通知",
+    "loading": "載入中..."
   },
   "common": {
+    "labels": {
+      "address": "位址"
+    },
+    "actions": {
+      "reconnect": "🔄 重新連線",
+      "manualReconnect": "手動重新連線",
+      "collapse": "摺疊",
+      "expandDetails": "展開詳細資訊",
+      "label": "動作",
+      "addToBlacklist": "新增至黑名單",
+      "addToWhitelist": "新增至白名單"
+    },
+    "unknown": "未知",
+    "optional": "選填",
+    "unknownSender": "未知發送者",
+    "noTitle": "無標題",
+    "content": "內容",
+    "bigText": "大文字",
+    "textLines": "文字行",
+    "additionalInfo": "額外資訊",
+    "packageName": "套件名稱",
+    "timeSent": "發送時間",
+    "notificationId": "通知 ID",
+    "tag": "標籤",
+    "messages": "訊息",
+    "sender": "發送者",
+    "time": "時間",
     "save": "儲存",
     "cancel": "取消",
     "back": "返回",
@@ -11,70 +148,427 @@
     "confirm": "確認",
     "loading": "載入中...",
     "error": "發生錯誤",
-    "connect": "連接",
-    "connecting": "連接中...",
-    "disconnect": "斷開連接",
-    "disconnecting": "斷開中...",
-    "connected": "已連接",
-    "disconnected": "已斷開",
-    "connectionFailed": "連接失敗",
+    "connect": "連線",
+    "connecting": "連線中...",
+    "disconnect": "斷開連線",
+    "disconnecting": "斷開連線中...",
+    "connected": "已連線",
+    "disconnected": "已斷開連線",
+    "connectionFailed": "連線失敗",
     "minimize": "最小化",
     "unread": "未讀",
-    "total": "總數",
+    "total": "總計",
     "errorOccurred": "發生錯誤",
     "retry": "重試",
     "settings": "設定",
-    "close": "關閉",
     "maximize": "最大化",
-    "restore": "還原"
+    "restore": "還原",
+    "enabled": "啟用",
+    "disabled": "停用"
   },
   "settings": {
     "title": "設定",
-    "language": "語言",
-    "appearance": "外觀",
-    "theme": "主題",
-    "light": "淺色",
-    "dark": "深色",
-    "system": "系統",
-    "notifications": "通知",
-    "enableNotifications": "啟用通知",
-    "notificationSound": "通知音效",
+    "appearance": {
+      "title": "外觀",
+      "theme": "主題",
+      "light": "亮色",
+      "dark": "暗色",
+      "system": "系統",
+      "language": "語言"
+    },
+    "notifications": {
+      "title": "通知",
+      "enableNotifications": "啟用通知",
+      "enableSounds": "啟用音效",
+      "enableBadge": "顯示徽章"
+    },
+    "websocketDevices": "WebSocket 裝置",
     "about": "關於",
     "version": "版本",
     "checkForUpdates": "檢查更新",
-    "clearAllDevices": "清除所有設備"
+    "clearAllDevices": "清除所有裝置",
+    "language": "語言",
+    "resetWarning": "重設將刪除已儲存裝置、視窗位置與大小、過濾設定及應用程式資料。此操作無法復原，請小心。"
   },
   "connection": {
-    "add": "添加連接"
+    "manager": {
+      "deleteConfirm": "您確定要刪除連線 \"{{name}}\" 嗎？",
+      "noConnections": "無已儲存連線",
+      "addConnectionPrompt": "點擊 \"新增連線\" 按鈕開始",
+      "totalConnections": "總計 {{count}} 連線",
+      "connectionDetails": {
+        "address": "位址",
+        "token": "權杖",
+        "none": "無",
+        "createdAt": "建立於",
+        "lastConnected": "上次連線"
+      },
+      "actions": {
+        "enable": "啟用",
+        "delete": "刪除",
+        "label": "連線動作"
+      }
+    },
+    "add": "新增連線",
+    "migratedConnection": "已遷移連線",
+    "socketSettings": "Socket 連線設定",
+    "serverAddress": "伺服器位址",
+    "serverAddressPlaceholder": "例如：\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "輸入伺服器位址",
+    "connectionFailedCheckAddress": "連線失敗，請檢查伺服器位址",
+    "supportedFormats": "支援 IP+埠、ws://、wss:// 網域等",
+    "authToken": "驗證權杖",
+    "enterAuthToken": "輸入驗證權杖",
+    "connecting": "連線中...",
+    "connect": "連線",
+    "connectionFailed": "連線失敗",
+    "testing": "測試中...",
+    "startSocketTest": "開始 Socket 測試",
+    "socketTestTitle": "Socket 測試",
+    "clickToStartTest": "點擊按鈕開始測試...",
+    "disconnect": "斷開連線",
+    "connected": "已連線",
+    "disconnected": "已斷開連線",
+    "failed": "連線失敗",
+    "retry": "重試",
+    "lost": "連線中斷",
+    "reconnecting": "重新連線中...",
+    "reconnect": "重新連線",
+    "reconnectIn": "{{count}} 秒後重試",
+    "reconnectNow": "立即重試",
+    "reconnectFailed": "重新連線失敗",
+    "reconnectSuccessful": "重新連線成功",
+    "reconnectAttempt": "嘗試 {{current}}/{{max}}",
+    "reconnectLimitReached": "達到重新連線嘗試上限",
+    "timeout": "連線逾時",
+    "refused": "連線被拒絕",
+    "reset": "連線已重設",
+    "aborted": "連線已中止",
+    "closed": "連線已關閉",
+    "error": "連線錯誤",
+    "backendConnectionFailed": "後端連線失敗",
+    "unknownConnectionError": "未知連線錯誤",
+    "status": "連線狀態",
+    "type": "連線類型",
+    "name": "連線名稱",
+    "settings": "連線設定",
+    "details": "連線詳細資訊",
+    "history": "連線歷史",
+    "log": "連線記錄",
+    "stats": "連線統計",
+    "test": "測試連線",
+    "testSuccessful": "連線測試成功",
+    "testFailed": "連線測試失敗",
+    "edit": "編輯連線",
+    "delete": "刪除連線",
+    "addTitle": "新增連線",
+    "tabs": {
+      "qrcode": "透過掃描新增",
+      "manual": "手動輸入"
+    },
+    "server": {
+      "starting": "啟動伺服器中...",
+      "started": "伺服器已啟動，埠：{{port}}",
+      "startFailed": "啟動伺服器失敗：{{error}}",
+      "stopping": "停止伺服器中...",
+      "stopped": "伺服器已停止"
+    },
+    "qrcode": {
+      "title": "透過掃描碼連線",
+      "status": {
+        "preparing": "準備啟動伺服器...",
+        "stoppingServer": "正在停止現有伺服器...",
+        "startingServer": "啟動伺服器中 (埠 {{port}})...",
+        "fetchingDeviceInfo": "正在取得裝置資訊...",
+        "gettingLocalIp": "正在取得本機 IP...",
+        "generatingQrCode": "正在產生 QR 碼...",
+        "ready": "掃描 QR 碼以連線裝置"
+      },
+      "connectionInfo": "使用您的手機掃描 QR 碼進行連線",
+      "serverPort": "伺服器運行於埠：{{port}}",
+      "error": {
+        "title": "啟動伺服器錯誤，請重試",
+        "retryButton": "重試"
+      },
+      "steps": {
+        "stoppingServer": "步驟 1/4：停止現有伺服器",
+        "startingServer": "步驟 2/4：啟動伺服器",
+        "fetchingDeviceInfo": "步驟 3/4：取得裝置資訊",
+        "gettingLocalIp": "步驟 4/5：取得本機 IP",
+        "generatingQrCode": "步驟 5/5：產生 QR 碼"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] 元件已掛載",
+        "componentUnmounting": "[QR-STABLE] 元件卸載清理",
+        "serverStarting": "[QR-STABLE] 啟動伺服器",
+        "serverStopping": "[QR-STABLE] 停止伺服器...",
+        "serverStopped": "[QR-STABLE] 伺服器已停止",
+        "serverError": "[QR-STABLE] 停止伺服器錯誤：",
+        "serverStarted": "[QR-STABLE] 伺服 Sadd器已啟動，埠：",
+        "startServerError": "[QR-STABLE] 啟動伺服器錯誤：",
+        "componentUnmounted": "[QR-STABLE] 元件已卸載，取消啟動伺服器",
+        "componentRendered": "元件已渲染"
+      }
+    },
+    "title": "連線裝置",
+    "qrCode": "掃描 QR 碼",
+    "manualInput": "手動輸入",
+    "scanQRCode": "掃描 QR 碼以連線裝置",
+    "scanQRCodeDescription": "在您的 Android 裝置上開啟應用程式，點擊 \"連線至 PC\"，然後掃描此 QR 碼",
+    "enterIPAddress": "輸入裝置 IP 位址",
+    "enterIPAddressDescription": "在您的 Android 裝置上找到 IP 位址，輸入於此",
+    "ipAddress": "IP 位址",
+    "port": "埠",
+    "disconnecting": "斷開連線中...",
+    "connectionFailedDescription": "無法連線至裝置。請確保裝置與電腦在同一網路，且 Android 應用程式正在運行。",
+    "tryAgain": "重試",
+    "cancel": "取消",
+    "connectionSuccessful": "連線成功",
+    "connectionSuccessfulDescription": "成功連線至裝置",
+    "continue": "繼續",
+    "noDevicesFound": "未找到裝置",
+    "searchingForDevices": "正在搜尋裝置...",
+    "selectDevice": "選擇裝置",
+    "selectDeviceDescription": "選擇要連線的裝置",
+    "refresh": "重新整理",
+    "deviceName": "裝置名稱",
+    "deviceStatus": "狀態",
+    "deviceLastConnected": "上次連線",
+    "deviceActions": "動作",
+    "deviceConnect": "連線",
+    "deviceDisconnect": "斷開連線",
+    "deviceRemove": "移除",
+    "deviceEdit": "編輯",
+    "deviceDetails": "詳細資訊",
+    "addDevice": "新增裝置",
+    "editDevice": "編輯裝置",
+    "removeDevice": "移除裝置",
+    "removeDeviceConfirmation": "您確定要移除此裝置嗎？",
+    "removeDeviceConfirmationDescription": "此操作將從已儲存裝置清單中移除裝置。您仍可透過掃描 QR 碼或手動輸入 IP 重新連線。",
+    "remove": "移除",
+    "keepDevice": "保留",
+    "deviceRemoved": "裝置已移除",
+    "deviceAdded": "裝置已新增",
+    "deviceUpdated": "裝置已更新",
+    "deviceConnected": "裝置已連線",
+    "deviceDisconnected": "裝置已斷開連線",
+    "allDevicesDisconnected": "所有裝置已斷開連線",
+    "connectionLost": "連線中斷",
+    "connectionHistory": "連線歷史",
+    "connectionLog": "連線記錄",
+    "connectionStats": "連線統計",
+    "connectionTest": "測試連線",
+    "connectionTestSuccessful": "連線測試成功",
+    "connectionTestFailed": "連線測試失敗",
+    "connectionError": "連線錯誤",
+    "requestingToken": "正在請求權杖...",
+    "authFailed": "驗證失敗",
+    "loginSuccess": "登入成功",
+    "missingToken": "缺少權杖",
+    "tokenReceived": "權杖已接收",
+    "loginFailed": "登入失敗"
   },
   "device": {
-    "connect": "連接設備",
-    "disconnect": "斷開連接",
-    "connected": "已連接",
-    "disconnected": "已斷開",
-    "connectionFailed": "連接失敗",
-    "retry": "重試",
-    "deviceInfo": "設備信息",
-    "deviceName": "設備名稱",
-    "deviceModel": "型號",
-    "deviceOS": "系統版本",
-    "batteryLevel": "電量",
-    "storage": "存儲",
-    "memory": "內存"
+    "title": "裝置",
+    "actions": {
+      "delete": "🗑️ 刪除裝置",
+      "label": "裝置動作"
+    },
+    "confirmDelete": "您確定要刪除裝置 \"{{name}}\" 嗎？",
+    "add": "新增裝置",
+    "edit": "編輯裝置равствуйте",
+    "tokenRequestFailed": "請求授權權杖失敗",
+    "loginInProgress": "登入中...",
+    "loginSuccess": "登入成功",
+    "disconnected": "裝置已斷開連線",
+    "allDevicesDisconnected": "所有裝置已斷開連線",
+    "missingUuid": "指定裝置 UUID",
+    "noDevices": "無裝置",
+    "noEnabledDevices": "無啟用裝置",
+    "notConnectedOrUnavailable": "裝置 {{deviceUuid}} 未連線或不可用",
+    "clickToAddDevice": "點擊 \"+ 新增連線\" 以掃描並新增裝置",
+    "info": "裝置資訊",
+    "name": "裝置名稱",
+    "model": "型號",
+    "os": "系統版本",
+    "batteryLevel": "電池電量",
+    "storage": "儲存空間",
+    "memory": "記憶體"
+  },
+  "manualInput": {
+    "title": "手動連線輸入",
+    "deviceName": {
+      "label": "裝置名稱（選填）：",
+      "placeholder": "例如：小米手機",
+      "hint": "若未填寫，將自動產生"
+    },
+    "socketAddress": {
+      "label": "Socket 位址 *： ",
+      "placeholder": "例如：192.168.1.100:6001",
+      "hint": "支援格式：IP:埠、網域:埠"
+    },
+    "validation": {
+      "socketRequired": "輸入 Socket 位址"
+    },
+    "status": {
+      "adding": "正在新增裝置...",
+      "added": "裝置已新增！"
+    },
+    "error": {
+      "addFailed": "新增失敗：{{error}}"
+    },
+    "hint": {
+      "title": "提示：",
+      "description": "輸入裝置 Socket 位址，支援以下格式：",
+      "formats": [
+        "IP:埠，例如 127.0.0.1:10035",
+        "完整 ws:// 或 wss:// 位址，例如 ws://localhost:10035",
+        "網域:埠，例如 example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "新增裝置",
+      "adding": "新增中..."
+    }
   },
   "notification": {
-    "noNotifications": "沒有通知",
+    "title": "通知",
+    "noNotifications": "無通知",
     "clearAll": "全部清除",
+    "clearAllConfirm": "您確定要清除所有通知嗎？",
+    "clearAllSuccess": "所有通知已清除",
+    "clearAllFailed": "清除通知失敗",
+    "delete": "刪除",
+    "deleteConfirm": "您確定要刪除此通知嗎？",
+    "deleteSuccess": "通知已刪除",
+    "deleteFailed": "刪除通知失敗",
+    "copy": "複製",
+    "copySuccess": "已複製至剪貼簿",
+    "copyFailed": "複製失敗",
+    "details": "詳細資訊",
+    "close": "關閉",
     "markAsRead": "標記為已讀",
     "markAsUnread": "標記為未讀",
-    "delete": "刪除",
+    "markAsReadSuccess": "已標記為已讀",
+, "markAsReadFailed": "標記為已讀失敗",
+    "markAsUnreadSuccess": "已標記為未讀",
+    "markAsUnreadFailed": "標記為未讀失敗",
+    "markAllAsRead": "全部標記為已讀",
+    "markAllAsReadConfirm": "您確定要將所有通知標記為已讀嗎？",
+    "markAllAsReadSuccess": "所有通知已標記為已讀",
+    "markAllAsReadFailed": "全部標記為已讀失敗",
+    "filter": "過濾",
+    "filterByApp": "依應用程式過濾",
+    "filterByKeyword": "依關鍵字過濾",
+    "filterByTime": "依時間過濾",
+    "filterByStatus": "依狀態過濾",
+    "filterByPriority": "依優先級過濾",
+    "filterByCategory": "依類別過濾",
+    "filterByChannel": "依頻道過濾",
+    "filterByDevice": "依裝置過濾",
     "reply": "回覆",
-    "copy": "複製",
-    "copied": "已複製!",
+    "copied": "已複製！",
     "expand": "顯示更多",
-    "collapse": "收起"
+    "collapse": "摺疊",
+    "totalCount": "總計 {{count}} 通知",
+    "selectedCount": "({{count}} 已選取)",
+    "markSelectedAsRead": "標記為已讀",
+    "selectToMarkAsRead": "選取以標記為已讀",
+    "noNotificationsMessage": "無通知",
+    "unknownSender": "未知發送者",
+    "noTitle": "無標題",
+    "noContent": "無內容",
+    "subText": "子文字",
+    "summary": "摘要",
+    "textLines": "多行文字",
+    "time": "時間",
+    "channelId": "頻道 ID",
+    "action": "動作",
+    "isInitialized": "已初始化",
+    "readStatus": "閱讀狀態",
+    "unread": "未讀",
+    "templateType": "範本類型",
+    "conversationTitle": "對話標題",
+    "additionalInfo": "額外資訊",
+    "participants": "參與者",
+    "isResident": "持續中",
+    "priority": "優先級",
+    "importance": "重要性",
+    "addToBlacklist": "新增至黑名單",
+    "addToWhitelist": "新增至白名單"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 顯示過濾",
+      "hide": "🔽 隱藏過濾",
+      "addPattern": "新增樣式",
+      "removePattern": "移除",
+      "reset": "重設為預設",
+      "save": "儲存設定"
+    },
+    "title": "過濾規則",
+    "basicRulesTitle": "基本過濾規則",
+    "rules": {
+      "ongoing": "持續通知",
+      "ongoingDesc": "過濾持續通知 (FLAG_ONGOING_EVENT)",
+      "system": "系統通知",
+      "systemDesc": "過濾 Android 系統通知 (android, com.android.*)",
+      "empty": "無內容通知",
+      "emptyDesc": "過濾標題和內容空白的通知",
+      "lowPriority": "低優先級通知",
+      "lowPriorityDesc": "過濾優先級和重要性低的通知",
+      "foreground": "前台服務通知",
+      "foregroundDesc": "過濾 channelId 包含 \"foreground\" 的通知",
+      "groupSummary": "群組摘要",
+      "groupSummaryDesc": "過濾標題包含 \"GroupSummary\" 的通知",
+      "runningService": "運行中通知",
+      "runningServiceDesc": "過濾 \"運行中\" + \"點擊查看詳細資訊\" 通知",
+      "packageBlacklist": "套件名稱黑名單",
+      "packageBlacklistDesc": "過濾指定套件名稱的通知（支援 regex）",
+      "packageWhitelist": "套件名稱白名單",
+      "packageWhitelistDesc": "僅顯示指定套件名稱的通知（支援 regex）",
+      "systemWhitelist": "系統應用程式白名單",
+      "systemWhitelistDesc": "即使 com.android.* 也不會被過濾"
+    },
+    "hint": {
+      "title": "提示：",
+      "exact": "精確匹配：com.tencent.mm",
+      "wildcard": "萬用字元：com.jd.*, *.xiaomi.*",
+      "regex": "Regex：^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "黑名單模式",
+      "whitelist": "白名單模式"
+    },
+    "messages": {
+      "patternAdded": "新增樣式：{{pattern}}",
+      "patternRemoved": "移除樣式：{{pattern}}",
+      "modeChanged": "切換至 {{mode}}",
+      "configReset": "重設為預設設定",
+      "configSaved": "設定已儲存",
+      "configLoadError": "載入設定錯誤：{{error}}",
+      "configSaveError": "儲存設定錯誤：{{error}}"
+    },
+    "enterPackageOrRegex": "輸入套件名稱或 regex",
+    "enterPackageOrRegexPlaceholder": "輸入套件名稱或 regex",
+    "invalidRegex": "無效 regex",
+    "confirmReset": "您確定要重設為預設設定嗎？",
+    "confirmRemovePattern": "您確定要從 {{rule}} 移除 \"{{pattern}}\" 嗎？"
   },
   "errors": {
-    "minimizeWindowFailed": "最小化窗口失敗"
-  }
+    "connectionFailed": "連線失敗",
+    "deleteFailed": "刪除失敗",
+    "websocketNotConnected": "WebSocket 未連線",
+    "websocketNotInitialized": "WebSocket 未初始化",
+    "minimizeWindowFailed": "最小化視窗失敗"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "無效 regex"
+    }
+  },
+  "login": "登入",
+  "request_token": "請求權杖",
+  "clear_messages": "清除訊息",
+  "get_package_icon": "取得應用程式圖示"
 }

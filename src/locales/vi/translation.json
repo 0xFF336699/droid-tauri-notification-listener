@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Danh sách trắng ứng dụng hệ thống",
+        "description": "Thông báo từ các ứng dụng này sẽ không bị lọc, ngay cả khi chúng là ứng dụng hệ thống",
+        "items": {
+          "mms": "SMS",
+          "phone": "Điện thoại"
+        },
+        "addCustom": "Thêm ứng dụng hệ thống tùy chỉnh vào danh sách trắng",
+        "example": "Ví dụ: 'com.android.mms' có thể lọc SMS"
+      },
+      "blacklist": {
+        "title": "Danh sách đen ứng dụng hệ thống",
+        "description": "Thông báo từ các ứng dụng này sẽ bị buộc lọc (ưu tiên cao nhất)",
+        "addCustom": "Thêm ứng dụng hệ thống tùy chỉnh vào danh sách đen"
+      }
+    },
+    "actions": {
+      "show": "Hiển thị cài đặt lọc",
+      "hide": "Ẩn cài đặt lọc"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Lọc thông báo đang diễn ra (FLAG_ONGOING_EVENT)",
+        "system": "Lọc thông báo hệ thống",
+        "emptyContent": "Lọc thông báo không có nội dung",
+        "lowPriority": "Lọc thông báo ưu tiên thấp",
+        "runningService": "Lọc thông báo dịch vụ đang chạy"
+      },
+      "status": {
+        "filteringOngoing": "Đang lọc thông báo đang diễn ra...",
+        "filteringSystem": "Đang lọc thông báo hệ thống...",
+        "filteringEmptyContent": "Đang lọc thông báo không có nội dung...",
+        "filteringLowPriority": "Đang lọc thông báo ưu tiên thấp...",
+        "filteringRunningService": "Đang lọc thông báo dịch vụ đang chạy...",
+        "filteringForegroundService": "Đang lọc thông báo dịch vụ nền trước...",
+        "filteringGroupSummary": "Đang lọc tóm tắt nhóm..."
+      },
+      "empty": "Thông báo không có nội dung",
+      "emptyDesc": "Lọc thông báo có tiêu đề và nội dung trống",
+      "foreground": "Thông báo dịch vụ nền trước",
+      "foregroundDesc": "Lọc thông báo nơi channelId chứa \"foreground\"",
+      "groupSummary": "Tóm tắt nhóm",
+      "groupSummaryDesc": "Lọc thông báo nơi tiêu đề chứa \"GroupSummary\"",
+      "lowPriority": "Thông báo ưu tiên thấp",
+      "lowPriorityDesc": "Lọc thông báo có ưu tiên và tầm quan trọng thấp",
+      "ongoing": "Thông báo đang diễn ra",
+      "ongoingDesc": "Lọc thông báo đang diễn ra (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Danh sách đen tên gói",
+      "packageBlacklistDesc": "Lọc thông báo từ tên gói được chỉ định (hỗ trợ regex)",
+      "packageWhitelist": "Danh sách trắng tên gói",
+      "packageWhitelistDesc": "Chỉ hiển thị thông báo từ tên gói được chỉ định (hỗ trợ regex)",
+      "runningService": "Thông báo đang chạy",
+      "runningServiceDesc": "Lọc \"Đang chạy\" + \"Nhấn để chi tiết\" thông báo",
+      "system": "Thông báo hệ thống",
+      "systemDesc": "Lọc thông báo hệ thống Android (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Đang chạy",
+      "tapForDetails": "Nhấn để chi tiết"
+    },
+    "errors": {
+      "filterError": "Lỗi lọc thông báo: {{error}}",
+      "invalidRegex": "Regex không hợp lệ {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Lỗi tải cấu hình: {{error}}",
+      "configReset": "Đặt lại về cài đặt mặc định",
+      "configSaved": "Cài đặt đã lưu",
+      "configSaveError": "Lỗi lưu cấu hình: {{error}}",
+      "modeChanged": "Chuyển sang {{mode}}",
+      "patternAdded": "Mẫu đã thêm: {{pattern}}",
+      "patternRemoved": "Mẫu đã xóa: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Bạn có chắc chắn muốn xóa tất cả thiết bị?",
+      "confirmMessage": "Thao tác này sẽ xóa tất cả thiết bị đã lưu, nhưng giữ cài đặt cửa sổ.",
+      "irreversible": "Thao tác này không thể hoàn tác!",
+      "success": "Dữ liệu thiết bị đã xóa!\nỨng dụng sẽ tải lại.",
+      "error": "Xóa thất bại",
+      "logs": {
+        "clearing": "[appReset] Đang xóa dữ liệu thiết bị...",
+        "cleared": "[appReset] Dữ liệu thiết bị đã xóa"
+      }
+    },
+    "confirmTitle": "Bạn có chắc chắn muốn đặt lại ứng dụng về trạng thái ban đầu?",
+    "confirmMessage": "Thao tác này sẽ xóa:\n- Tất cả thiết bị đã lưu\n- Cài đặt vị trí và kích thước cửa sổ\n- Tất cả cài đặt lọc\n- Tất cả cài đặt ứng dụng\n\nỨng dụng sẽ đóng và khởi động lại để áp dụng thay đổi.\n\nThao tác này không thể hoàn tác!",
+    "confirmButton": "Xác nhận",
+    "cancelButton": "Hủy",
+    "logs": {
+      "starting": "[appReset] Bắt đầu đặt lại ứng dụng...",
+      "clearingLocalStorage": "[appReset] Đang xóa localStorage...",
+      "localStorageCleared": "[appReset] localStorage đã xóa",
+      "creatingResetMarker": "[appReset] Tạo tệp đánh dấu đặt lại...",
+      "resetMarkerCreated": "[appReset] Tệp đánh dấu đặt lại đã tạo",
+      "resettingAppData": "[appReset] Đang đặt lại dữ liệu ứng dụng...",
+      "appDataReset": "[appReset] Dữ liệu ứng dụng đã đặt lại",
+      "exitingApp": "[appReset] Đang đóng ứng dụng...",
+      "error": "[appReset] Lỗi đặt lại ứng dụng:"
+    },
+    "comments": {
+      "resetFunction": "Đặt lại ứng dụng về trạng thái mặc định",
+      "resetDescription": "Xóa tất cả dữ liệu:\n- LocalStorage (danh sách thiết bị, cấu hình lọc v.v. dữ liệu frontend)\n- Thư mục dữ liệu cục bộ Tauri (trạng thái cửa sổ v.v. dữ liệu backend)",
+      "resetStrategy": "Sử dụng chiến lược tệp đánh dấu để giải quyết vấn đề khóa tệp trên Windows:\n1. Xóa LocalStorage\n2. Tạo tệp đánh dấu đặt lại\n3. Đóng ứng dụng\n4. Tại lần khởi động tiếp theo, tự động xóa tệp dữ liệu"
+    }
+  },
   "app": {
     "title": "Trình nghe thông báo",
-    "description": "Nghe và quản lý thông báo thiết bị"
+    "description": "Nghe và quản lý thông báo thiết bị",
+    "loading": "Đang tải..."
   },
   "common": {
+    "labels": {
+      "address": "Địa chỉ"
+    },
+    "actions": {
+      "reconnect": "🔄 Kết nối lại",
+      "manualReconnect": "Kết nối lại thủ công",
+      "collapse": "Thu gọn",
+      "expandDetails": "Mở rộng chi tiết",
+      "label": "Hành động",
+      "addToBlacklist": "Thêm vào danh sách đen",
+      "addToWhitelist": "Thêm vào danh sách trắng"
+    },
+    "unknown": "Không biết",
+    "optional": "Tùy chọn",
+    "unknownSender": "Người gửi không biết",
+    "noTitle": "Không có tiêu đề",
+    "content": "Nội dung",
+    "bigText": "Văn bản lớn",
+    "textLines": "Dòng văn bản",
+    "additionalInfo": "Thông tin bổ sung",
+    "packageName": "Tên gói",
+    "timeSent": "Thời gian gửi",
+    "notificationId": "ID thông báo",
+    "tag": "Thẻ",
+    "messages": "Tin nhắn",
+    "sender": "Người gửi",
+    "time": "Thời gian",
     "save": "Lưu",
     "cancel": "Hủy",
     "back": "Quay lại",
@@ -20,61 +157,418 @@
     "connectionFailed": "Kết nối thất bại",
     "minimize": "Thu nhỏ",
     "unread": "Chưa đọc",
-    "total": "Tổng",
+    "total": "Tổng cộng",
     "errorOccurred": "Đã xảy ra lỗi",
     "retry": "Thử lại",
     "settings": "Cài đặt",
-    "close": "Đóng",
     "maximize": "Phóng to",
-    "restore": "Khôi phục"
+    "restore": "Khôi phục",
+    "enabled": "Đã bật",
+    "disabled": "Đã tắt"
   },
   "settings": {
     "title": "Cài đặt",
-    "language": "Ngôn ngữ",
-    "appearance": "Giao diện",
-    "theme": "Chủ đề",
-    "light": "Sáng",
-    "dark": "Tối",
-    "system": "Hệ thống",
-    "notifications": "Thông báo",
-    "enableNotifications": "Bật thông báo",
-    "notificationSound": "Âm thanh thông báo",
+    "appearance": {
+      "title": "Giao diện",
+      "theme": "Chủ đề",
+      "light": "Sáng",
+      "dark": "Tối",
+      "system": "Hệ thống",
+      "language": "Ngôn ngữ"
+    },
+    "notifications": {
+      "title": "Thông báo",
+      "enableNotifications": "Bật thông báo",
+      "enableSounds": "Bật âm thanh",
+      "enableBadge": "Hiển thị badge"
+    },
+    "websocketDevices": "Thiết bị WebSocket",
     "about": "Giới thiệu",
     "version": "Phiên bản",
     "checkForUpdates": "Kiểm tra cập nhật",
-    "clearAllDevices": "Xóa tất cả thiết bị"
+    "clearAllDevices": "Xóa tất cả thiết bị",
+    "language": "Ngôn ngữ",
+    "resetWarning": "Đặt lại sẽ xóa thiết bị đã lưu, vị trí và kích thước cửa sổ, cấu hình lọc và dữ liệu ứng dụng. Thao tác này không thể hoàn tác, hãy cẩn thận."
   },
   "connection": {
-    "add": "Thêm kết nối"
-  },
-  "device": {
-    "connect": "Kết nối thiết bị",
+    "manager": {
+      "deleteConfirm": "Bạn có chắc chắn muốn xóa kết nối \"{{name}}\"?",
+      "noConnections": "Không có kết nối đã lưu",
+      "addConnectionPrompt": "Nhấp vào nút \"Thêm kết nối\" để bắt đầu",
+      "totalConnections": "Tổng cộng {{count}} kết nối",
+      "connectionDetails": {
+        "address": "Địa chỉ",
+        "token": "Token",
+        "none": "Không có",
+        "createdAt": "Tạo lúc",
+        "lastConnected": "Kết nối cuối"
+      },
+      "actions": {
+        "enable": "Bật",
+        "delete": "Xóa",
+        "label": "Hành động kết nối"
+      }
+    },
+    "add": "Thêm kết nối",
+    "migratedConnection": "Kết nối đã di chuyển",
+    "socketSettings": "Cài đặt kết nối socket",
+    "serverAddress": "Địa chỉ máy chủ",
+    "serverAddressPlaceholder": "Ví dụ:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Nhập địa chỉ máy chủ",
+    "connectionFailedCheckAddress": "Kết nối thất bại, kiểm tra địa chỉ máy chủ",
+    "supportedFormats": "Hỗ trợ IP+port, ws://, wss:// tên miền v.v.",
+    "authToken": "Token xác thực",
+    "enterAuthToken": "Nhập token xác thực",
+    "connecting": "Đang kết nối...",
+    "connect": "Kết nối",
+    "connectionFailed": "Kết nối thất bại",
+    "testing": "Đang kiểm tra...",
+    "startSocketTest": "Bắt đầu kiểm tra socket",
+    "socketTestTitle": "Kiểm tra Socket",
+    "clickToStartTest": "Nhấp nút để bắt đầu kiểm tra...",
     "disconnect": "Ngắt kết nối",
     "connected": "Đã kết nối",
     "disconnected": "Đã ngắt kết nối",
-    "connectionFailed": "Kết nối thất bại",
+    "failed": "Kết nối thất bại",
     "retry": "Thử lại",
-    "deviceInfo": "Thông tin thiết bị",
+    "lost": "Mất kết nối",
+    "reconnecting": "Đang kết nối lại...",
+    "reconnect": "Kết nối lại",
+    "reconnectIn": "Thử lại sau {{count}} giây",
+    "reconnectNow": "Thử ngay",
+    "reconnectFailed": "Kết nối lại thất bại",
+    "reconnectSuccessful": "Kết nối lại thành công",
+    "reconnectAttempt": "Lần thử {{current}}/{{max}}",
+    "reconnectLimitReached": "Đạt giới hạn lần thử kết nối lại",
+    "timeout": "Hết thời gian kết nối",
+    "refused": "Kết nối bị từ chối",
+    "reset": "Kết nối đã đặt lại",
+    "aborted": "Kết nối bị hủy",
+    "closed": "Kết nối đã đóng",
+    "error": "Lỗi kết nối",
+    "backendConnectionFailed": "Kết nối backend thất bại",
+    "unknownConnectionError": "Lỗi kết nối không biết",
+    "status": "Trạng thái kết nối",
+    "type": "Loại kết nối",
+    "name": "Tên kết nối",
+    "settings": "Cài đặt kết nối",
+    "details": "Chi tiết kết nối",
+    "history": "Lịch sử kết nối",
+    "log": "Nhật ký kết nối",
+    "stats": "Thống kê kết nối",
+    "test": "Kiểm tra kết nối",
+    "testSuccessful": "Kiểm tra kết nối thành công",
+    "testFailed": "Kiểm tra kết nối thất bại",
+    "edit": "Chỉnh sửa kết nối",
+    "delete": "Xóa kết nối",
+    "addTitle": "Thêm kết nối",
+    "tabs": {
+      "qrcode": "Thêm qua quét",
+      "manual": "Nhập thủ công"
+    },
+    "server": {
+      "starting": "Đang khởi động máy chủ...",
+      "started": "Máy chủ đã khởi động, cổng: {{port}}",
+      "startFailed": "Khởi động máy chủ thất bại: {{error}}",
+      "stopping": "Đang dừng máy chủ...",
+      "stopped": "Máy chủ đã dừng"
+    },
+    "qrcode": {
+      "title": "Kết nối qua quét mã",
+      "status": {
+        "preparing": "Chuẩn bị khởi động máy chủ...",
+        "stoppingServer": "Đang dừng máy chủ hiện có...",
+        "startingServer": "Đang khởi động máy chủ (cổng {{port}})...",
+        "fetchingDeviceInfo": "Đang lấy thông tin thiết bị...",
+        "gettingLocalIp": "Đang lấy IP cục bộ...",
+        "generatingQrCode": "Đang tạo mã QR...",
+        "ready": "Quét mã QR để kết nối thiết bị"
+      },
+      "connectionInfo": "Sử dụng điện thoại để quét mã QR và kết nối",
+      "serverPort": "Máy chủ chạy trên cổng: {{port}}",
+      "error": {
+        "title": "Lỗi khởi động máy chủ, thử lại",
+        "retryButton": "Thử lại"
+      },
+      "steps": {
+        "stoppingServer": "Bước 1/4: Dừng máy chủ hiện có",
+        "startingServer": "Bước 2/4: Khởi động máy chủ",
+        "fetchingDeviceInfo": "Bước 3/4: Lấy thông tin thiết bị",
+        "gettingLocalIp": "Bước 4/5: Lấy IP cục bộ",
+        "generatingQrCode": "Bước 5/5: Tạo mã QR"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Thành phần đã gắn",
+        "componentUnmounting": "[QR-STABLE] Dọn dẹp tháo gỡ",
+        "serverStarting": "[QR-STABLE] Khởi động máy chủ",
+        "serverStopping": "[QR-STABLE] Dừng máy chủ...",
+        "serverStopped": "[QR-STABLE] Máy chủ đã dừng",
+        "serverError": "[QR-STABLE] Lỗi dừng máy chủ:",
+        "serverStarted": "[QR-STABLE] Máy chủ đã khởi động, cổng:",
+        "startServerError": "[QR-STABLE] Lỗi khởi động máy chủ:",
+        "componentUnmounted": "[QR-STABLE] Thành phần đã tháo, hủy khởi động máy chủ",
+        "componentRendered": "Thành phần đã render"
+      }
+    },
+    "title": "Kết nối thiết bị",
+    "qrCode": "Quét mã QR",
+    "manualInput": "Nhập thủ công",
+    "scanQRCode": "Quét mã QR để kết nối thiết bị",
+    "scanQRCodeDescription": "Trên thiết bị Android của bạn, mở ứng dụng, nhấp \"Kết nối với PC\", sau đó quét mã QR này",
+    "enterIPAddress": "Nhập địa chỉ IP thiết bị",
+    "enterIPAddressDescription": "Tìm địa chỉ IP trên thiết bị Android của bạn, nhập ở đây",
+    "ipAddress": "Địa chỉ IP",
+    "port": "Cổng",
+    "disconnecting": "Đang ngắt kết nối...",
+    "connectionFailedDescription": "Không thể kết nối với thiết bị. Đảm bảo thiết bị và máy tính cùng mạng và ứng dụng Android đang chạy.",
+    "tryAgain": "Thử lại",
+    "cancel": "Hủy",
+    "connectionSuccessful": "Kết nối thành công",
+    "connectionSuccessfulDescription": "Kết nối với thiết bị thành công",
+    "continue": "Tiếp tục",
+    "noDevicesFound": "Không tìm thấy thiết bị",
+    "searchingForDevices": "Đang tìm kiếm thiết bị...",
+    "selectDevice": "Chọn thiết bị",
+    "selectDeviceDescription": "Chọn thiết bị để kết nối",
+    "refresh": "Làm mới",
     "deviceName": "Tên thiết bị",
-    "deviceModel": "Mẫu",
-    "deviceOS": "Phiên bản hệ điều hành",
-    "batteryLevel": "Pin",
-    "storage": "Bộ nhớ",
+    "deviceStatus": "Trạng thái",
+    "deviceLastConnected": "Kết nối cuối",
+    "deviceActions": "Hành động",
+    "deviceConnect": "Kết nối",
+    "deviceDisconnect": "Ngắt kết nối",
+    "deviceRemove": "Xóa",
+    "deviceEdit": "Chỉnh sửa",
+    "deviceDetails": "Chi tiết",
+    "addDevice": "Thêm thiết bị",
+    "editDevice": "Chỉnh sửa thiết bị",
+    "removeDevice": "Xóa thiết bị",
+    "removeDeviceConfirmation": "Bạn có chắc chắn muốn xóa thiết bị này?",
+    "removeDeviceConfirmationDescription": "Thao tác này sẽ xóa thiết bị khỏi danh sách thiết bị đã lưu. Bạn vẫn có thể kết nối lại bằng cách quét mã QR hoặc nhập IP thủ công.",
+    "remove": "Xóa",
+    "keepDevice": "Giữ",
+    "deviceRemoved": "Thiết bị đã xóa",
+    "deviceAdded": "Thiết bị đã thêm",
+    "deviceUpdated": "Thiết bị đã cập nhật",
+    "deviceConnected": "Thiết bị đã kết nối",
+    "deviceDisconnected": "Thiết bị đã ngắt kết nối",
+    "allDevicesDisconnected": "Tất cả thiết bị đã ngắt kết nối",
+    "connectionLost": "Mất kết nối",
+    "connectionHistory": "Lịch sử kết nối",
+    "connectionLog": "Nhật ký kết nối",
+    "connectionStats": "Thống kê kết nối",
+    "connectionTest": "Kiểm tra kết nối",
+    "connectionTestSuccessful": "Kiểm tra kết nối thành công",
+    "connectionTestFailed": "Kiểm tra kết nối thất bại",
+    "connectionError": "Lỗi kết nối",
+    "requestingToken": "Đang yêu cầu token...",
+    "authFailed": "Xác thực thất bại",
+    "loginSuccess": "Đăng nhập thành công",
+    "missingToken": "Thiếu token",
+    "tokenReceived": "Token đã nhận",
+    "loginFailed": "Đăng nhập thất bại"
+  },
+  "device": {
+    "title": "Thiết bị",
+    "actions": {
+      "delete": "🗑️ Xóa thiết bị",
+      "label": "Hành động thiết bị"
+    },
+    "confirmDelete": "Bạn có chắc chắn muốn xóa thiết bị \"{{name}}\"?",
+    "add": "Thêm thiết bị",
+    "edit": "Chỉnh sửa thiết bị",
+    "tokenRequestFailed": "Yêu cầu token ủy quyền thất bại",
+    "loginInProgress": "Đang đăng nhập...",
+    "loginSuccess": "Đăng nhập thành công",
+    "disconnected": "Thiết bị đã ngắt kết nối",
+    "allDevicesDisconnected": "Tất cả thiết bị đã ngắt kết nối",
+    "missingUuid": "Chỉ định UUID thiết bị",
+    "noDevices": "Không có thiết bị",
+    "noEnabledDevices": "Không có thiết bị bật",
+    "notConnectedOrUnavailable": "Thiết bị {{deviceUuid}} không kết nối hoặc không khả dụng",
+    "clickToAddDevice": "Nhấp \"+ Thêm kết nối\" để quét và thêm thiết bị",
+    "info": "Thông tin thiết bị",
+    "name": "Tên thiết bị",
+    "model": "Mẫu",
+    "os": "Phiên bản hệ thống",
+    "batteryLevel": "Mức pin",
+    "storage": "Lưu trữ",
     "memory": "Bộ nhớ"
   },
+  "manualInput": {
+    "title": "Nhập kết nối thủ công",
+    "deviceName": {
+      "label": "Tên thiết bị (tùy chọn):",
+      "placeholder": "Ví dụ: Điện thoại Xiaomi",
+      "hint": "Nếu không điền, sẽ tạo tự động"
+    },
+    "socketAddress": {
+      "label": "Địa chỉ socket *: ",
+      "placeholder": "Ví dụ: 192.168.1.100:6001",
+      "hint": "Định dạng hỗ trợ: IP:cổng, tên miền:cổng"
+    },
+    "validation": {
+      "socketRequired": "Nhập địa chỉ socket"
+    },
+    "status": {
+      "adding": "Đang thêm thiết bị...",
+      "added": "Thiết bị đã thêm!"
+    },
+    "error": {
+      "addFailed": "Thêm thất bại: {{error}}"
+    },
+    "hint": {
+      "title": "Mẹo:",
+      "description": "Nhập địa chỉ socket thiết bị, hỗ trợ định dạng sau:",
+      "formats": [
+        "IP:cổng, ví dụ 127.0.0.1:10035",
+        "Địa chỉ ws:// hoặc wss:// đầy đủ, ví dụ ws://localhost:10035",
+        "Tên miền:cổng, ví dụ example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Thêm thiết bị",
+      "adding": "Đang thêm..."
+    }
+  },
   "notification": {
+    "title": "Thông báo",
     "noNotifications": "Không có thông báo",
     "clearAll": "Xóa tất cả",
-    "markAsRead": "Đánh dấu là đã đọc",
-    "markAsUnread": "Đánh dấu là chưa đọc",
+    "clearAllConfirm": "Bạn có chắc chắn muốn xóa tất cả thông báo?",
+    "clearAllSuccess": "Tất cả thông báo đã xóa",
+    "clearAllFailed": "Xóa thông báo thất bại",
     "delete": "Xóa",
-    "reply": "Trả lời",
+    "deleteConfirm": "Bạn có chắc chắn muốn xóa thông báo này?",
+    "deleteSuccess": "Thông báo đã xóa",
+    "deleteFailed": "Xóa thông báo thất bại",
     "copy": "Sao chép",
+    "copySuccess": "Đã sao chép vào clipboard",
+    "copyFailed": "Sao chép thất bại",
+    "details": "Chi tiết",
+    "close": "Đóng",
+    "markAsRead": "Đánh dấu đã đọc",
+    "markAsUnread": "Đánh dấu chưa đọc",
+    "markAsReadSuccess": "Đã đánh dấu đã đọc",
+    "markAsReadFailed": "Đánh dấu đã đọc thất bại",
+    "markAsUnreadSuccess": "Đã đánh dấu chưa đọc",
+    "markAsUnreadFailed": "Đánh dấu chưa đọc thất bại",
+    "markAllAsRead": "Đánh dấu tất cả đã đọc",
+    "markAllAsReadConfirm": "Bạn có chắc chắn muốn đánh dấu tất cả thông báo đã đọc?",
+    "markAllAsReadSuccess": "Tất cả thông báo đã đánh dấu đã đọc",
+    "markAllAsReadFailed": "Đánh dấu tất cả đã đọc thất bại",
+    "filter": "Lọc",
+    "filterByApp": "Lọc theo ứng dụng",
+    "filterByKeyword": "Lọc theo từ khóa",
+    "filterByTime": "Lọc theo thời gian",
+    "filterByStatus": "Lọc theo trạng thái",
+    "filterByPriority": "Lọc theo ưu tiên",
+    "filterByCategory": "Lọc theo danh mục",
+    "filterByChannel": "Lọc theo kênh",
+    "filterByDevice": "Lọc theo thiết bị",
+    "reply": "Trả lời",
     "copied": "Đã sao chép!",
-    "expand": "Hiện thêm",
-    "collapse": "Thu gọn"
+    "expand": "Hiển thị thêm",
+    "collapse": "Thu gọn",
+    "totalCount": "Tổng cộng {{count}} thông báo",
+    "selectedCount": "({{count}} đã chọn)",
+    "markSelectedAsRead": "Đánh dấu đã đọc",
+    "selectToMarkAsRead": "Chọn để đánh dấu đã đọc",
+    "noNotificationsMessage": "Không có thông báo",
+    "unknownSender": "Người gửi không biết",
+    "noTitle": "Không có tiêu đề",
+    "noContent": "Không có nội dung",
+    "subText": "Phụ đề",
+    "summary": "Tóm tắt",
+    "textLines": "Dòng văn bản nhiều",
+    "time": "Thời gian",
+    "channelId": "ID kênh",
+    "action": "Hành động",
+    "isInitialized": "Đã khởi tạo",
+    "readStatus": "Trạng thái đọc",
+    "unread": "Chưa đọc",
+    "templateType": "Loại mẫu",
+    "conversationTitle": "Tiêu đề cuộc trò chuyện",
+    "additionalInfo": "Thông tin bổ sung",
+    "participants": "Người tham gia",
+    "isResident": "Đang diễn ra",
+    "priority": "Ưu tiên",
+    "importance": "Tầm quan trọng",
+    "addToBlacklist": "Thêm vào danh sách đen",
+    "addToWhitelist": "Thêm vào danh sách trắng"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Hiển thị lọc",
+      "hide": "🔽 Ẩn lọc",
+      "addPattern": "Thêm mẫu",
+      "removePattern": "Xóa",
+      "reset": "Đặt lại mặc định",
+      "save": "Lưu cài đặt"
+    },
+    "title": "Quy tắc lọc",
+    "basicRulesTitle": "Quy tắc lọc cơ bản",
+    "rules": {
+      "ongoing": "Thông báo đang diễn ra",
+      "ongoingDesc": "Lọc thông báo đang diễn ra (FLAG_ONGOING_EVENT)",
+      "system": "Thông báo hệ thống",
+      "systemDesc": "Lọc thông báo hệ thống Android (android, com.android.*)",
+      "empty": "Thông báo không có nội dung",
+      "emptyDesc": "Lọc thông báo có tiêu đề và nội dung trống",
+      "lowPriority": "Thông báo ưu tiên thấp",
+      "lowPriorityDesc": "Lọc thông báo có ưu tiên và tầm quan trọng thấp",
+      "foreground": "Thông báo dịch vụ nền trước",
+      "foregroundDesc": "Lọc thông báo nơi channelId chứa \"foreground\"",
+      "groupSummary": "Tóm tắt nhóm",
+      "groupSummaryDesc": "Lọc thông báo nơi tiêu đề chứa \"GroupSummary\"",
+      "runningService": "Thông báo đang chạy",
+      "runningServiceDesc": "Lọc \"Đang chạy\" + \"Nhấn để chi tiết\" thông báo",
+      "packageBlacklist": "Danh sách đen tên gói",
+      "packageBlacklistDesc": "Lọc thông báo từ tên gói được chỉ định (hỗ trợ regex)",
+      "packageWhitelist": "Danh sách trắng tên gói",
+      "packageWhitelistDesc": "Chỉ hiển thị thông báo từ tên gói được chỉ định (hỗ trợ regex)",
+      "systemWhitelist": "Danh sách trắng ứng dụng hệ thống",
+      "systemWhitelistDesc": "Ngay cả com.android.* cũng không bị lọc"
+    },
+    "hint": {
+      "title": "Mẹo:",
+      "exact": "Khớp chính xác: com.tencent.mm",
+      "wildcard": "Ký tự đại diện: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Chế độ danh sách đen",
+      "whitelist": "Chế độ danh sách trắng"
+    },
+    "messages": {
+      "patternAdded": "Mẫu đã thêm: {{pattern}}",
+      "patternRemoved": "Mẫu đã xóa: {{pattern}}",
+      "modeChanged": "Chuyển sang {{mode}}",
+      "configReset": "Đặt lại cấu hình mặc định",
+      "configSaved": "Cài đặt đã lưu",
+      "configLoadError": "Lỗi tải cấu hình: {{error}}",
+      "configSaveError": "Lỗi lưu cấu hình: {{error}}"
+    },
+    "enterPackageOrRegex": "Nhập tên gói hoặc regex",
+    "enterPackageOrRegexPlaceholder": "Nhập tên gói hoặc regex",
+    "invalidRegex": "Regex không hợp lệ",
+    "confirmReset": "Bạn có chắc chắn muốn đặt lại về cấu hình mặc định?",
+    "confirmRemovePattern": "Bạn có chắc chắn muốn xóa \"{{pattern}}\" từ {{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "Không thể thu nhỏ cửa sổ"
-  }
+    "connectionFailed": "Kết nối thất bại",
+    "deleteFailed": "Xóa thất bại",
+    "websocketNotConnected": "WebSocket không kết nối",
+    "websocketNotInitialized": "WebSocket không khởi tạo",
+    "minimizeWindowFailed": "Thu nhỏ cửa sổ thất bại"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Regex không hợp lệ"
+    }
+  },
+  "login": "Đăng nhập",
+  "request_token": "Yêu cầu token",
+  "clear_messages": "Xóa tin nhắn",
+  "get_package_icon": "Lấy biểu tượng ứng dụng"
 }

@@ -1,80 +1,574 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Liste blanche des applications système",
+        "description": "Les notifications de ces applications ne seront pas filtrées, même si elles sont des applications système",
+        "items": {
+          "mms": "SMS",
+          "phone": "Téléphone"
+        },
+        "addCustom": "Ajouter une application système personnalisée à la liste blanche",
+        "example": "Par exemple : 'com.android.mms' peut filtrer les SMS"
+      },
+      "blacklist": {
+        "title": "Liste noire des applications système",
+        "description": "Les notifications de ces applications seront filtrées de force (priorité la plus élevée)",
+        "addCustom": "Ajouter une application système personnalisée à la liste noire"
+      }
+    },
+    "actions": {
+      "show": "Afficher les paramètres de filtrage",
+      "hide": "Masquer les paramètres de filtrage"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filtrer les notifications en cours (FLAG_ONGOING_EVENT)",
+        "system": "Filtrer les notifications système",
+        "emptyContent": "Filtrer les notifications sans contenu",
+        "lowPriority": "Filtrer les notifications de faible priorité",
+        "runningService": "Filtrer les notifications de service en cours"
+      },
+      "status": {
+        "filteringOngoing": "Filtrage des notifications en cours...",
+        "filteringSystem": "Filtrage des notifications système...",
+        "filteringEmptyContent": "Filtrage des notifications sans contenu...",
+        "filteringLowPriority": "Filtrage des notifications de faible priorité...",
+        "filteringRunningService": "Filtrage des notifications de service en cours...",
+        "filteringForegroundService": "Filtrage des notifications de service au premier plan...",
+        "filteringGroupSummary": "Filtrage des notifications de résumé de groupe..."
+      },
+      "empty": "Notifications sans contenu",
+      "emptyDesc": "Filtrer les notifications avec titre et contenu vides",
+      "foreground": "Notifications de service au premier plan",
+      "foregroundDesc": "Filtrer les notifications où channelId contient \"foreground\"",
+      "groupSummary": "Notifications de résumé de groupe",
+      "groupSummaryDesc": "Filtrer les notifications où le titre contient \"GroupSummary\"",
+      "lowPriority": "Notifications de faible priorité",
+      "lowPriorityDesc": "Filtrer les notifications de faible priorité et d'importance",
+      "ongoing": "Notifications en cours",
+      "ongoingDesc": "Filtrer les notifications en cours (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Liste noire des noms de paquets",
+      "packageBlacklistDesc": "Filtrer les notifications des noms de paquets spécifiés (prend en charge les regex)",
+      "packageWhitelist": "Liste blanche des noms de paquets",
+      "packageWhitelistDesc": "Afficher uniquement les notifications des noms de paquets spécifiés (prend en charge les regex)",
+      "runningService": "NotificationsNotifications en cours d'exécution",
+      "runningServiceDesc": "Filtrer les notifications \"En cours\" + \"Appuyez pour détails\"",
+      "system": "Notifications système",
+      "systemDesc": "Filtrer les notifications système Android (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "En cours",
+      "tapForDetails": "Appuyez pour détails"
+    },
+    "errors": {
+      "filterError": "Erreur lors du filtrage des notifications : {{error}}",
+      "invalidRegex": "Regex invalide {{pattern}} : {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Erreur de chargement de la configuration : {{error}}",
+      "configReset": "Réinitialisé aux paramètres par défaut",
+      "configSaved": "Paramètres enregistrés",
+      "configSaveError": "Erreur d'enregistrement de la configuration : {{error}}",
+      "modeChanged": "Passé en {{mode}}",
+      "patternAdded": "Modèle ajouté : {{pattern}}",
+      "patternRemoved": "Modèle supprimé : {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Êtes-vous sûr de vouloir supprimer tous les appareils ?",
+      "confirmMessage": "Cela supprimera tous les appareils enregistrés mais conservera les paramètres de fenêtre.",
+      "irreversible": "Cette action ne peut pas être annulée !",
+      "success": "Données des appareils supprimées !\nL'application va se recharger.",
+      "error": "Suppression échouée",
+      "logs": {
+        "clearing": "[appReset] Suppression des données des appareils...",
+        "cleared": "[appReset] Données des appareils supprimées"
+      }
+    },
+    "confirmTitle": "Êtes-vous sûr de vouloir réinitialiser l'application à l'état initial ?",
+    "confirmMessage": "Cela supprimera :\n- Tous les appareils enregistrés\n- Les paramètres de position et de taille de fenêtre\n- Tous les paramètres de filtre\n- Tous les paramètres de l'application\n\nL'application se fermera et redémarrera pour appliquer les modifications.\n\nCette action ne peut pas être annulée !",
+    "confirmButton": "Confirmer",
+    "cancelButton": "Annuler",
+    "logs": {
+      "starting": "[appReset] Démarrage de la réinitialisation de l'application...",
+      "clearingLocalStorage": "[appReset] Nettoyage de localStorage...",
+      "localStorageCleared": "[appReset] localStorage nettoyé",
+      "creatingResetMarker": "[appReset] Création du fichier marqueur de réinitialisation...",
+      "resetMarkerCreated": "[appReset] Fichier marqueur de réinitialisation créé",
+      "resettingAppData": "[appReset] Réinitialisation des données de l'application...",
+      "appDataReset": "[appReset] Données de l'application réinitialisées",
+      "exitingApp": "[appReset] Sortie de l'application...",
+      "error": "[appReset] Erreur lors de la réinitialisation de l'application :"
+    },
+    "comments": {
+      "resetFunction": "Réinitialiser l'application à l'état par défaut",
+      "resetDescription": "Supprimer toutes les données :\n- LocalStorage (liste des appareils, configurations de filtre, etc. données frontend)\n- Dossier de données local Tauri (état de la fenêtre, etc. données backend)",
+      "resetStrategy": "Utiliser la stratégie de fichier marqueur pour résoudre les problèmes de verrouillage de fichiers sous Windows :\n1. Nettoyer LocalStorage\n2. Créer le fichier marqueur de réinitialisation\n3. Quitter l'application\n4. Au prochain démarrage, supprimer automatiquement les fichiers de données"
+    }
+  },
   "app": {
-    "title": "Écouteur de notifications",
-    "description": "Écouter et gérer les notifications des appareils"
+    "title": "Écouteur de Notifications",
+    "description": "Écouter et gérer les notifications des appareils",
+    "loading": "Chargement..."
   },
   "common": {
+    "labels": {
+      "address": "Adresse"
+    },
+    "actions": {
+      "reconnect": "🔄 Reconnecter",
+      "manualReconnect": "Reconnexion manuelle",
+      "collapse": "Réduire",
+      "expandDetails": "Étendre les détails",
+      "label": "Action",
+      "addToBlacklist": "Ajouter à la liste noire",
+      "addToWhitelist": "Ajouter à la liste blanche"
+    },
+    "unknown": "Inconnu",
+    "optional": "Optionnel",
+    "unknownSender": "Expéditeur inconnu",
+    "noTitle": "Sans titre",
+    "content": "Contenu",
+    "bigText": "Grand texte",
+    "textLines": "Lignes de texte",
+    "additionalInfo": "Informations supplémentaires",
+    "packageName": "Nom du paquet",
+    "timeSent": "Heure d'envoi",
+    "notificationId": "ID de notification",
+    "tag": "Étiquette",
+    "messages": "Messages",
+    "sender": "Expéditeur",
+    "time": "Heure",
     "save": "Enregistrer",
     "cancel": "Annuler",
     "back": "Retour",
     "delete": "Supprimer",
     "confirm": "Confirmer",
     "loading": "Chargement...",
-    "error": "Une erreur est survenue",
-    "connect": "Se connecter",
+    "error": "Une erreur s'est produite",
+    "connect": "Connecter",
     "connecting": "Connexion...",
-    "disconnect": "Se déconnecter",
+    "disconnect": "Déconnecter",
     "disconnecting": "Déconnexion...",
     "connected": "Connecté",
     "disconnected": "Déconnecté",
     "connectionFailed": "Échec de la connexion",
-    "minimize": "Réduire",
+    "minimize": "Minimiser",
     "unread": "Non lu",
     "total": "Total",
-    "errorOccurred": "Une erreur est survenue",
+    "errorOccurred": "Une erreur s'est produite",
     "retry": "Réessayer",
     "settings": "Paramètres",
-    "close": "Fermer",
-    "maximize": "Agrandir",
-    "restore": "Restaurer"
+    "maximize": "Maximiser",
+    "restore": "Restaurer",
+    "enabled": "Activé",
+    "disabled": "Désactivé"
   },
   "settings": {
     "title": "Paramètres",
-    "language": "Langue",
-    "appearance": "Apparence",
-    "theme": "Thème",
-    "light": "Clair",
-    "dark": "Sombre",
-    "system": "Système",
-    "notifications": "Notifications",
-    "enableNotifications": "Activer les notifications",
-    "notificationSound": "Son de notification",
+    "appearance": {
+      "title": "Apparence",
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système",
+      "language": "Langue"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "enableNotifications": "Activer les notifications",
+      "enableSounds": "Activer les sons",
+      "enableBadge": "Afficher le badge"
+    },
+    "websocketDevices": "Appareils WebSocket",
     "about": "À propos",
     "version": "Version",
     "checkForUpdates": "Vérifier les mises à jour",
-    "clearAllDevices": "Effacer tous les appareils"
+    "clearAllDevices": "Effacer tous les appareils",
+    "language": "Langue",
+    "resetWarning": "La réinitialisation supprimera les appareils enregistrés, la position et la taille de la fenêtre, les configurations de filtre et les données de l'application. Cette action ne peut pas être annulée, soyez prudent."
   },
   "connection": {
-    "add": "Ajouter une connexion"
-  },
-  "device": {
-    "connect": "Connecter l'appareil",
+    "manager": {
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer la connexion \"{{name}}\" ?",
+      "noConnections": "Aucune connexion enregistrée",
+      "addConnectionPrompt": "Cliquez sur le bouton \"Ajouter une connexion\" pour commencer",
+      "totalConnections": "{{count}} connexions au total",
+      "connectionDetails": {
+        "address": "Adresse",
+        "token": "Token",
+        "none": "Aucun",
+        "createdAt": "Créé le",
+        "lastConnected": "Dernière connexion"
+      },
+      "actions": {
+        "enable": "Activer",
+        "delete": "Supprimer",
+        "label": "Actions de connexion"
+      }
+    },
+    "add": "Ajouter une connexion",
+    "migratedConnection": "Connexion migrée",
+    "socketSettings": "Paramètres de connexion Socket",
+    "serverAddress": "Adresse du serveur",
+    "serverAddressPlaceholder": "Par exemple :\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Entrez l'adresse du serveur",
+    "connectionFailedCheckAddress": "Échec de la connexion, vérifiez l'adresse du serveur",
+    "supportedFormats": "Prend en charge IP+port, ws://, wss:// domaine etc.",
+    "authToken": "Token d'authentification",
+    "enterAuthToken": "Entrez le token d'authentification",
+    "connecting": "Connexion...",
+    "connect": "Connecter",
+    "connectionFailed": "Échec de la connexion",
+    "testing": "Test en cours...",
+    "startSocketTest": "Démarrer le test Socket",
+    "socketTestTitle": "Test Socket",
+    "clickToStartTest": "Cliquez sur le bouton pour démarrer le test...",
     "disconnect": "Déconnecter",
     "connected": "Connecté",
     "disconnected": "Déconnecté",
-    "connectionFailed": "Échec de la connexion",
+    "failed": "Échec de la connexion",
     "retry": "Réessayer",
-    "deviceInfo": "Informations sur l'appareil",
+    "lost": "Connexion perdue",
+    "reconnecting": "Reconnexion...",
+    "reconnect": "Reconnecter",
+    "reconnectIn": "Réessayer dans {{count}} secondes",
+    "reconnectNow": "Réessayer maintenant",
+    "reconnectFailed": "Reconnexion échouée",
+    "reconnectSuccessful": "Reconnexion réussie",
+    "reconnectAttempt": "Tentative {{current}}/{{max}}",
+    "reconnectLimitReached": "Limite de tentatives de reconnexion atteinte",
+    "timeout": "Délai de connexion dépassé",
+    "refused": "Connexion refusée",
+    "reset": "Connexion réinitialisée",
+    "aborted": "Connexion abandonnée",
+    "closed": "Connexion fermée",
+    "error": "Erreur de connexion",
+    "backendConnectionFailed": "Échec de la connexion backend",
+    "unknownConnectionError": "Erreur de connexion inconnue",
+    "status": "État de la connexion",
+    "type": "Type de connexion",
+    "name": "Nom de la connexion",
+    "settings": "Paramètres de connexion",
+    "details": "Détails de la connexion",
+    "history": "Historique de connexion",
+    "log": "Journal de connexion",
+    "stats": "Statistiques de connexion",
+    "test": "Tester la connexion",
+    "testSuccessful": "Test de connexion réussi",
+    "testFailed": "Test de connexion échoué",
+    "edit": "Modifier la connexion",
+    "delete": "Supprimer la connexion",
+    "addTitle": "Ajouter une connexion",
+    "tabs": {
+      "qrcode": "Ajouter par scan",
+      "manual": "Saisie manuelle"
+    },
+    "server": {
+      "starting": "Démarrage du serveur...",
+      "started": "Serveur démarré, port : {{port}}",
+      "startFailed": "Échec du démarrage du serveur : {{error}}",
+      "stopping": "Arrêt du serveur...",
+      "stopped": "Serveur arrêté"
+    },
+    "qrcode": {
+      "title": "Connecter par scan de code",
+      "status": {
+        "preparing": "Préparation au démarrage du serveur...",
+        "stoppingServer": "Arrêt du serveur existant...",
+        "startingServer": "Démarrage du serveur (port {{port}})...",
+        "fetchingDeviceInfo": "Récupération des informations de l'appareil...",
+        "gettingLocalIp": "Obtention de l'IP locale...",
+        "generatingQrCode": "Génération du code QR...",
+        "ready": "Scannez le code QR pour connecter l'appareil"
+      },
+      "connectionInfo": "Utilisez votre téléphone pour scanner le code QR et connecter",
+      "serverPort": "Serveur en cours d'exécution sur le port : {{port}}",
+      "error": {
+        "title": "Erreur lors du démarrage du serveur, réessayez",
+        "retryButton": "Réessayer"
+      },
+      "steps": {
+        "stoppingServer": "Étape 1/4 : Arrêt du serveur existant",
+        "startingServer": "Étape 2/4 : Démarrage du serveur",
+        "fetchingDeviceInfo": "Étape 3/4 : Récupération des informations de l'appareil",
+        "gettingLocalIp": "Étape 4/5 : Obtention de l'IP locale",
+        "generatingQrCode": "Étape 5/5 : Génération du code QR"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Composant monté",
+        "componentUnmounting": "[QR-STABLE] Nettoyage du démontage du composant",
+        "serverStarting": "[QR-STABLE] Démarrage du serveur",
+        "serverStopping": "[QR-STABLE] Arrêt du serveur...",
+        "serverStopped": "[QR-STABLE] Serveur arrêté",
+        "serverError": "[QR-STABLE] Erreur lors de l'arrêt du serveur :",
+        "serverStarted": "[QR-STABLE] Serveur démarré, port :",
+        "startServerError": "[QR-STABLE] Erreur lors du démarrage du serveur :",
+        "componentUnmounted": "[QR-STABLE] Composant démonté, annuler le démarrage du serveur",
+        "componentRendered": "Composant rendu"
+      }
+    },
+    "title": "Connecter l'appareil",
+    "qrCode": "Scanner le code QR",
+    "manualInput": "Saisie manuelle",
+    "scanQRCode": "Scanner le code QR pour connecter l'appareil",
+    "scanQRCodeDescription": "Sur votre appareil Android, ouvrez l'application, cliquez sur \"Connecter au PC\", puis scannez ce code QR",
+    "enterIPAddress": "Entrez l'adresse IP de l'appareil",
+    "enterIPAddressDescription": "Trouvez l'adresse IP sur votre appareil Android, entrez-la ici",
+    "ipAddress": "Adresse IP",
+    "port": "Port",
+    "disconnecting": "Déconnexion...",
+    "connectionFailedDescription": "Impossible de se connecter à l'appareil. Assurez-vous que l'appareil et l'ordinateur sont sur le même réseau et que l'application Android est en cours d'exécution.",
+    "tryAgain": "Réessayer",
+    "cancel": "Annuler",
+    "connectionSuccessful": "Connexion réussie",
+    "connectionSuccessfulDescription": "Connecté avec succès à l'appareil",
+    "continue": "Continuer",
+    "noDevicesFound": "Aucun appareil trouvé",
+    "searchingForDevices": "Recherche d'appareils...",
+    "selectDevice": "Sélectionner l'appareil",
+    "selectDeviceDescription": "Sélectionnez l'appareil à connecter",
+    "refresh": "Actualiser",
     "deviceName": "Nom de l'appareil",
-    "deviceModel": "Modèle",
-    "deviceOS": "Version du système d'exploitation",
-    "batteryLevel": "Batterie",
+    "deviceStatus": "Statut",
+    "deviceLastConnected": "Dernière connexion",
+    "deviceActions": "Actions",
+    "deviceConnect": "Connecter",
+    "deviceDisconnect": "Déconnecter",
+    "deviceRemove": "Supprimer",
+    "deviceEdit": "Modifier",
+    "deviceDetails": "Détails",
+    "addDevice": "Ajouter un appareil",
+    "editDevice": "Modifier l'appareil",
+    "removeDevice": "Supprimer l'appareil",
+    "removeDeviceConfirmation": "Êtes-vous sûr de vouloir supprimer cet appareil ?",
+    "removeDeviceConfirmationDescription": "Cette action supprime l'appareil de la liste des appareils enregistrés. Vous pouvez toujours vous reconnecter en scannant le code QR ou en entrant l'IP manuellement.",
+    "remove": "Supprimer",
+    "keepDevice": "Conserver",
+    "deviceRemoved": "Appareil supprimé",
+    "deviceAdded": "Appareil ajouté",
+    "deviceUpdated": "Appareil mis à jour",
+    "deviceConnected": "Appareil connecté",
+    "deviceDisconnected": "Appareil déconnecté",
+    "allDevicesDisconnected": "Tous les appareils déconnectés",
+    "connectionLost": "Connexion perdue",
+    "connectionHistory": "Historique de connexion",
+    "connectionLog": "Journal de connexion",
+    "connectionStats": "Statistiques de connexion",
+    "connectionTest": "Tester la connexion",
+    "connectionTestSuccessful": "Test de connexion réussi",
+    "connectionTestFailed": "Test de connexion échoué",
+    "connectionError": "Erreur de connexion",
+    "requestingToken": "Demande de token...",
+    "authFailed": "Échec de l'authentification",
+    "loginSuccess": "Connexion réussie",
+    "missingToken": "Token manquant",
+    "tokenReceived": "Token reçu",
+    "loginFailed": "Échec de la connexion"
+  },
+  "device": {
+    "title": "Appareils",
+    "actions": {
+      "delete": "🗑️ Supprimer l'appareil",
+      "label": "Actions de l'appareil"
+    },
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer l'appareil \"{{name}}\" ?",
+    "add": "Ajouter un appareil",
+    "edit": "Modifier l'appareil",
+    "tokenRequestFailed": "Échec de la récupération du token d'autorisation",
+    "loginInProgress": "Connexion en cours...",
+    "loginSuccess": "Connexion réussie",
+    "disconnected": "Appareil déconnecté",
+    "allDevicesDisconnected": "Tous les appareils déconnectés",
+    "missingUuid": "Spécifiez l'UUID de l'appareil",
+    "noDevices": "Aucun appareil",
+    "noEnabledDevices": "Aucun appareil activé",
+    "notConnectedOrUnavailable": "Appareil {{deviceUuid}} non connecté ou indisponible",
+    "clickToAddDevice": "Cliquez sur \"+ Ajouter une connexion\" pour scanner et ajouter un appareil",
+    "info": "Informations sur l'appareil",
+    "name": "Nom de l'appareil",
+    "model": "Modèle",
+    "os": "Version du système",
+    "batteryLevel": "Niveau de batterie",
     "storage": "Stockage",
     "memory": "Mémoire"
   },
+  "manualInput": {
+    "title": "Saisie manuelle de connexion",
+    "deviceName": {
+      "label": "Nom de l'appareil (optionnel) :",
+      "placeholder": "Par exemple : Téléphone Xiaomi",
+      "hint": "Si non rempli, généré automatiquement"
+    },
+    "socketAddress": {
+      "label": "Adresse Socket * : ",
+      "placeholder": "Par exemple : 192.168.1.100:6001",
+      "hint": "Formats supportés : IP:port, domaine:port"
+    },
+    "validation": {
+      "socketRequired": "Entrez l'adresse socket"
+    },
+    "status": {
+      "adding": "Ajout de l'appareil...",
+      "added": "Appareil ajouté !"
+    },
+    "error": {
+      "addFailed": "Ajout échoué : {{error}}"
+    },
+    "hint": {
+      "title": "Astuce :",
+      "description": "Entrez l'adresse socket de l'appareil, supporte les formats suivants :",
+      "formats": [
+        "IP:port, ex. 127.0.0.1:10035",
+        "Adresse complète ws:// ou wss://, ex. ws://localhost:10035",
+        "Domaine:port, ex. example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Ajouter l'appareil",
+      "adding": "Ajout..."
+    }
+  },
   "notification": {
+    "title": "Notifications",
     "noNotifications": "Aucune notification",
     "clearAll": "Tout effacer",
-    "markAsRead": "Marquer comme lu",
-    "markAsUnread": "Marquer comme non lu",
+    "clearAllConfirm": "Êtes-vous sûr de vouloir effacer toutes les notifications ?",
+    "clearAllSuccess": "Toutes les notifications effacées",
+    "clearAllFailed": "Échec de l'effacement des notifications Échec",
     "delete": "Supprimer",
-    "reply": "Répondre",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette notification ?",
+    "deleteSuccess": "Notification supprimée",
+    "deleteFailed": "Échec de la suppression de la notification",
     "copy": "Copier",
+    "copySuccess": "Copié dans le presse-papiers",
+    "copyFailed": "Copie échouée",
+    "details": "Détails",
+    "close": "Fermer",
+    "markAsRead": "Marquer comme lue",
+    "markAsUnread": "Marquer comme non lue",
+    "markAsReadSuccess": "Marquée comme lue",
+    "markAsReadFailed": "Échec du marquage comme lue",
+    "markAsUnreadSuccess": "Marquée comme non lue",
+    "markAsUnreadFailed": "Échec du marquage comme non lue",
+    "markAllAsRead": "Tout marquer comme lu",
+    "markAllAsReadConfirm": "Êtes-vous sûr de vouloir marquer toutes les notifications comme lues ?",
+    "markAllAsReadSuccess": "Toutes les notifications marquées comme lues",
+    "markAllAsReadFailed": "Échec du marquage de tout comme lu",
+    "filter": "Filtrer",
+    "filterByApp": "Filtrer par application",
+    "filterByKeyword": "Filtrer par mot-clé",
+    "filterByTime": "Filtrer par heure",
+    "filterByStatus": "Filtrer par statut",
+    "filterByPriority": "Filtrer par priorité",
+    "filterByCategory": "Filtrer par catégorie",
+    "filterByChannel": "Filtrer par canal",
+    "filterByDevice": "Filtrer par appareil",
+    "reply": "Répondre",
     "copied": "Copié !",
     "expand": "Afficher plus",
-    "collapse": "Réduire"
+    "collapse": "Réduire",
+    "totalCount": "{{count}} notifications au total",
+    "selectedCount": "(Sélectionnées {{count}})",
+    "markSelectedAsRead": "Marquer comme lue",
+    "selectToMarkAsRead": "Sélectionner pour marquer comme lue",
+    "noNotificationsMessage": "Aucune notification",
+    "unknownSender": "Expéditeur inconnu",
+    "noTitle": "Sans titre",
+    "noContent": "Sans contenu",
+    "subText": "Sous-texte",
+    "summary": "Résumé",
+    "textLines": "Texte multiligne",
+    "time": "Heure",
+    "channelId": "ID du canal",
+    "action": "Action",
+    "isInitialized": "Initialisé",
+    "readStatus": "Statut de lecture",
+    "unread": "Non lu",
+    "templateType": "Type de modèle",
+    "conversationTitle": "Titre de la conversation",
+    "additionalInfo": "Informations supplémentaires",
+    "participants": "Participants",
+    "isResident": "En cours",
+    "priority": "Priorité",
+    "importance": "Importance",
+    "addToBlacklist": "Ajouter à la liste noire",
+    "addToWhitelist": "Ajouter à la liste blanche"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Afficher le filtre",
+      "hide": "🔽 Masquer le filtre",
+      "addPattern": "Ajouter un modèle",
+      "removePattern": "Supprimer",
+      "reset": "Réinitialiser par défaut",
+      "save": "Enregistrer les paramètres"
+    },
+    "title": "Règles de filtrage",
+    "basicRulesTitle": "Règles de filtrage de base",
+    "rules": {
+      "ongoing": "Notifications en cours",
+      "ongoingDesc": "Filtrer les notifications en cours (FLAG_ONGOING_EVENT)",
+      "system": "Notifications système",
+      "systemDesc": "Filtrer les notifications système Android (android, com.android.*)",
+      "empty": "Notifications sans contenu",
+      "emptyDesc": "Filtrer les notifications avec titre et contenu vides",
+      "lowPriority": "Notifications de faible priorité",
+      "lowPriorityDesc": "Filtrer les notifications de faible priorité et d'importance",
+      "foreground": "Notifications de service au premier plan",
+      "foregroundDesc": "Filtrer les notifications où channelId contient \"foreground\"",
+      "groupSummary": "Notifications de résumé de groupe",
+      "groupSummaryDesc": "Filtrer les notifications où le titre contient \"GroupSummary\"",
+      "runningService": "Notifications en cours d'exécution",
+      "runningServiceDesc": "Filtrer les notifications \"En cours\" + \"Appuyez pour détails\"",
+      "packageBlacklist": "Liste noire des noms de paquets",
+      "packageBlacklistDesc": "Filtrer les notifications des noms de paquets spécifiés (prend en charge les regex)",
+      "packageWhitelist": "Liste blanche des noms de paquets",
+      "packageWhitelistDesc": "Afficher uniquement les notifications des noms de paquets spécifiés (prend en charge les regex)",
+      "systemWhitelist": "Liste blanche des applications système",
+      "systemWhitelistDesc": "Même com.android.* non filtré"
+    },
+    "hint": {
+      "title": "Astuce :",
+      "exact": "Correspondance exacte : com.tencent.mm",
+      "wildcard": "Joker : com.jd.*, *.xiaomi.*",
+      "regex": "Regex : ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Mode liste noire",
+      "whitelist": "Mode liste blanche"
+    },
+    "messages": {
+      "patternAdded": "Modèle ajouté : {{pattern}}",
+      "patternRemoved": "Modèle supprimé : {{pattern}}",
+      "modeChanged": "Passé en {{mode}}",
+      "configReset": "Réinitialisé à la configuration par défaut",
+      "configSaved": "Paramètres enregistrés",
+      "configLoadError": "Erreur de chargement de la configuration : {{error}}",
+      "configSaveError": "Erreur d'enregistrement de la configuration : {{error}}"
+    },
+    "enterPackageOrRegex": "Entrez le nom du paquet ou regex",
+    "enterPackageOrRegexPlaceholder": "Entrez le nom du paquet ou regex",
+    "invalidRegex": "Regex invalide",
+    "confirmReset": "Êtes-vous sûr de vouloir réinitialiser à la configuration par défaut ?",
+    "confirmRemovePattern": "Êtes-vous sûr de vouloir supprimer \"{{pattern}}\" de {{rule}} ?"
   },
   "errors": {
-    "minimizeWindowFailed": "Impossible de réduire la fenêtre"
-  }
+    "connectionFailed": "Échec de la connexion",
+    "deleteFailed": "Suppression échouée",
+    "websocketNotConnected": "WebSocket non connecté",
+    "websocketNotInitialized": "WebSocket non initialisé",
+    "minimizeWindowFailed": "Échec de la minimisation de la fenêtre"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Regex invalide"
+    }
+  },
+  "login": "Se connecter",
+  "request_token": "Demander un token",
+  "clear_messages": "Effacer les messages",
+  "get_package_icon": "Obtenir l'icône de l'application"
 }

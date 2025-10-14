@@ -254,7 +254,7 @@ function App() {
 
           <button
             onClick={() => {
-              if (window.confirm('确定要清空所有设备吗？此操作不可恢复！')) {
+              if (window.confirm(`${t('appReset.devices.confirmTitle')}\n${t('appReset.devices.irreversible')}`)) {
                 log('Clearing all devices');
 
                 // 清空所有设备
@@ -356,7 +356,7 @@ function App() {
                 console.error('Socket 测试失败:', error);
               }
             }}
-            title="测试 Socket 连接"
+            title={t('connection.connectionTest')}
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
               border: 'none',
@@ -377,7 +377,7 @@ function App() {
           {/* 添加连接按钮 */}
           <button
             onClick={() => setShowAddDialog(true)}
-            title="添加连接"
+            title={t('connection.add')}
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
               border: 'none',
@@ -396,7 +396,7 @@ function App() {
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            title="设置连接"
+            title={t('settings.title')}
             style={{
               background: 'rgba(255, 255, 255, 0.2)',
               border: 'none',
@@ -502,18 +502,18 @@ function App() {
                   type="checkbox"
                   checked={!!selected[n.id]}
                   onChange={() => toggleSelect(n.id)}
-                  title="选择以标记为已读"
+                  title={t('notification.selectToMarkAsRead')}
                 />
                 <div>
-                  <div style={{ fontWeight: 600 }}>{n.title ?? "(无标题)"}</div>
-                  <div style={{ opacity: 0.8 }}>{n.text ?? "(无内容)"}</div>
+                  <div style={{ fontWeight: 600 }}>{n.title ?? t('notification.noTitle')}</div>
+                  <div style={{ opacity: 0.8 }}>{n.text ?? t('notification.noContent')}</div>
                   <div style={{ fontSize: 12, opacity: 0.6 }}>
-                    {n.packageName ?? "(unknown)"} · {time ?? "-"}
+                    {n.packageName ?? t('common.unknown')} · {time ?? "-"}
                   </div>
                 </div>
               </div>
               <div>
-                <button onClick={() => doDelete(n.id)}>删除</button>
+                <button onClick={() => doDelete(n.id)}>{t('notification.delete')}</button>
               </div>
             </div>
           );

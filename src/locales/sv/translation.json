@@ -1,16 +1,153 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Vitlista för systemappar",
+        "description": "Notiser från dessa appar filtreras inte, även om de är systemappar",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telefon"
+        },
+        "addCustom": "Lägg till anpassad systemapp i vitlistan",
+        "example": "T.ex.: 'com.android.mms' kan filtrera SMS"
+      },
+      "blacklist": {
+        "title": "Svartlista för systemappar",
+        "description": "Notiser från dessa appar tvingas filtreras (högsta prioritet)",
+        "addCustom": "Lägg till anpassad systemapp i svartlistan"
+      }
+    },
+    "actions": {
+      "show": "Visa filterinställningar",
+      "hide": "Dölj filterinställningar"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filtrera pågående notiser (FLAG_ONGOING_EVENT)",
+        "system": "Filtrera systemnotiser",
+        "emptyContent": "Filtrera notiser utan innehåll",
+        "lowPriority": "Filtrera notiser med låg prioritet",
+        "runningService": "Filtrera notiser från körande tjänst"
+      },
+      "status": {
+        "filteringOngoing": "Filtrerar pågående notiser...",
+        "filteringSystem": "Filtrerar systemnotiser...",
+        "filteringEmptyContent": "Filtrerar notiser utan innehåll...",
+        "filteringLowPriority": "Filtrerar notiser med låg prioritet...",
+        "filteringRunningService": "Filtrerar notiser från körande tjänst...",
+        "filteringForegroundService": "Filtrerar notiser från förgrundstjänst...",
+        "filteringGroupSummary": "Filtrerar gruppsammanfattningar..."
+      },
+      "empty": "Notiser utan innehåll",
+      "emptyDesc": "Filtrera notiser med tom titel och innehåll",
+      "foreground": "Notiser från förgrundstjänst",
+      "foregroundDesc": "Filtrera notiser där channelId innehåller \"foreground\"",
+      "groupSummary": "Gruppsammanfattningar",
+      "groupSummaryDesc": "Filtrera notiser där titel innehåller \"GroupSummary\"",
+      "lowPriority": "Notiser med låg prioritet",
+      "lowPriorityDesc": "Filtrera notiser med låg prioritet och betydelse",
+      "ongoing": "Pågående notiser",
+      "ongoingDesc": "Filtrera pågående notiser (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Svartlista för paketnamn",
+      "packageBlacklistDesc": "Filtrera notiser från angivna paketnamn (regex-stöd)",
+      "packageWhitelist": "Vitlista för paketnamn",
+      "packageWhitelistDesc": "Visa endast notiser från angivna paketnamn (regex-stöd)",
+      "runningService": "Körande notiser",
+      "runningServiceDesc": "Filtrera \"Körande\" + \"Tryck för detaljer\" notiser",
+      "system": "Systemnotiser",
+      "systemDesc": "Filtrera Android-systemnotiser (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Körande",
+      "tapForDetails": "Tryck för detaljer"
+    },
+    "errors": {
+      "filterError": "Fel vid filtrering av notiser: {{error}}",
+      "invalidRegex": "Ogiltigt regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Fel vid laddning av konfiguration: {{error}}",
+      "configReset": "Återställt till standardinställningar",
+      "configSaved": "Inställningar sparade",
+      "configSaveError": "Fel vid sparande av konfiguration: {{error}}",
+      "modeChanged": "Växlat till {{mode}}",
+      "patternAdded": "Mönster tillagt: {{pattern}}",
+      "patternRemoved": "Mönster borttaget: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Är du säker på att du vill ta bort alla enheter?",
+      "confirmMessage": "Detta tar bort alla sparade enheter, men behåller fönsterinställningarna.",
+      "irreversible": "Denna åtgärd kan inte ångras!",
+      "success": "Enhetsdata borttagna!\nAppen kommer att laddas om.",
+      "error": "Borttagning misslyckades",
+      "logs": {
+        "clearing": "[appReset] Raderar enhetsdata...",
+        "cleared": "[appReset] Enhetsdata raderade"
+      }
+    },
+    "confirmTitle": "Är du säker på att du vill återställa appen till initialt tillstånd?",
+    "confirmMessage": "Detta tar bort:\n- Alla sparade enheter\n- Inställningar för fönsterposition och storlek\n- Alla filterinställningar\n- Alla appinställningar\n\nAppen stängs och startas om för att tillämpa ändringarna.\n\nDenna åtgärd kan inte ångras!",
+    "confirmButton": "Bekräfta",
+    "cancelButton": "Avbryt",
+    "logs": {
+      "starting": "[appReset] Startar appåterställning...",
+      "clearingLocalStorage": "[appReset] Raderar localStorage...",
+      "localStorageCleared": "[appReset] localStorage raderat",
+      "creatingResetMarker": "[appReset] Skapar återställningsmarkörfil...",
+      "resetMarkerCreated": "[appReset] Återställningsmarkörfil skapad",
+      "resettingAppData": "[appReset] Återställer appdata...",
+      "appDataReset": "[appReset] Appdata återställd",
+      "exitingApp": "[appReset] Stänger app...",
+      "error": "[appReset] Fel vid appåterställning:"
+    },
+    "comments": {
+      "resetFunction": "Återställ app till standardtillstånd",
+      "resetDescription": "Ta bort all data:\n- LocalStorage (enhetslista, filterkonfigurationer etc. frontend-data)\n- Tauri lokal datamapp (fönstertillstånd etc. backend-data)",
+      "resetStrategy": "Använd markörfilsstrategi för att lösa filblockeringsproblem i Windows:\n1. Radera LocalStorage\n2. Skapa återställningsmarkörfil\n3. Stäng app\n4. Vid nästa start, ta automatiskt bort datafiler"
+    }
+  },
   "app": {
-    "title": "Aviseringslyssnare",
-    "description": "Lyssna och hantera enhetsaviseringar"
+    "title": "Notislyssnare",
+    "description": "Lyssna och hantera enhetsnotiser",
+    "loading": "Laddar..."
   },
   "common": {
+    "labels": {
+      "address": "Adress"
+    },
+    "actions": {
+      "reconnect": "🔄 Återanslut",
+      "manualReconnect": "Manuell återanslutning",
+      "collapse": "Fäll ihop",
+      "expandDetails": "Expandera detaljer",
+      "label": "Åtgärd",
+      "addToBlacklist": "Lägg till i svartlista",
+      "addToWhitelist": "Lägg till i vitlista"
+    },
+    "unknown": "Okänd",
+    "optional": "Valfritt",
+    "unknownSender": "Okänd avsändare",
+    "noTitle": "Ingen titel",
+    "content": "Innehåll",
+    "bigText": "Stor text",
+    "textLines": "Textrader",
+    "additionalInfo": "Ytterligare information",
+    "packageName": "Paketnamn",
+    "timeSent": "Skickad tid",
+    "notificationId": "Notis-ID",
+    "tag": "Tagg",
+    "messages": "Meddelanden",
+    "sender": "Avsändare",
+    "time": "Tid",
     "save": "Spara",
     "cancel": "Avbryt",
     "back": "Tillbaka",
     "delete": "Ta bort",
     "confirm": "Bekräfta",
     "loading": "Laddar...",
-    "error": "Ett fel uppstod",
+    "error": "Ett fel inträffade",
     "connect": "Anslut",
     "connecting": "Ansluter...",
     "disconnect": "Koppla från",
@@ -19,62 +156,419 @@
     "disconnected": "Frånkopplad",
     "connectionFailed": "Anslutning misslyckades",
     "minimize": "Minimera",
-    "unread": "Oläst",
+    "unread": "Olästa",
     "total": "Totalt",
-    "errorOccurred": "Ett fel uppstod",
+    "errorOccurred": "Ett fel inträffade",
     "retry": "Försök igen",
     "settings": "Inställningar",
-    "close": "Stäng",
     "maximize": "Maximera",
-    "restore": "Återställ"
+    "restore": "Återställ",
+    "enabled": "Aktiverad",
+    "disabled": "Inaktiverad"
   },
   "settings": {
     "title": "Inställningar",
-    "language": "Språk",
-    "appearance": "Utseende",
-    "theme": "Tema",
-    "light": "Ljust",
-    "dark": "Mörkt",
-    "system": "System",
-    "notifications": "Aviseringar",
-    "enableNotifications": "Aktivera aviseringar",
-    "notificationSound": "Aviseringsljud",
-    "about": "Om",
+    "appearance": {
+      "title": "Utseende",
+      "theme": "Tema",
+      "light": "Ljust",
+      "dark": "Mörkt",
+      "system": "System",
+      "language": "Språk"
+    },
+    "notifications": {
+      "title": "Notiser",
+      "enableNotifications": "Aktivera notiser",
+      "enableSounds": "Aktivera ljud",
+      "enableBadge": "Visa badge"
+    },
+    "websocketDevices": "WebSocket-enheter",
+    "about": "Om appen",
     "version": "Version",
-    "checkForUpdates": "Sök efter uppdateringar",
-    "clearAllDevices": "Rensa alla enheter"
+    "checkForUpdates": "Kontrollera uppdateringar",
+    "clearAllDevices": "Radera alla enheter",
+    "language": "Språk",
+    "resetWarning": "Återställning tar bort sparade enheter, fönsterposition och storlek, filterkonfigurationer och appdata. Denna åtgärd kan inte ångras, var försiktig."
   },
   "connection": {
-    "add": "Lägg till anslutning"
-  },
-  "device": {
-    "connect": "Anslut enhet",
+    "manager": {
+      "deleteConfirm": "Är du säker på att du vill ta bort anslutningen \"{{name}}\"?",
+      "noConnections": "Inga sparade anslutningar",
+      "addConnectionPrompt": "Klicka på knappen \"Lägg till anslutning\" för att börja",
+      "totalConnections": "Totalt {{count}} anslutningar",
+      "connectionDetails": {
+        "address": "Adress",
+        "token": "Token",
+        "none": "Ingen",
+        "createdAt": "Skapad",
+        "lastConnected": "Senast ansluten"
+      },
+      "actions": {
+        "enable": "Aktivera",
+        "delete": "Ta bort",
+        "label": "Anslutningsåtgärder"
+      }
+    },
+    "add": "Lägg till anslutning",
+    "migratedConnection": "Migrerad anslutning",
+    "socketSettings": "Socket-anslutningsinställningar",
+    "serverAddress": "Serveradress",
+    "serverAddressPlaceholder": "T.ex.:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Ange serveradress",
+    "connectionFailedCheckAddress": "Anslutning misslyckades, kontrollera serveradressen",
+    "supportedFormats": "Stöder IP+port, ws://, wss:// domän etc.",
+    "authToken": "Autentiseringstoken",
+    "enterAuthToken": "Ange autentiseringstoken",
+    "connecting": "Ansluter...",
+    "connect": "Anslut",
+    "connectionFailed": "Anslutning misslyckades",
+    "testing": "Testar...",
+    "startSocketTest": "Starta socket-test",
+    "socketTestTitle": "Socket-test",
+    "clickToStartTest": "Klicka på knappen för att starta testet...",
     "disconnect": "Koppla från",
     "connected": "Ansluten",
     "disconnected": "Frånkopplad",
-    "connectionFailed": "Anslutning misslyckades",
+    "failed": "Anslutning misslyckades",
     "retry": "Försök igen",
-    "deviceInfo": "Enhetsinformation",
+    "lost": "Anslutning förlorad",
+    "reconnecting": "Återansluter...",
+    "reconnect": "Återanslut",
+    "reconnectIn": "Försök igen om {{count}} sekunder",
+    "reconnectNow": "Försök nu",
+    "reconnectFailed": "Återanslutning misslyckades",
+    "reconnectSuccessful": "Återanslutning lyckades",
+    "reconnectAttempt": "Försök {{current}}/{{max}}",
+    "reconnectLimitReached": "Gräns för återanslutningsförsök uppnådd",
+    "timeout": "Anslutningstimeout",
+    "refused": "Anslutning nekad",
+    "reset": "Anslutning återställd",
+    "aborted": "Anslutning avbruten",
+    "closed": "Anslutning stängd",
+    "error": "Anslutningsfel",
+    "backendConnectionFailed": "Backend-anslutning misslyckades",
+    "unknownConnectionError": "Okänt anslutningsfel",
+    "status": "Anslutningsstatus",
+    "type": "Anslutningstyp",
+    "name": "Anslutningsnamn",
+    "settings": "Anslutningsinställningar",
+    "details": "Anslutningsdetaljer",
+    "history": "Anslutningshistorik",
+    "log": "Anslutningslogg",
+    "stats": "Anslutningsstatistik",
+    "test": "Testa anslutning",
+    "testSuccessful": "Anslutningstest lyckades",
+    "testFailed": "Anslutningstest misslyckades",
+    "edit": "Redigera anslutning",
+    "delete": "Ta bort anslutning",
+    "addTitle": "Lägg till anslutning",
+    "tabs": {
+      "qrcode": "Lägg till via skanning",
+      "manual": "Manuell inmatning"
+    },
+    "server": {
+      "starting": "Startar server...",
+      "started": "Server startad, port: {{port}}",
+      "startFailed": "Serverstart misslyckades: {{error}}",
+      "stopping": "Stoppar server...",
+      "stopped": "Server stoppad"
+    },
+    "qrcode": {
+      "title": "Anslut via kodskanning",
+      "status": {
+        "preparing": "Förbereder serverstart...",
+        "stoppingServer": "Stoppar befintlig server...",
+        "startingServer": "Startar server (port {{port}})...",
+        "fetchingDeviceInfo": "Hämtar enhetsinformation...",
+        "gettingLocalIp": "Hämtar lokal IP...",
+        "generatingQrCode": "Genererar QR-kod...",
+        "ready": "Skanna QR-koden för att ansluta enheten"
+      },
+      "connectionInfo": "Använd din telefon för att skanna QR-koden och ansluta",
+      "serverPort": "Server körs på port: {{port}}",
+      "error": {
+        "title": "Fel vid serverstart, försök igen",
+        "retryButton": "Försök igen"
+      },
+      "steps": {
+        "stoppingServer": "Steg 1/4: Stoppar befintlig server",
+        "startingServer": "Steg 2/4: Startar server",
+        "fetchingDeviceInfo": "Steg 3/4: Hämtar enhetsinformation",
+        "gettingLocalIp": "Steg 4/5: Hämtar lokal IP",
+        "generatingQrCode": "Steg 5/5: Genererar QR-kod"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Komponent monterad",
+        "componentUnmounting": "[QR-STABLE] Rengöring av avmontering",
+        "serverStarting": "[QR-STABLE] Startar server",
+        "serverStopping": "[QR-STABLE] Stoppar server...",
+        "serverStopped": "[QR-STABLE] Server stoppad",
+        "serverError": "[QR-STABLE] Fel vid serverstopp:",
+        "serverStarted": "[QR-STABLE] Server startad, port:",
+        "startServerError": "[QR-STABLE] Fel vid serverstart:",
+        "componentUnmounted": "[QR-STABLE] Komponent avmonterad, avbryt serverstart",
+        "componentRendered": "Komponent renderad"
+      }
+    },
+    "title": "Anslut enhet",
+    "qrCode": "Skanna QR-kod",
+    "manualInput": "Manuell inmatning",
+    "scanQRCode": "Skanna QR-kod för att ansluta enhet",
+    "scanQRCodeDescription": "På din Android-enhet, öppna appen, klicka \"Anslut till PC\", skanna sedan denna QR-kod",
+    "enterIPAddress": "Ange enhetens IP-adress",
+    "enterIPAddressDescription": "Hitta IP-adressen på din Android-enhet, ange den här",
+    "ipAddress": "IP-adress",
+    "port": "Port",
+    "disconnecting": "Kopplar från...",
+    "connectionFailedDescription": "Kunde inte ansluta till enheten. Se till att enheten och datorn är på samma nätverk och Android-appen körs.",
+    "tryAgain": "Försök igen",
+    "cancel": "Avbryt",
+    "connectionSuccessful": "Anslutning lyckades",
+    "connectionSuccessfulDescription": "Ansluten till enheten framgångsrikt",
+    "continue": "Fortsätt",
+    "noDevicesFound": "Inga enheter hittades",
+    "searchingForDevices": "Söker efter enheter...",
+    "selectDevice": "Välj enhet",
+    "selectDeviceDescription": "Välj enhet att ansluta",
+    "refresh": "Uppdatera",
     "deviceName": "Enhetsnamn",
-    "deviceModel": "Modell",
-    "deviceOS": "OS-version",
+    "deviceStatus": "Status",
+    "deviceLastConnected": "Senast ansluten",
+    "deviceActions": "Åtgärder",
+    "deviceConnect": "Anslut",
+    "deviceDisconnect": "Koppla från",
+    "deviceRemove": "Ta bort",
+    "deviceEdit": "Redigera",
+    "deviceDetails": "Detaljer",
+    "addDevice": "Lägg till enhet",
+    "editDevice": "Redigera enhet",
+    "removeDevice": "Ta bort enhet",
+    "removeDeviceConfirmation": "Är du säker på att du vill ta bort denna enhet?",
+    "removeDeviceConfirmationDescription": "Denna åtgärd tar bort enheten från listan över sparade enheter. Du kan fortfarande återansluta genom att skanna QR-kod eller ange IP manuellt.",
+    "remove": "Ta bort",
+    "keepDevice": "Behåll",
+    "deviceRemoved": "Enhet borttagen",
+    "deviceAdded": "Enhet tillagd",
+    "deviceUpdated": "Enhet uppdaterad",
+    "deviceConnected": "Enhet ansluten",
+    "deviceDisconnected": "Enhet frånkopplad",
+    "allDevicesDisconnected": "Alla enheter frånkopplade",
+    "connectionLost": "Anslutning förlorad",
+    "connectionHistory": "Anslutningshistorik",
+    "connectionLog": "Anslutningslogg",
+    "connectionStats": "Anslutningsstatistik",
+    "connectionTest": "Testa anslutning",
+    "connectionTestSuccessful": "Anslutningstest lyckades",
+    "connectionTestFailed": "Anslutningstest misslyckades",
+    "connectionError": "Anslutningsfel",
+    "requestingToken": "Begär token...",
+    "authFailed": "Autentisering misslyckades",
+    "loginSuccess": "Inloggning lyckades",
+    "missingToken": "Token saknas",
+    "tokenReceived": "Token mottagen",
+    "loginFailed": "Inloggning misslyckades"
+  },
+  "device": {
+    "title": "Enheter",
+    "actions": {
+      "delete": "🗑️ Ta bort enhet",
+      "label": "Enhetsåtgärder"
+    },
+    "confirmDelete": "Är du säker på att du vill ta bort enheten \"{{name}}\"?",
+    "add": "Lägg till enhet",
+    "edit": "Redigera enhet",
+    "tokenRequestFailed": "Fel vid hämtning av auktorisationstoken",
+    "loginInProgress": "Loggar in...",
+    "loginSuccess": "Inloggning lyckades",
+    "disconnected": "Enhet frånkopplad",
+    "allDevicesDisconnected": "Alla enheter frånkopplade",
+    "missingUuid": "Ange enhetens UUID",
+    "noDevices": "Inga enheter",
+    "noEnabledDevices": "Inga aktiverade enheter",
+    "notConnectedOrUnavailable": "Enhet {{deviceUuid}} inte ansluten eller otillgänglig",
+    "clickToAddDevice": "Klicka \"+ Lägg till anslutning\" för att skanna och lägga till enhet",
+    "info": "Enhetsinformation",
+    "name": "Enhetsnamn",
+    "model": "Modell",
+    "os": "Systemversion",
     "batteryLevel": "Batterinivå",
     "storage": "Lagring",
     "memory": "Minne"
   },
+  "manualInput": {
+    "title": "Manuell anslutningsinmatning",
+    "deviceName": {
+      "label": "Enhetsnamn (valfritt):",
+      "placeholder": "T.ex.: Xiaomi-telefon",
+      "hint": "Om inte ifylld, genereras automatiskt"
+    },
+    "socketAddress": {
+      "label": "Socket-adress *: ",
+      "placeholder": "T.ex.: 192.168.1.100:6001",
+      "hint": "Stödda format: IP:port, domän:port"
+    },
+    "validation": {
+      "socketRequired": "Ange socket-adress"
+    },
+    "status": {
+      "adding": "Lägger till enhet...",
+      "added": "Enhet tillagd!"
+    },
+    "error": {
+      "addFailed": "Tillagg misslyckades: {{error}}"
+    },
+    "hint": {
+      "title": "Tips:",
+      "description": "Ange enhetens socket-adress, stödjer följande format:",
+      "formats": [
+        "IP:port, t.ex. 127.0.0.1:10035",
+        "Full ws:// eller wss:// adress, t.ex. ws://localhost:10035",
+        "Domän:port, t.ex. example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Lägg till enhet",
+      "adding": "Lägger till..."
+    }
+  },
   "notification": {
-    "noNotifications": "Inga aviseringar",
+    "title": "Notiser",
+    "noNotifications": "Inga notiser",
     "clearAll": "Rensa alla",
-    "markAsRead": "Märk som läst",
-    "markAsUnread": "Märk som oläst",
+    "clearAllConfirm": "Är du säker på att du vill rensa alla notiser?",
+    "clearAllSuccess": "Alla notiser rensade",
+    "clearAllFailed": "Rensning av notiser misslyckades",
     "delete": "Ta bort",
-    "reply": "Svara",
+    "deleteConfirm": "Är du säker på att du vill ta bort denna notis?",
+    "deleteSuccess": "Notis borttagen",
+    "deleteFailed": "Borttagning av notis misslyckades",
     "copy": "Kopiera",
-    "copied": "Kopierad!",
+    "copySuccess": "Kopierat till urklipp",
+    "copyFailed": "Kopiering misslyckades",
+    "details": "Detaljer",
+    "close": "Stäng",
+    "markAsRead": "Markera som läst",
+    "markAsUnread": "Markera som oläst",
+    "markAsReadSuccess": "Markerad som läst",
+    "markAsReadFailed": "Markering som läst misslyckades",
+    "markAsUnreadSuccess": "Markerad som oläst",
+    "markAsUnreadFailed": "Markering som oläst misslyckades",
+    "markAllAsRead": "Markera alla som lästa",
+    "markAllAsReadConfirm": "Är du säker på att du vill markera alla notiser som lästa?",
+    "markAllAsReadSuccess": "Alla notiser markerade som lästa",
+    "markAllAsReadFailed": "Markering av alla som lästa misslyckades",
+    "filter": "Filter",
+    "filterByApp": "Filtrera efter app",
+    "filterByKeyword": "Filtrera efter nyckelord",
+    "filterByTime": "Filtrera efter tid",
+    "filterByStatus": "Filtrera efter status",
+    "filterByPriority": "Filtrera efter prioritet",
+    "filterByCategory": "Filtrera efter kategori",
+    "filterByChannel": "Filtrera efter kanal",
+    "filterByDevice": "Filtrera efter enhet",
+    "reply": "Svara",
+    "copied": "Kopierat!",
     "expand": "Visa mer",
-    "collapse": "Visa mindre"
+    "collapse": "Fäll ihop",
+    "totalCount": "Totalt {{count}} notiser",
+    "selectedCount": "({{count}} valda)",
+    "markSelectedAsRead": "Markera som läst",
+    "selectToMarkAsRead": "Välj för att markera som läst",
+    "noNotificationsMessage": "Inga notiser",
+    "unknownSender": "Okänd avsändare",
+    "noTitle": "Ingen titel",
+    "noContent": "Inget innehåll",
+    "subText": "Undertext",
+    "summary": "Sammanfattning",
+    "textLines": "Fler rader text",
+    "time": "Tid",
+    "channelId": "Kanal-ID",
+    "action": "Åtgärd",
+    "isInitialized": "Initierad",
+    "readStatus": "Lässtatus",
+    "unread": "Oläst",
+    "templateType": "Malltyp",
+    "conversationTitle": "Konversationstitel",
+    "additionalInfo": "Ytterligare information",
+    "participants": "Deltagare",
+    "isResident": "Pågående",
+    "priority": "Prioritet",
+    "importance": "Betydelse",
+    "addToBlacklist": "Lägg till stret i svartlista",
+    "addToWhitelist": "Lägg till i vitlista"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Visa filter",
+      "hide": "🔽 Dölj filter",
+      "addPattern": "Lägg till mönster",
+      "removePattern": "Ta bort",
+      "reset": "Återställ till standard",
+      "save": "Spara inställningar"
+    },
+    "title": "Filtreringsregler",
+    "basicRulesTitle": "Grundläggande filtreringsregler",
+    "rules": {
+      "ongoing": "Pågående notiser",
+      "ongoingDesc": "Filtrera pågående notiser (FLAG_ONGOING_EVENT)",
+      "system": "Systemnotiser",
+      "systemDesc": "Filtrera Android-systemnotiser (android, com.android.*)",
+      "empty": "Notiser utan innehåll",
+      "emptyDesc": "Filtrera notiser med tom titel och innehåll",
+      "lowPriority": "Notiser med låg prioritet",
+      "lowPriorityDesc": "Filtrera notiser med låg prioritet och betydelse",
+      "foreground": "Notiser från förgrundstjänst",
+      "foregroundDesc": "Filtrera notiser där channelId innehåller \"foreground\"",
+      "groupSummary": "Gruppsammanfattningar",
+      "groupSummaryDesc": "Filtrera notiser där titel innehåller \"GroupSummary\"",
+      "runningService": "Körande notiser",
+      "runningServiceDesc": "Filtrera \"Körande\" + \"Tryck för detaljer\" notiser",
+      "packageBlacklist": "Svartlista för paketnamn",
+      "packageBlacklistDesc": "Filtrera notiser från angivna paketnamn (regex-stöd)",
+      "packageWhitelist": "Vitlista för paketnamn",
+      "packageWhitelistDesc": "Visa endast notiser från angivna paketnamn (regex-stöd)",
+      "systemWhitelist": "Vitlista för systemappar",
+      "systemWhitelistDesc": "Även com.android.* filtreras inte"
+    },
+    "hint": {
+      "title": "Tips:",
+      "exact": "Exakt matchning: com.tencent.mm",
+      "wildcard": "Jokertecken: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Svartlisteläge",
+      "whitelist": "Vitlisteläge"
+    },
+    "messages": {
+      "patternAdded": "Mönster tillagt: {{pattern}}",
+      "patternRemoved": "Mönster borttaget: {{pattern}}",
+      "modeChanged": "Växlat till {{mode}}",
+      "configReset": "Återställt till standardkonfiguration",
+      "configSaved": "Inställningar sparade",
+      "configLoadError": "Fel vid laddning av konfiguration: {{error}}",
+      "configSaveError": "Fel vid sparande av konfiguration: {{error}}"
+    },
+    "enterPackageOrRegex": "Ange paketnamn eller regex",
+    "enterPackageOrRegexPlaceholder": "Ange paketnamn eller regex",
+    "invalidRegex": "Ogiltigt regex",
+    "confirmReset": "Är du säker på att du vill återställa till standardkonfiguration?",
+    "confirmRemovePattern": "Är du säker på att du vill ta bort \"{{pattern}}\" från {{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "Kunde inte minimera fönstret"
-  }
+    "connectionFailed": "Anslutning misslyckades",
+    "deleteFailed": "Borttagning misslyckades",
+    "websocketNotConnected": "WebSocket inte ansluten",
+    "websocketNotInitialized": "WebSocket inte initierad",
+    "minimizeWindowFailed": "Minimering av fönster misslyckades"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Ogiltigt regex"
+    }
+  },
+  "login": "Logga in",
+  "request_token": "Begär token",
+  "clear_messages": "Rensa meddelanden",
+  "get_package_icon": "Hämta appikon"
 }

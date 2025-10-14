@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { invoke } from '@tauri-apps/api/core';
 
 const SocketTest: React.FC = () => {
+  const { t } = useTranslation();
   const [isTesting, setIsTesting] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
 
@@ -60,7 +62,7 @@ const SocketTest: React.FC = () => {
       marginTop: '16px',
       maxWidth: '600px'
     }}>
-      <h3>Socket 测试</h3>
+      <h3>{t('connection.socketTestTitle', 'Socket 测试')}</h3>
       <button 
         onClick={runSocketTest}
         disabled={isTesting}
@@ -73,7 +75,7 @@ const SocketTest: React.FC = () => {
           cursor: isTesting ? 'not-allowed' : 'pointer'
         }}
       >
-        {isTesting ? '测试中...' : '开始 Socket 测试'}
+        {isTesting ? t('connection.testing', '测试中...') : t('connection.startSocketTest', '开始 Socket 测试')}
       </button>
       
       <div style={{ 
@@ -87,7 +89,7 @@ const SocketTest: React.FC = () => {
         fontSize: '12px'
       }}>
         {logs.length === 0 ? (
-          <div style={{ color: '#999' }}>点击按钮开始测试...</div>
+          <div style={{ color: '#999' }}>{t('connection.clickToStartTest', '点击按钮开始测试...')}</div>
         ) : (
           logs.map((log, index) => (
             <div key={index} style={{ marginBottom: '4px' }}>{log}</div>

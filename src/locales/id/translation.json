@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Daftar Putih Aplikasi Sistem",
+        "description": "Notifikasi dari aplikasi ini tidak akan difilter, meskipun merupakan aplikasi sistem",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telepon"
+        },
+        "addCustom": "Tambahkan aplikasi sistem kustom ke daftar putih",
+        "example": "Misalnya: 'com.android.mms' dapat memfilter SMS"
+      },
+      "blacklist": {
+        "title": "Daftar Hitam Aplikasi Sistem",
+        "description": "Notifikasi dari aplikasi ini akan dipaksa difilter (prioritas tertinggi)",
+        "addCustom": "Tambahkan aplikasi sistem kustom ke daftar hitam"
+      }
+    },
+    "actions": {
+      "show": "Tampilkan pengaturan filter",
+      "hide": "Sembunyikan pengaturan filter"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filter notifikasi yang sedang berlangsung (FLAG_ONGOING_EVENT)",
+        "system": "Filter notifikasi sistem",
+        "emptyContent": "Filter notifikasi tanpa konten",
+        "lowPriority": "Filter notifikasi prioritas rendah",
+        "runningService": "Filter notifikasi layanan yang berjalan"
+      },
+      "status": {
+        "filteringOngoing": "Menyaring notifikasi yang sedang berlangsung...",
+        "filteringSystem": "Menyaring notifikasi sistem...",
+        "filteringEmptyContent": "Menyaring notifikasi tanpa konten...",
+        "filteringLowPriority": "Menyaring notifikasi prioritas rendah...",
+        "filteringRunningService": "Menyaring notifikasi layanan yang berjalan...",
+        "filteringForegroundService": "Menyaring notifikasi layanan foreground...",
+        "filteringGroupSummary": "Menyaring notifikasi ringkasan grup..."
+      },
+      "empty": "Notifikasi tanpa konten",
+      "emptyDesc": "Filter notifikasi dengan judul dan konten kosong",
+      "foreground": "Notifikasi layanan foreground",
+      "foregroundDesc": "Filter notifikasi di mana channelId mengandung \"foreground\"",
+      "groupSummary": "Notifikasi ringkasan grup",
+      "groupSummaryDesc": "Filter notifikasi di mana judul mengandung \"GroupSummary\"",
+      "lowPriority": "Notifikasi prioritas rendah",
+      "lowPriorityDesc": "Filter notifikasi prioritas rendah dan pentingnya rendah",
+      "ongoing": "Notifikasi yang sedang berlangsung",
+      "ongoingDesc": "Filter notifikasi yang sedang berlangsung (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Daftar hitam nama paket",
+      "packageBlacklistDesc": "Filter notifikasi dari nama paket yang ditentukan (mendukung regex)",
+      "packageWhitelist": "Daftar putih nama paket",
+      "packageWhitelistDesc": "Tampilkan hanya notifikasi dari nama paket yang ditentukan (mendukung regex)",
+      "runningService": "Notifikasi yang berjalan",
+      "runningServiceDesc": "Filter notifikasi \"Sedang Berjalan\" + \"Ketuk untuk detail\"",
+      "system": "Notifikasi sistem",
+      "systemDesc": "Filter notifikasi sistem Android (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Sedang Berjalan",
+      "tapForDetails": "Ketuk untuk detail"
+    },
+    "errors": {
+      "filterError": "Kesalahan memfilter notifikasi: {{error}}",
+      "invalidRegex": "Regex tidak valid {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Kesalahan memuat konfigurasi: {{error}}",
+      "configReset": "Direset ke pengaturan default",
+      "configSaved": "Pengaturan tersimpan",
+      "configSaveError": "Kesalahan menyimpan konfigurasi: {{error}}",
+      "modeChanged": "Berpindah ke {{mode}}",
+      "patternAdded": "Pola ditambahkan: {{pattern}}",
+      "patternRemoved": "Pola dihapus: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Apakah Anda yakin ingin menghapus semua perangkat?",
+      "confirmMessage": "Ini akan menghapus semua perangkat tersimpan tetapi mempertahankan pengaturan jendela.",
+      "irreversible": "Tindakan ini tidak dapat dibatalkan!",
+      "success": "Data perangkat dihapus!\nAplikasi akan dimuat ulang.",
+      "error": "Penghapusan gagal",
+      "logs": {
+        "clearing": "[appReset] Menghapus data perangkat...",
+        "cleared": "[appReset] Data perangkat dibersihkan"
+      }
+    },
+    "confirmTitle": "Apakah Anda yakin ingin mereset aplikasi ke keadaan awal?",
+    "confirmMessage": "Ini akan menghapus:\n- Semua perangkat tersimpan\n- Pengaturan posisi dan ukuran jendela\n- Semua pengaturan filter\n- Semua pengaturan aplikasi\n\nAplikasi akan ditutup dan dimulai ulang untuk menerapkan perubahan.\n\nTindakan ini tidak dapat dibatalkan!",
+    "confirmButton": "Konfirmasi",
+    "cancelButton": "Batal",
+    "logs": {
+      "starting": "[appReset] Memulai reset aplikasi...",
+      "clearingLocalStorage": "[appReset] Membersihkan localStorage...",
+      "localStorageCleared": "[appReset] localStorage dibersihkan",
+      "creatingResetMarker": "[appReset] Membuat file penanda reset...",
+      "resetMarkerCreated": "[appReset] File penanda reset dibuat",
+      "resettingAppData": "[appReset] Mereset data aplikasi...",
+      "appDataReset": "[appReset] Data aplikasi direset",
+      "exitingApp": "[appReset] Keluar dari aplikasi...",
+      "error": "[appReset] Kesalahan mereset aplikasi:"
+    },
+    "comments": {
+      "resetFunction": "Reset aplikasi ke keadaan default",
+      "resetDescription": "Hapus semua data:\n- LocalStorage (daftar perangkat, konfigurasi filter, dll. data frontend)\n- Folder data lokal Tauri (status jendela, dll. data backend)",
+      "resetStrategy": "Gunakan strategi file penanda untuk menyelesaikan masalah penguncian file Windows:\n1. Bersihkan LocalStorage\n2. Buat file penanda reset\n3. Keluar dari aplikasi\n4. Pada start berikutnya, hapus file data secara otomatis"
+    }
+  },
   "app": {
-    "title": "Pendengar Notifikasi",
-    "description": "Dengarkan dan kelola notifikasi perangkat"
+    "title": "Pemantau Notifikasi",
+    "description": "Dengarkan dan kelola notifikasi perangkat",
+    "loading": "Memuat..."
   },
   "common": {
+    "labels": {
+      "address": "Alamat"
+    },
+    "actions": {
+      "reconnect": "🔄 Sambungkan ulang",
+      "manualReconnect": "Sambungan ulang manual",
+      "collapse": "Lipat",
+      "expandDetails": "Perluas detail",
+      "label": "Aksi",
+      "addToBlacklist": "Tambahkan ke daftar hitam",
+      "addToWhitelist": "Tambahkan ke daftar putih"
+    },
+    "unknown": "Tidak diketahui",
+    "optional": "Opsional",
+    "unknownSender": "Pengirim tidak diketahui",
+    "noTitle": "Tanpa judul",
+    "content": "Konten",
+    "bigText": "Teks besar",
+    "textLines": "Baris teks",
+    "additionalInfo": "Informasi tambahan",
+    "packageName": "Nama paket",
+    "timeSent": "Waktu dikirim",
+    "notificationId": "ID notifikasi",
+    "tag": "Tag",
+    "messages": "Pesan",
+    "sender": "Pengirim",
+    "time": "Waktu",
     "save": "Simpan",
     "cancel": "Batal",
     "back": "Kembali",
@@ -11,8 +148,8 @@
     "confirm": "Konfirmasi",
     "loading": "Memuat...",
     "error": "Terjadi kesalahan",
-    "connect": "Sambung",
-    "connecting": "Menyambung...",
+    "connect": "Hubungkan",
+    "connecting": "Menghubungkan...",
     "disconnect": "Putuskan",
     "disconnecting": "Memutuskan...",
     "connected": "Terhubung",
@@ -24,57 +161,414 @@
     "errorOccurred": "Terjadi kesalahan",
     "retry": "Coba lagi",
     "settings": "Pengaturan",
-    "close": "Tutup",
     "maximize": "Maksimalkan",
-    "restore": "Pulihkan"
+    "restore": "Pulihkan",
+    "enabled": "Diaktifkan",
+    "disabled": "Dinonaktifkan"
   },
   "settings": {
     "title": "Pengaturan",
-    "language": "Bahasa",
-    "appearance": "Tampilan",
-    "theme": "Tema",
-    "light": "Terang",
-    "dark": "Gelap",
-    "system": "Sistem",
-    "notifications": "Notifikasi",
-    "enableNotifications": "Aktifkan notifikasi",
-    "notificationSound": "Suara notifikasi",
+    "appearance": {
+      "title": "Tampilan",
+      "theme": "Tema",
+      "light": "Terang",
+      "dark": "Gelap",
+      "system": "Sistem",
+      "language": "Bahasa"
+    },
+    "notifications": {
+      "title": "Notifikasi",
+      "enableNotifications": "Aktifkan notifikasi",
+      "enableSounds": "Aktifkan suara",
+      "enableBadge": "Tampilkan lencana"
+    },
+    "websocketDevices": "Perangkat WebSocket",
     "about": "Tentang",
     "version": "Versi",
     "checkForUpdates": "Periksa pembaruan",
-    "clearAllDevices": "Hapus semua perangkat"
+    "clearAllDevices": "Hapus semua perangkat",
+    "language": "Bahasa",
+    "resetWarning": "Reset akan menghapus perangkat tersimpan, posisi dan ukuran jendela, konfigurasi filter, dan data aplikasi. Tindakan ini tidak dapat dibatalkan, berhati-hatilah."
   },
   "connection": {
-    "add": "Tambahkan koneksi"
-  },
-  "device": {
-    "connect": "Sambungkan perangkat",
+    "manager": {
+      "deleteConfirm": "Apakah Anda yakin ingin menghapus koneksi \"{{name}}\"?",
+      "noConnections": "Tidak ada koneksi tersimpan",
+      "addConnectionPrompt": "Klik tombol \"Tambah koneksi\" untuk memulai",
+      "totalConnections": "Total {{count}} koneksi",
+      "connectionDetails": {
+        "address": "Alamat",
+        "token": "Token",
+        "none": "Tidak ada",
+        "createdAt": "Dibuat pada",
+        "lastConnected": "Terakhir terhubung"
+      },
+      "actions": {
+        "enable": "Aktifkan",
+        "delete": "Hapus",
+        "label": "Aksi koneksi"
+      }
+    },
+    "add": "Tambah koneksi",
+    "migratedConnection": "Koneksi yang dimigrasi",
+    "socketSettings": "Pengaturan koneksi Socket",
+    "serverAddress": "Alamat server",
+    "serverAddressPlaceholder": "Contoh:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Masukkan alamat server",
+    "connectionFailedCheckAddress": "Koneksi gagal, periksa alamat server",
+    "supportedFormats": "Mendukung IP+port, ws://, wss:// domain dll.",
+    "authToken": "Token autentikasi",
+    "enterAuthToken": "Masukkan token autentikasi",
+    "connecting": "Menghubungkan...",
+    "connect": "Hubungkan",
+    "connectionFailed": "Koneksi gagal",
+    "testing": "Menguji...",
+    "startSocketTest": "Mulai tes Socket",
+    "socketTestTitle": "Tes Socket",
+    "clickToStartTest": "Klik tombol untuk memulai tes...",
     "disconnect": "Putuskan",
     "connected": "Terhubung",
     "disconnected": "Terputus",
-    "connectionFailed": "Koneksi gagal",
+    "failed": "Koneksi gagal",
     "retry": "Coba lagi",
-    "deviceInfo": "Informasi perangkat",
+    "lost": "Koneksi hilang",
+    "reconnecting": "Menghubungkan ulang...",
+    "reconnect": "Sambungkan ulang",
+    "reconnectIn": "Coba lagi dalam {{count}} detik",
+    "reconnectNow": "Coba lagi sekarang",
+    "reconnectFailed": "Sambungan ulang gagal",
+    "reconnectSuccessful": "Sambungan ulang berhasil",
+    "reconnectAttempt": "Percobaan {{current}}/{{max}}",
+    "reconnectLimitReached": "Batas percobaan sambungan ulang tercapai",
+    "timeout": "Waktu tunggu koneksi",
+    "refused": "Koneksi ditolak",
+    "reset": "Koneksi direset",
+    "aborted": "Koneksi dibatalkan",
+    "closed": "Koneksi ditutup",
+    "error": "Kesalahan koneksi",
+    "backendConnectionFailed": "Koneksi backend gagal",
+    "unknownConnectionError": "Kesalahan koneksi tidak diketahui",
+    "status": "Status koneksi",
+    "type": "Jenis koneksi",
+    "name": "Nama koneksi",
+    "settings": "Pengaturan koneksi",
+    "details": "Detail koneksi",
+    "history": "Riwayat koneksi",
+    "log": "Log koneksi",
+    "stats": "Statistik koneksi",
+    "test": "Tes koneksi",
+    "testSuccessful": "Tes koneksi berhasil",
+    "testFailed": "Tes koneksi gagal",
+    "edit": "Edit koneksi",
+    "delete": "Hapus koneksi",
+    "addTitle": "Tambah koneksi",
+    "tabs": {
+      "qrcode": "Tambahkan dengan scan",
+      "manual": "Input manual"
+    },
+    "server": {
+      "starting": "Memulai server...",
+      "started": "Server dimulai, port: {{port}}",
+      "startFailed": "Pemulaian server gagal: {{error}}",
+      "stopping": "Menghentikan server...",
+      "stopped": "Server dihentikan"
+    },
+    "qrcode": {
+      "title": "Hubungkan dengan scan kode",
+      "status": {
+        "preparing": "Mempersiapkan untuk memulai server...",
+        "stoppingServer": "Menghentikan server yang ada...",
+        "startingServer": "Memulai server (port {{port}})...",
+        "fetchingDeviceInfo": "Mengambil informasi perangkat...",
+        "gettingLocalIp": "Mengambil IP lokal...",
+        "generatingQrCode": "Menghasilkan kode QR...",
+        "ready": "Scan kode QR untuk menghubungkan perangkat"
+      },
+      "connectionInfo": "Gunakan ponsel Anda untuk memindai kode QR dan terhubung",
+      "serverPort": "Server berjalan di port: {{port}}",
+      "error": {
+        "title": "Kesalahan memulai server, coba lagi",
+        "retryButton": "Coba lagi"
+      },
+      "steps": {
+        "stoppingServer": "Langkah 1/4: Menghentikan server yang ada",
+        "startingServer": "Langkah 2/4: Memulai server",
+        "fetchingDeviceInfo": "Langkah 3/4: Mengambil informasi perangkat",
+        "gettingLocalIp": "Langkah 4/5: Mengambil IP lokal",
+        "generatingQrCode": "Langkah 5/5: Menghasilkan kode QR"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Komponen dipasang",
+        "componentUnmounting": "[QR-STABLE] Komponen pemasangan ulang pembersihan",
+        "serverStarting": "[QR-STABLE] Memulai server",
+        "serverStopping": "[QR-STABLE] Menghentikan server...",
+        "serverStopped": "[QR-STABLE] Server dihentikan",
+        "serverError": "[QR-STABLE] Kesalahan menghentikan server:",
+        "serverStarted": "[QR-STABLE] Server dimulai, port:",
+        "startServerError": "[QR-STABLE] Kesalahan memulai server:",
+        "componentUnmounted": "[QR-STABLE] Komponen dilepas, batalkan pemulaian server",
+        "componentRendered": "Komponen dirender"
+      }
+    },
+    "title": "Hubungkan perangkat",
+    "qrCode": "Scan kode QR",
+    "manualInput": "Input manual",
+    "scanQRCode": "Scan kode QR untuk menghubungkan perangkat",
+    "scanQRCodeDescription": "Di perangkat Android Anda, buka aplikasi, klik \"Hubungkan ke PC\", lalu scan kode QR ini",
+    "enterIPAddress": "Masukkan alamat IP perangkat",
+    "enterIPAddressDescription": "Temukan alamat IP di perangkat Android Anda, masukkan di sini",
+    "ipAddress": "Alamat IP",
+    "port": "Port",
+    "disconnecting": "Memutuskan...",
+    "connectionFailedDescription": "Tidak dapat terhubung ke perangkat. Pastikan perangkat dan komputer berada di jaringan yang sama, dan aplikasi Android sedang berjalan.",
+    "tryAgain": "Coba lagi",
+    "cancel": "Batal",
+    "connectionSuccessful": "Koneksi berhasil",
+    "connectionSuccessfulDescription": "Berhasil terhubung ke perangkat",
+    "continue": "Lanjutkan",
+    "noDevicesFound": "Tidak ada perangkat yang ditemukan",
+    "searchingForDevices": "Mencari perangkat...",
+    "selectDevice": "Pilih perangkat",
+    "selectDeviceDescription": "Pilih perangkat untuk dihubungkan",
+    "refresh": "Muat ulang",
     "deviceName": "Nama perangkat",
-    "deviceModel": "Model",
-    "deviceOS": "Versi sistem operasi",
-    "batteryLevel": "Baterai",
+    "deviceStatus": "Status",
+    "deviceLastConnected": "Terakhir terhubung",
+    "deviceActions": "Aksi",
+    "deviceConnect": "Hubungkan",
+    "deviceDisconnect": "Putuskan",
+    "deviceRemove": "Hapus",
+    "deviceEdit": "Edit",
+    "deviceDetails": "Detail",
+    "addDevice": "Tambah perangkat",
+    "editDevice": "Edit perangkat",
+    "removeDevice": "Hapus perangkat",
+    "removeDeviceConfirmation": "Apakah Anda yakin ingin menghapus perangkat ini?",
+    "removeDeviceConfirmationDescription": "Tindakan ini menghapus perangkat dari daftar perangkat tersimpan. Anda masih dapat terhubung ulang dengan memindai kode QR atau memasukkan IP secara manual.",
+    "remove": "Hapus",
+    "keepDevice": "Pertahankan",
+    "deviceRemoved": "Perangkat dihapus",
+    "deviceAdded": "Perangkat ditambahkan",
+    "deviceUpdated": "Perangkat diperbarui",
+    "deviceConnected": "Perangkat terhubung",
+    "deviceDisconnected": "Perangkat terputus",
+    "allDevicesDisconnected": "Semua perangkat terputus",
+    "connectionLost": "Koneksi hilang",
+    "connectionHistory": "Riwayat koneksi",
+    "connectionLog": "Log koneksi",
+    "connectionStats": "Statistik koneksi",
+    "connectionTest": "Tes koneksi",
+    "connectionTestSuccessful": "Tes koneksi berhasil",
+    "connectionTestFailed": "Tes koneksi gagal",
+    "connectionError": "Kesalahan koneksi",
+    "requestingToken": "Meminta token...",
+    "authFailed": "Autentikasi gagal",
+    "loginSuccess": "Login berhasil",
+    "missingToken": "Token hilang",
+    "tokenReceived": "Token diterima",
+    "loginFailed": "Login gagal"
+  },
+  "device": {
+    "title": "Perangkat",
+    "actions": {
+      "delete": "🗑️ Hapus perangkat",
+      "label": "Aksi perangkat"
+    },
+    "confirmDelete": "Apakah Anda yakin ingin menghapus perangkat \"{{name}}\"?",
+    "add": "Tambah perangkat",
+    "edit": "Edit perangkat",
+    "tokenRequestFailed": "Gagal mengambil token otorisasi",
+    "loginInProgress": "Sedang login...",
+    "loginSuccess": "Login berhasil",
+    "disconnected": "Perangkat terputus",
+    "allDevicesDisconnected": "Semua perangkat terputus",
+    "missingUuid": "Tentukan UUID perangkat",
+    "noDevices": "Tidak ada perangkat",
+    "noEnabledDevices": "Tidak ada perangkat yang diaktifkan",
+    "notConnectedOrUnavailable": "Perangkat {{deviceUuid}} tidak terhubung atau tidak tersedia",
+    "clickToAddDevice": "Klik \"+ Tambah koneksi\" untuk scan dan tambah perangkat",
+    "info": "Informasi perangkat",
+    "name": "Nama perangkat",
+    "model": "Model",
+    "os": "Versi sistem",
+    "batteryLevel": "Tingkat baterai",
     "storage": "Penyimpanan",
     "memory": "Memori"
   },
+  "manualInput": {
+    "title": "Input koneksi manual",
+    "deviceName": {
+      "label": "Nama perangkat (opsional):",
+      "placeholder": "Misalnya: Ponsel Xiaomi",
+      "hint": "Jika tidak diisi, dibuat otomatis"
+    },
+    "socketAddress": {
+      "label": "Alamat Socket *: ",
+      "placeholder": "Misalnya: 192.168.1.100:6001",
+      "hint": "Format yang didukung: IP:port, domain:port"
+    },
+    "validation": {
+      "socketRequired": "Masukkan alamat socket"
+    },
+    "status": {
+      "adding": "Menambahkan perangkat...",
+      "added": "Perangkat ditambahkan!"
+    },
+    "error": {
+      "addFailed": "Penambahan gagal: {{error}}"
+    },
+    "hint": {
+      "title": "Petunjuk:",
+      "description": "Masukkan alamat socket perangkat, mendukung format berikut:",
+      "formats": [
+        "IP:port, misalnya 127.0.0.1:10035",
+        "Alamat ws:// atau wss:// lengkap, misalnya ws://localhost:10035",
+        "Domain:port, misalnya example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Tambah perangkat",
+      "adding": "Menambahkan..."
+    }
+  },
   "notification": {
+    "title": "Notifikasi",
     "noNotifications": "Tidak ada notifikasi",
     "clearAll": "Hapus semua",
-    "markAsRead": "Tandai sudah dibaca",
-    "markAsUnread": "Tandai belum dibaca",
+    "clearAllConfirm": "Apakah Anda yakin ingin menghapus semua notifikasi?",
+    "clearAllSuccess": "Semua notifikasi dihapus",
+    "clearAllFailed": "Penghapusan notifikasi gagal",
     "delete": "Hapus",
-    "reply": "Balas",
+    "deleteConfirm": "Apakah Anda yakin ingin menghapus notifikasi ini?",
+    "deleteSuccess": "Notifikasi dihapus",
+    "deleteFailed": "Penghapusan notifikasi gagal",
     "copy": "Salin",
-    "copied": "Tersalin!",
+    "copySuccess": "Disalin ke clipboard",
+    "copyFailed": "Penyalinan gagal",
+    "details": "Detail",
+    "close": "Tutup",
+    "markAsRead": "Tandai sebagai dibaca",
+    "markAsUnread": "Tandai sebagai belum dibaca",
+    "markAsReadSuccess": "Ditandai sebagai dibaca",
+    "markAsReadFailed": "Penandaan sebagai dibaca gagal",
+    "markAsUnreadSuccess": "Ditandai sebagai belum dibaca",
+    "markAsUnreadFailed": "Penandaan sebagai belum dibaca gagal",
+    "markAllAsRead": "Tandai semua sebagai dibaca",
+    "markAllAsReadConfirm": "Apakah Anda yakin ingin menandai semua notifikasi sebagai dibaca?",
+    "markAllAsReadSuccess": "Semua notifikasi ditandai sebagai dibaca",
+    "markAllAsReadFailed": "Penandaan semua sebagai dibaca gagal",
+    "filter": "Filter",
+    "filterByApp": "Filter berdasarkan aplikasi",
+    "filterByKeyword": "Filter berdasarkan kata kunci",
+    "filterByTime": "Filter berdasarkan waktu",
+    "filterByStatus": "Filter berdasarkan status",
+    "filterByPriority": "Filter berdasarkan prioritas",
+    "filterByCategory": "Filter berdasarkan kategori",
+    "filterByChannel": "Filter berdasarkan saluran",
+    "filterByDevice": "Filter berdasarkan perangkat",
+    "reply": "Balas",
+    "copied": "Disalin!",
     "expand": "Tampilkan lebih banyak",
-    "collapse": "Sembunyikan"
+    "collapse": "Lipat",
+    "totalCount": "Total {{count}} notifikasi",
+    "selectedCount": "(Dipilih {{count}})",
+    "markSelectedAsRead": "Tandai sebagai dibaca",
+    "selectToMarkAsRead": "Pilih untuk menandai sebagai dibaca",
+    "noNotificationsMessage": "Tidak ada notifikasi",
+    "unknownSender": "Pengirim tidak diketahui",
+    "noTitle": "Tanpa judul",
+    "noContent": "Tanpa konten",
+    "subText": "Sub teks",
+    "summary": "Ringkasan",
+    "textLines": "Teks multi-baris",
+    "time": "Waktu",
+    "channelId": "ID saluran",
+    "action": "Aksi",
+    "isInitialized": "Diinisialisasi",
+    "readStatus": "Status baca",
+    "unread": "Belum dibaca",
+    "templateType": "Jenis template",
+    "conversationTitle": "Judul percakapan",
+    "additionalInfo": "Informasi tambahan",
+    "participants": "Peserta",
+    "isResident": "Sedang berlangsung",
+    "priority": "Prioritas",
+    "importance": "Kepentingan",
+    "addToBlacklist": "Tambahkan ke daftar hitam",
+    "addToWhitelist": "Tambahkan ke daftar putih"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Tampilkan filter",
+      "hide": "🔽 Sembunyikan filter",
+      "addPattern": "Tambahkan pola",
+      "removePattern": "Hapus",
+      "reset": "Reset ke default",
+      "save": "Simpan pengaturan"
+    },
+    "title": "Aturan filter",
+    "basicRulesTitle": "Aturan filter dasar",
+    "rules": {
+      "ongoing": "Notifikasi yang sedang berlangsung",
+      "ongoingDesc": "Filter notifikasi yang sedang berlangsung (FLAG_ONGOING_EVENT)",
+      "system": "Notifikasi sistem",
+      "systemDesc": "Filter notifikasi sistem Android (android, com.android.*)",
+      "empty": "Notifikasi tanpa konten",
+      "emptyDesc": "Filter notifikasi dengan judul dan konten kosong",
+      "lowPriority": "Notifikasi prioritas rendah",
+      "lowPriorityDesc": "Filter notifikasi prioritas rendah dan pentingnya rendah",
+      "foreground": "Notifikasi layanan foreground",
+      "foregroundDesc": "Filter notifikasi di mana channelId mengandung \"foreground\"",
+      "groupSummary": "Notifikasi ringkasan grup",
+      "groupSummaryDesc": "Filter notifikasi di mana judul mengandung \"GroupSummary\"",
+      "runningService": "Notifikasi yang berjalan",
+      "runningServiceDesc": "Filter notifikasi \"Sedang Berjalan\" + \"Ketuk untuk detail\"",
+      "packageBlacklist": "Daftar hitam nama paket",
+      "packageBlacklistDesc": "Filter notifikasi dari nama paket yang ditentukan (mendukung regex)",
+      "packageWhitelist": "Daftar putih nama paket",
+      "packageWhitelistDesc": "Tampilkan hanya notifikasi dari nama paket yang ditentukan (mendukung regex)",
+      "systemWhitelist": "Daftar putih aplikasi sistem",
+      "systemWhitelistDesc": "Bahkan com.android.* tidak difilter"
+    },
+    "hint": {
+      "title": "Petunjuk:",
+      "exact": "Kecocokan tepat: com.tencent.mm",
+      "wildcard": "Wildcard: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Mode daftar hitam",
+      "whitelist": "Mode daftar putih"
+    },
+    "messages": {
+      "patternAdded": "Pola ditambahkan: {{pattern}}",
+      "patternRemoved": "Pola dihapus: {{pattern}}",
+      "modeChanged": "Berpindah ke {{mode}}",
+      "configReset": "Direset ke konfigurasi default",
+      "configSaved": "Pengaturan tersimpan",
+      "configLoadError": "Kesalahan memuat konfigurasi: {{error}}",
+      "configSaveError": "Kesalahan menyimpan konfigurasi: {{error}}"
+    },
+    "enterPackageOrRegex": "Masukkan nama paket atau regex",
+    "enterPackageOrRegexPlaceholder": "Masukkan nama paket atau regex",
+    "invalidRegex": "Regex tidak valid",
+    "confirmReset": "Apakah Anda yakin ingin mereset ke konfigurasi default?",
+    "confirmRemovePattern": "Apakah Anda yakin ingin menghapus \"{{pattern}}\" dari {{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "Gagal meminimalkan jendela"
-  }
+    "connectionFailed": "Koneksi gagal",
+    "deleteFailed": "Penghapusan gagal",
+    "websocketNotConnected": "WebSocket tidak terhubung",
+    "websocketNotInitialized": "WebSocket tidak diinisialisasi",
+    "minimizeWindowFailed": "Minimalkan jendela gagal"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Regex tidak valid"
+    }
+  },
+  "login": "Masuk",
+  "request_token": "Minta token",
+  "clear_messages": "Hapus pesan",
+  "get_package_icon": "Dapatkan ikon aplikasi"
 }

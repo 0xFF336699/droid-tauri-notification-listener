@@ -1,4 +1,5 @@
 import { toProxy } from 'fanfanlo-deep-watcher';
+import i18n from 'i18next';
 
 // 包名过滤规则
 export interface PackageFilterRule {
@@ -27,50 +28,50 @@ const STORAGE_KEY = 'notification-filter-config';
 const DEFAULT_RULES: FilterRule[] = [
   {
     id: 'ongoing-notification',
-    name: '常驻通知',
-    description: '过滤常驻通知 (FLAG_ONGOING_EVENT)',
+    name: i18n.t('notificationFilter.rules.ongoing'),
+    description: i18n.t('notificationFilter.rules.ongoingDesc'),
     enabled: true
   },
   {
     id: 'system-notification',
-    name: '系统通知',
-    description: '过滤 Android 系统通知 (android, com.android.*)',
+    name: i18n.t('notificationFilter.rules.system'),
+    description: i18n.t('notificationFilter.rules.systemDesc'),
     enabled: true
   },
   {
     id: 'empty-content',
-    name: '无内容通知',
-    description: '过滤标题和内容都为空的通知',
+    name: i18n.t('notificationFilter.rules.empty'),
+    description: i18n.t('notificationFilter.rules.emptyDesc'),
     enabled: true
   },
   {
     id: 'low-priority',
-    name: '低优先级通知',
-    description: '过滤低优先级和低重要性的通知',
+    name: i18n.t('notificationFilter.rules.lowPriority'),
+    description: i18n.t('notificationFilter.rules.lowPriorityDesc'),
     enabled: true
   },
   {
     id: 'foreground-service',
-    name: '前台服务通知',
-    description: '过滤 channelId 包含 "foreground" 的通知',
+    name: i18n.t('notificationFilter.rules.foreground'),
+    description: i18n.t('notificationFilter.rules.foregroundDesc'),
     enabled: true
   },
   {
     id: 'group-summary',
-    name: '分组摘要通知',
-    description: '过滤 title 包含 "GroupSummary" 的通知',
+    name: i18n.t('notificationFilter.rules.groupSummary'),
+    description: i18n.t('notificationFilter.rules.groupSummaryDesc'),
     enabled: true
   },
   {
     id: 'running-service',
-    name: '正在运行通知',
-    description: '过滤 "正在运行" + "点按即可了解详情" 的通知',
+    name: i18n.t('notificationFilter.rules.runningService'),
+    description: i18n.t('notificationFilter.rules.runningServiceDesc'),
     enabled: true
   },
   {
     id: 'package-blacklist',
-    name: '包名黑名单',
-    description: '过滤指定包名的通知 (支持正则)',
+    name: i18n.t('notificationFilter.rules.packageBlacklist'),
+    description: i18n.t('notificationFilter.rules.packageBlacklistDesc'),
     enabled: false,
     packageFilter: {
       id: 'package-blacklist',
@@ -81,8 +82,8 @@ const DEFAULT_RULES: FilterRule[] = [
   },
   {
     id: 'package-whitelist',
-    name: '包名白名单',
-    description: '只显示指定包名的通知 (支持正则)',
+    name: i18n.t('notificationFilter.rules.packageWhitelist'),
+    description: i18n.t('notificationFilter.rules.packageWhitelistDesc'),
     enabled: false,
     packageFilter: {
       id: 'package-whitelist',
@@ -118,7 +119,8 @@ function loadConfig(): FilterConfig {
       return { rules: mergedRules };
     }
   } catch (e) {
-    console.error('[FilterConfig] Failed to load config:', e);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.error(i18n.t('notificationFilter.messages.configLoadError', { error: errorMessage }));
   }
   return { rules: [...DEFAULT_RULES] };
 }
@@ -127,9 +129,10 @@ function saveConfig(config: FilterConfig) {
   try {
     const json = JSON.stringify(config);
     localStorage.setItem(STORAGE_KEY, json);
-    console.log('[FilterConfig] Config saved');
+    console.log(i18n.t('notificationFilter.messages.configSaved'));
   } catch (e) {
-    console.error('[FilterConfig] Failed to save config:', e);
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.error(i18n.t('notificationFilter.messages.configSaveError', { error: errorMessage }));
   }
 }
 
@@ -143,7 +146,7 @@ function setRuleEnabled(ruleId: string, enabled: boolean) {
       rule.packageFilter.enabled = enabled;
     }
     saveConfig(config);
-    console.log(`[FilterConfig] Rule "${ruleId}" ${enabled ? 'enabled' : 'disabled'}`);
+    console.log(`[FilterConfig] Rule "${ruleId}" ${enabled ? i18n.t('common.enabled') : i18n.t('common.disabled')}`);
   }
 }
 
@@ -159,7 +162,7 @@ function addPackagePattern(ruleId: string, pattern: string) {
   if (!rule.packageFilter.patterns.includes(pattern)) {
     rule.packageFilter.patterns.push(pattern);
     saveConfig(config);
-    console.log(`[FilterConfig] Added pattern "${pattern}" to ${ruleId}`);
+    console.log(i18n.t('notificationFilter.messages.patternAdded', { pattern }));
   }
 }
 
@@ -171,7 +174,7 @@ function removePackagePattern(ruleId: string, pattern: string) {
   if (index > -1) {
     rule.packageFilter.patterns.splice(index, 1);
     saveConfig(config);
-    console.log(`[FilterConfig] Removed pattern "${pattern}" from ${ruleId}`);
+    console.log(i18n.t('notificationFilter.messages.patternRemoved', { pattern }));
   }
 }
 
@@ -181,7 +184,7 @@ function setPackageFilterMode(ruleId: string, mode: 'blacklist' | 'whitelist') {
 
   rule.packageFilter.mode = mode;
   saveConfig(config);
-  console.log(`[FilterConfig] Set ${ruleId} mode to ${mode}`);
+  console.log(i18n.t('notificationFilter.messages.modeChanged', { mode: i18n.t(`notificationFilter.modes.${mode}`) }));
 }
 
 function getPackageFilter(ruleId: string): PackageFilterRule | undefined {
@@ -192,7 +195,7 @@ function getPackageFilter(ruleId: string): PackageFilterRule | undefined {
 function resetConfig() {
   config.rules = JSON.parse(JSON.stringify(DEFAULT_RULES));
   saveConfig(config);
-  console.log('[FilterConfig] Config reset to defaults');
+  console.log(i18n.t('notificationFilter.messages.configReset'));
 }
 
 export const filterConfigController = {

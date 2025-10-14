@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Sistem Uygulamaları Beyaz Listesi",
+        "description": "Bu uygulamalardan gelen bildirimler sistem uygulamaları olsa bile filtrelenmeyecek",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telefon"
+        },
+        "addCustom": "Özel sistem uygulamasını beyaz listeye ekle",
+        "example": "Örn.: 'com.android.mms' SMS'i filtreleyebilir"
+      },
+      "blacklist": {
+        "title": "Sistem Uygulamaları Kara Listesi",
+        "description": "Bu uygulamalardan gelen bildirimler zorla filtrelenecek (en yüksek öncelik)",
+        "addCustom": "Özel sistem uygulamasını kara listeye ekle"
+      }
+    },
+    "actions": {
+      "show": "Filtre ayarlarını göster",
+      "hide": "Filtre ayarlarını gizle"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Devam eden bildirimleri filtrele (FLAG_ONGOING_EVENT)",
+        "system": "Sistem bildirimlerini filtrele",
+        "emptyContent": "İçeriksiz bildirimleri filtrele",
+        "lowPriority": "Düşük öncelikli bildirimleri filtrele",
+        "runningService": "Çalışan hizmet bildirimlerini filtrele"
+      },
+      "status": {
+        "filteringOngoing": "Devam eden bildirimler filtreleniyor...",
+        "filteringSystem": "Sistem bildirimleri filtreleniyor...",
+        "filteringEmptyContent": "İçeriksiz bildirimler filtreleniyor...",
+        "filteringLowPriority": "Düşük öncelikli bildirimler filtreleniyor...",
+        "filteringRunningService": "Çalışan hizmet bildirimleri filtreleniyor...",
+        "filteringForegroundService": "Ön plan hizmet bildirimleri filtreleniyor...",
+        "filteringGroupSummary": "Grup özetleri filtreleniyor..."
+      },
+      "empty": "İçeriksiz bildirimler",
+      "emptyDesc": "Boş başlık ve içerikli bildirimleri filtrele",
+      "foreground": "Ön plan hizmet bildirimleri",
+      "foregroundDesc": "channelId 'foreground' içeren bildirimleri filtrele",
+      "groupSummary": "Grup özetleri",
+      "groupSummaryDesc": "Başlıkta 'GroupSummary' içeren bildirimleri filtrele",
+      "lowPriority": "Düşük öncelikli bildirimler",
+      "lowPriorityDesc": "Düşük öncelik ve önemdeki bildirimleri filtrele",
+      "ongoing": "Devam eden bildirimler",
+      "ongoingDesc": "Devam eden bildirimleri filtrele (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Paket adı kara listesi",
+      "packageBlacklistDesc": "Belirtil字母 paket adlarından gelen bildirimleri filtrele (regex desteği)",
+      "packageWhitelist": "Paket adı beyaz listesi",
+      "packageWhitelistDesc": "Yalnızca belirtilen paket adlarından gelen bildirimleri göster (regex desteği)",
+      "runningService": "Çalışan bildirimler",
+      "runningServiceDesc": "'Çalışıyor' + 'Ayrıntılar için dokunun' bildirimlerini filtrele",
+      "system": "Sistem bildirimleri",
+      "systemDesc": "Android sistem bildirimlerini filtrele (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Çalışıyor",
+      "tapForDetails": "Ayrıntılar için dokunun"
+    },
+    "errors": {
+      "filterError": "Bildirim filtreleme hatası: {{error}}",
+      "invalidRegex": "Geçersiz regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Yapılandırma yükleme hatası: {{error}}",
+      "configReset": "Varsayılan ayarlara sıfırlandı",
+      "configSaved": "Ayarlar kaydedildi",
+      "configSaveError": "Yapılandırma kaydetme hatası: {{error}}",
+      "modeChanged": "{{mode}} moduna geçildi",
+      "patternAdded": "Desen eklendi: {{pattern}}",
+      "patternRemoved": "Desen kaldırıldı: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Tüm cihazları kaldırmak istediğinizden emin misiniz?",
+      "confirmMessage": "Bu, tüm kaydedilen cihazları kaldırır ancak pencere ayarlarını korur.",
+      "irreversible": "Bu işlem geri alınamaz!",
+      "success": "Cihaz verileri kaldırıldı!\nUygulama yeniden yüklenecek.",
+      "error": "Kaldırma başarısız",
+      "logs": {
+        "clearing": "[appReset] Cihaz verileri temizleniyor...",
+        "cleared": "[appReset] Cihaz verileri temizlendi"
+      }
+    },
+    "confirmTitle": "Uygulamayı başlangıç durumuna sıfırlamak istediğinizden emin misiniz?",
+    "confirmMessage": "Bu işlem şunları kaldırır:\n- Tüm kaydedilen cihazlar\n- Pencere konumu ve boyutu ayarları\n- Tüm filtre ayarları\n- Tüm uygulama ayarları\n\nUygulama kapanacak ve değişiklikleri uygulamak için yeniden başlayacak.\n\nBu işlem geri alınamaz!",
+    "confirmButton": "Onaylayın",
+    "cancelButton": "İptal",
+    "logs": {
+      "starting": "[appReset] Uygulama sıfırlama başlatılıyor...",
+      "clearingLocalStorage": "[appReset] localStorage temizleniyor...",
+      "localStorageCleared": "[appReset] localStorage temizlendi",
+      "creatingResetMarker":  "[appReset] Sıfırlama işaretleyici dosyası oluşturuluyor...",
+      "resetMarkerCreated": "[appReset] Sıfırlama işaretleyici dosyası oluşturuldu",
+      "resettingAppData": "[appReset] Uygulama verileri sıfırlanıyor...",
+      "appDataReset": "[appReset] Uygulama verileri sıfırlandı",
+      "exitingApp": "[appReset] Uygulama kapatılıyor...",
+      "error": "[appReset] Uygulama sıfırlama hatası:"
+    },
+    "comments": {
+      "resetFunction": "Uygulamayı varsayılan duruma sıfırla",
+      "resetDescription": "Tüm verileri kaldır:\n- LocalStorage (cihaz listesi, filtre yapılandırmaları vb. frontend verileri)\n- Tauri yerel veri klasörü (pencere durumu vb. backend verileri)",
+      "resetStrategy": "Windows'ta dosya kilitleme sorunlarını çözmek için işaretleyici dosya stratejisi kullan:\n1. LocalStorage'ı temizle\n2. Sıfırlama işaretleyici dosyası oluştur\n3. Uygulamayı kapat\n4. Bir sonraki başlatmada veri dosyalarını otomatik kaldır"
+    }
+  },
   "app": {
     "title": "Bildirim Dinleyicisi",
-    "description": "Cihaz bildirimlerini dinleyin ve yönetin"
+    "description": "Cihaz bildirimlerini dinleyin ve yönetin",
+    "loading": "Yükleniyor..."
   },
   "common": {
+    "labels": {
+      "address": "Adres"
+    },
+    "actions": {
+      "reconnect": "🔄 Yeniden bağlan",
+      "manualReconnect": "Manuel yeniden bağlantı",
+      "collapse": "Daralt",
+      "expandDetails": "Ayrıntıları genişlet",
+      "label": "Eylem",
+      "addToBlacklist": "Kara listeye ekle",
+      "addToWhitelist": "Beyaz listeye ekle"
+    },
+    "unknown": "Bilinmiyor",
+    "optional": "İsteğe bağlı",
+    "unknownSender": "Bilinmeyen gönderen",
+    "noTitle": "Başlık yok",
+    "content": "İçerik",
+    "bigText": "Büyük metin",
+    "textLines": "Metin satırları",
+    "additionalInfo": "Ek bilgi",
+    "packageName": "Paket adı",
+    "timeSent": "Gönderim zamanı",
+    "notificationId": "Bildirim ID'si",
+    "tag": "Etiket",
+    "messages": "Mesajlar",
+    "sender": "Gönderen",
+    "time": "Zaman",
     "save": "Kaydet",
     "cancel": "İptal",
     "back": "Geri",
@@ -15,66 +152,424 @@
     "connecting": "Bağlanıyor...",
     "disconnect": "Bağlantıyı kes",
     "disconnecting": "Bağlantı kesiliyor...",
-    "connected": "Bağlı",
+    "connected": "Bağlandı",
     "disconnected": "Bağlantı kesildi",
     "connectionFailed": "Bağlantı başarısız",
     "minimize": "Küçült",
     "unread": "Okunmamış",
     "total": "Toplam",
     "errorOccurred": "Bir hata oluştu",
-    "retry": "Yeniden dene",
+    "retry": "Tekrar dene",
     "settings": "Ayarlar",
-    "close": "Kapat",
     "maximize": "Büyüt",
-    "restore": "Geri yükle"
+    "restore": "Geri yükle",
+    "enabled": "Etkin",
+    "disabled": "Devre dışı"
   },
   "settings": {
     "title": "Ayarlar",
-    "language": "Dil",
-    "appearance": "Görünüm",
-    "theme": "Tema",
-    "light": "Açık",
-    "dark": "Koyu",
-    "system": "Sistem",
-    "notifications": "Bildirimler",
-    "enableNotifications": "Bildirimleri etkinleştir",
-    "notificationSound": "Bildirim sesi",
+    "appearance": {
+      "title": "Görünüm",
+      "theme": "Tema",
+      "light": "Açık",
+      "dark": "Koyu",
+      "system": "Sistem",
+      "language": "Dil"
+    },
+    "notifications": {
+      "title": "Bildirimler",
+      "enableNotifications": "Bildirimleri etkinleştir",
+      "enableSounds": "Sesleri etkinleştir",
+      "enableBadge": "Rozet göster"
+    },
+    "websocketDevices": "WebSocket Cihazları",
     "about": "Hakkında",
     "version": "Sürüm",
     "checkForUpdates": "Güncellemeleri kontrol et",
-    "clearAllDevices": "Tüm cihazları temizle"
+    "clearAllDevices": "Tüm cihazları temizle",
+    "language": "Dil",
+    "resetWarning": "Sıfırlama kaydedilen cihazları, pencere konumu ve boyutu, filtre yapılandırmalarını ve uygulama verilerini kaldırır. Bu işlem geri alınamaz, dikkatli olun."
   },
   "connection": {
-    "add": "Bağlantı ekle"
+    "manager": {
+      "deleteConfirm": "\"{{name}}\" bağlantısını silmek istediğinizden emin misiniz?",
+      "noConnections": "Kaydedilmiş bağlantı yok",
+      "addConnectionPrompt": "Başlamak için \"Bağlantı ekle\" düğmesine tıklayın",
+      "totalConnections": "Toplam {{count}} bağlantı",
+      "connectionDetails": {
+        "address": "Adres",
+        "token": "Jeton",
+        "none": "Yok",
+        "createdAt": "Oluşturulma",
+        "lastConnected": "Son bağlantı"
+      },
+      "actions": {
+        "enable": "Etkinleştir",
+        "delete": "Sil",
+        "label": "Bağlantı eylemleri"
+      }
+    },
+    "add": "Bağlantı ekle",
+    "migratedConnection": "Taşınmış bağlantı",
+    "socketSettings": "Socket bağlantı ayarları",
+    "serverAddress": "Sunucu adresi",
+    "serverAddressPlaceholder": "Örn.:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Sunucu adresini girin",
+    "connectionFailedCheckAddress": "Bağlantı başarısız, sunucu adresini kontrol edin",
+    "supportedFormats": "IP+port, ws://, wss:// alan adı vb. destekler",
+    "authToken": "Kimlik doğrulama jetonu",
+    "enterAuthToken": "Kimlik doğrulama jetonunu girin",
+    "connecting": "Bağlanıyor...",
+    "connect": "Bağlan",
+    "connectionFailed": "Bağlantı başarısız",
+    "testing": "Test ediliyor...",
+    "startSocketTest": "Socket testini başlat",
+    "socketTestTitle": "Socket Testi",
+    "clickToStartTest": "Testi başlatmak için düğmeye tıklayın...",
+    "disconnect": "Bağlantıyı kes",
+    "connected": "Bağlandı",
+    "disconnected": "Bağlantı kesildi",
+    "failed": "Bağlantı başarısız",
+    "retry": "Tekrar dene",
+    "lost": "Bağlantı kaybedildi",
+    "reconnecting": "Yeniden bağlanıyor...",
+    "reconnect": "Yeniden bağlan",
+    "reconnectIn": "{{count}} saniye içinde tekrar dene",
+    "reconnectNow": "Şimdi dene",
+    "reconnectFailed": "Yeniden bağlantı başarısız",
+    "reconnectSuccessful": "Yeniden bağlantı başarılı",
+    "reconnectAttempt": "Deneme {{current}}/{{max}}",
+    "reconnectLimitReached": "Yeniden bağlantı deneme sınırı aşıldı",
+    "timeout": "Bağlantı zaman aşımı",
+    "refused": "Bağlantı reddedildi",
+    "reset": "Bağlantı sıfırlandı",
+    "aborted": "Bağlantı iptal edildi",
+    "closed": "Bağlantı kapatıldı",
+    "error": "Bağlantı hatası",
+    "backendConnectionFailed": "Arka uç bağlantısı başarısız",
+    "unknownConnectionError": "Bilinmeyen bağlantı hatası",
+    "status": "Bağlantı durumu",
+    "type": "Bağlantı türü",
+    "name": "Bağlantı adı",
+    "settings": "Bağlantı ayarları",
+    "details": "Bağlantı ayrıntıları",
+    "history": "Bağlantı geçmişi",
+    "log": "Bağlantı günlüğü",
+    "stats": "Bağlantı istatistikleri",
+    "test": "Bağlantıyı test et",
+    "testSuccessful": "Bağlantı testi başarılı",
+    "testFailed": "Bağlantı testi başarısız",
+    "edit": "Bağlantıyı düzenle",
+    "delete": "Bağlantıyı sil",
+    "addTitle": "Bağlantı ekle",
+    "tabs": {
+      "qrcode": "Tarama yoluyla ekle",
+      "manual": "Manuel giriş"
+    },
+    "server": {
+      "starting": "Sunucu başlatılıyor...",
+      "started": "Sunucu başlatıldı, port: {{port}}",
+      "startFailed": "Sunucu başlatma başarısız: {{error}}",
+      "stopping": "Sunucu durduruluyor...",
+      "stopped": "Sunucu durduruldu"
+    },
+    "qrcode": {
+      "title": "Kod tarama yoluyla bağlan",
+      "status": {
+        "preparing": "Sunucu başlatmaya hazırlanıyor...",
+        "stoppingServer": "Mevcut sunucu durduruluyor...",
+        "startingServer": "Sunucu başlatılıyor (port {{port}})...",
+        "fetchingDeviceInfo": "Cihaz bilgisi alınıyor...",
+        "gettingLocalIp": "Yerel IP alınıyor...",
+        "generatingQrCode": "QR kodu oluşturuluyor...",
+        "ready": "Cihazı bağlamak için QR kodu tarayın"
+      },
+      "connectionInfo": "Telefonunuzu kullanarak QR kodu tarayın ve bağlanın",
+      "serverPort": "Sunucu portta çalışıyor: {{port}}",
+      "error": {
+        "title": "Sunucu başlatma hatası, tekrar deneyin",
+        "retryButton": "Tekrar dene"
+      },
+      "steps": {
+        "stoppingServer": "Adım 1/4: Mevcut sunucu durduruluyor",
+        "startingServer": "Adım 2/4: Sunucu başlatılıyor",
+        "fetchingDeviceInfo": "Adım 3/4: Cihaz bilgisi alınıyor",
+        "gettingLocalIp": "Adım 4/5: Yerel IP alınıyor",
+        "generatingQrCode": "Adım 5/5: QR kodu oluşturuluyor"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Bileşen monte edildi",
+        "componentUnmounting": "[QR-STABLE] Bileşen sökümü temizleniyor",
+        "serverStarting": "[QR-STABLE] Sunucu başlatılıyor",
+        "serverStopping": "[QR-STABLE] Sunucu durduruluyor...",
+        "serverStopped": "[QR-STABLE] Sunucu durduruldu",
+        "serverError": "[QR-STABLE] Sunucu durdurma hatası:",
+        "serverStarted": "[QR-STABLE] Sunucu başlatıldı, port:",
+        "startServerError": "[QR-STABLE] Sunucu başlatma hatası:",
+        "componentUnmounted": "[QR-STABLE] Bileşen söküldü, sunucu başlatma iptal edildi",
+        "componentRendered": "Bileşen render edildi"
+      }
+    },
+    "title": "Cihaz bağla",
+    "qrCode": "QR kodu tara",
+    "manualInput": "Manuel giriş",
+    "scanQRCode": "Cihaz bağlamak için QR kodu tara",
+    "scanQRCodeDescription": "Android cihazınızda uygulamayı açın, \"PC'ye bağlan\"a tıklayın, ardından bu QR kodu tarayın",
+    "enterIPAddress": "Cihaz IP adresini girin",
+    "enterIPAddressDescription": "Android cihazınızda IP adresini bulun, buraya girin",
+    "ipAddress": "IP adresi",
+    "port": "Port",
+    "disconnecting": "Bağlantı kesiliyor... ",
+    "connectionFailedDescription": "Cihaza bağlanılamadı. Cihaz ve bilgisayarın aynı ağda olduğundan ve Android uygulamasının çalıştığından emin olun.",
+    "tryAgain": "Tekrar dene",
+    "cancel": "İptal",
+    "connectionSuccessful": "Bağlantı başarılı",
+    "connectionSuccessfulDescription": "Cihaza başarıyla bağlandı",
+    "continue": "Devam et",
+    "noDevicesFound": "Cihaz bulunamadı",
+    "searchingForDevices": "Cihazlar aranıyor...",
+    "selectDevice": "Cihaz seç",
+    "selectDeviceDescription": "Bağlanmak için cihaz seçin",
+    "refresh": "Yenile",
+    "deviceName": "Cihaz adı",
+    "deviceStatus": "Durum",
+    "deviceLastConnected": "Son bağlantı",
+    "deviceActions": "Eylemler",
+    "deviceConnect": "Bağlan",
+    "deviceDisconnect": "Bağlantıyı kes",
+    "deviceRemove": "Kaldır",
+    "deviceEdit": "Düzenle",
+    "deviceDetails": "Ayrıntılar",
+    "addDevice": "Cihaz ekle",
+    "editDevice": "Cihaz düzenle",
+    "removeDevice": "Cihaz kaldır",
+    "removeDeviceConfirmation": "Bu cihazı kaldırmak istediğinizden emin misiniz?",
+    "removeDeviceConfirmationDescription": "Bu işlem cihazı kaydedilen cihazlar listesinden kaldırır. QR kodu tarayarak veya IP'yi manuel girerek yeniden bağlanabilirsiniz.",
+    "remove": "Kaldır",
+    "keepDevice": "Tut",
+    "deviceRemoved": "Cihaz kaldırıldı",
+    "deviceAdded": "Cihaz eklendi",
+    "deviceUpdated": "Cihaz güncellendi",
+    "deviceConnected": "Cihaz bağlandı",
+    "deviceDisconnected": "Cihaz bağlantısı kesildi",
+    "allDevicesDisconnected": "Tüm cihazların bağlantısı kesildi",
+    "connectionLost": "Bağlantı kaybedildi",
+    "connectionHistory": "Bağlantı geçmişi",
+    "connectionLog": "Bağlantı günlüğü",
+    "connectionStats": "Bağlantı istatistikleri",
+    "connectionTest": "Bağlantıyı test et",
+    "connectionTestSuccessful": "Bağlantı testi başarılı",
+    "connectionTestFailed": "Bağlantı testi başarısız",
+    "connectionError": "Bağlantı hatası",
+    "requestingToken": "Jeton isteniyor...",
+    "authFailed": "Kimlik doğrulama başarısız",
+    "loginSuccess": "Giriş başarılı",
+    "missingToken": "Jeton eksik",
+    "tokenReceived": "Jeton alındı",
+    "loginFailed": "Giriş başarısız"
   },
   "device": {
-    "connect": "Cihazı bağla",
-    "disconnect": "Bağlantıyı kes",
-    "connected": "Bağlı",
-    "disconnected": "Bağlantı kesildi",
-    "connectionFailed": "Bağlantı başarısız",
-    "retry": "Yeniden dene",
-    "deviceInfo": "Cihaz bilgisi",
-    "deviceName": "Cihaz adı",
-    "deviceModel": "Model",
-    "deviceOS": "İşletim sistemi sürümü",
-    "batteryLevel": "Pil",
+    "title": "Cihazlar",
+    "actions": {
+      "delete": "🗑️ Cihaz sil",
+      "label": "Cihaz eylemleri"
+    },
+    "confirmDelete": "\"{{name}}\" cihazını silmek istediğinizden emin misiniz?",
+    "add": "Cihaz ekle",
+    "edit": "Cihaz düzenle",
+    "tokenRequestFailed": "Yetkilendirme jetonu alma başarısız",
+    "loginInProgress": "Giriş yapılıyor...",
+    "loginSuccess": "Giriş başarılı",
+    "disconnected": "Cihaz bağlantısı kesildi",
+    "allDevicesDisconnected": "Tüm cihazların bağlantısı kesildi",
+    "missingUuid": "Cihaz UUID'sini belirtin",
+    "noDevices": "Cihaz yok",
+    "noEnabledDevices": "Etkin cihaz yok",
+    "notConnectedOrUnavailable": "{{deviceUuid}} cihazı bağlı değil veya kullanılamıyor",
+    "clickToAddDevice": "Tarama ve ekleme için \"+ Bağlantı ekle\"ye tıklayın",
+    "info": "Cihaz bilgisi",
+    "name": "Cihaz adı",
+    "model": "Model",
+    "os": "Sistem sürümü",
+    "batteryLevel": "Pil seviyesi",
     "storage": "Depolama",
     "memory": "Bellek"
   },
+  "manualInput": {
+    "title": "Manuel bağlantı girişi",
+    "deviceName": {
+      "label": "Cihaz adı (isteğe bağlı):",
+      "placeholder": "Örn.: Xiaomi Telefon",
+      "hint": "Doldurulmazsa otomatik oluşturulur"
+    },
+    "socketAddress": {
+      "label": "Socket adresi *: ",
+      "placeholder": "Örn.: 192.168.1.100:6001",
+      "hint": "Desteklenen formatlar: IP:port, alanadı:port"
+    },
+    "validation": {
+      "socketRequired": "Socket adresini girin"
+    },
+    "status": {
+      "adding": "Cihaz ekleniyor...",
+      "added": "Cihaz eklendi!"
+    },
+    "error": {
+      "addFailed": "Ekleme başarısız: {{error}}"
+    },
+    "hint": {
+      "title": "İpucu:",
+      "description": "Cihaz socket adresini girin, şu formatları destekler:",
+      "formats": [
+        "IP:port, örn. 127.0.0.1:10035",
+        "Tam ws:// veya wss:// adresi, örn. ws://localhost:10035",
+        "Alanadı:port, örn. example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Cihaz ekle",
+      "adding": "Ekleniyor..."
+    }
+  },
   "notification": {
+    "title": "Bildirimler",
     "noNotifications": "Bildirim yok",
     "clearAll": "Tümünü temizle",
-    "markAsRead": "Okundu olarak işaretle",
-    "markAsUnread": "Okunmamış olarak işaretle",
+    "clearAllConfirm": "Tüm bildirimleri temizlemek istediğinizden emin misiniz?",
+    "clearAllSuccess": "Tüm bildirimler temizlendi",
+    "clearAllFailed": "Bildirim temizleme başarısız",
     "delete": "Sil",
-    "reply": "Yanıtla",
+    "deleteConfirm": "Bu bildirimi silmek istediğinizden emin misiniz?",
+    "deleteSuccess": "Bildirim silindi",
+    "deleteFailed": "Bildirim silme başarısız",
     "copy": "Kopyala",
+    "copySuccess": "Panoya kopyalandı",
+    "copyFailed": "Kopyalama başarısız",
+    "details": "Ayrıntılar",
+    "close": "Kapat",
+    "markAsRead": "Okundu olarak işaretle",
+    "markAsUnread": "Okunmadı olarak işaretle",
+    "markAsReadSuccess": "Okundu olarak işaretlendi",
+    "markAsReadFailed": "Okundu işaretleme başarısız",
+    "markAsUnreadSuccess": "Okunmadı olarak işaretlendi",
+    "markAsUnreadFailed": "Okunmadı işaretleme başarısız",
+    "markAllAsRead": "Tümünü okundu olarak işaretle",
+    "markAllAsReadConfirm": "Tüm bildirimleri okundu olarak işaretlemek istediğinizden emin misiniz?",
+    "markAllAsReadSuccess": "Tüm bildirimler okundu olarak işaretlendi",
+    "markAllAsReadFailed": "Tümünü okundu işaretleme başarısız",
+    "filter": "Filtre",
+    "filterByApp": "Uygulamaya göre filtrele",
+    "filterByKeyword":
+    "Anahtar kelimeye göre filtrele",
+    "filterByTime": "Zamana göre filtrele",
+    "filterByStatus": "Duruma göre filtrele",
+    "filterByPriority": "Önceliğe göre filtrele",
+    "filterByCategory": "Kategoriye göre filtrele",
+    "filterByChannel": "Kanala göre filtrele",
+    "filterByDevice": "Cihaza göre filtrele",
+    "reply": "Yanıtla",
     "copied": "Kopyalandı!",
     "expand": "Daha fazla göster",
-    "collapse": "Daha az göster"
+    "collapse": "Daralt",
+    "totalCount": "Toplam {{count}} bildirim",
+    "selectedCount": "({{count}} seçili)",
+    "markSelectedAsRead": "Okundu olarak işaretle",
+    "selectToMarkAsRead": "Okundu olarak işaretlemek için seçin",
+    "noNotificationsMessage": "Bildirim yok",
+    "unknownSender": "Bilinmeyen gönderen",
+    "noTitle": "Başlık yok",
+    "noContent": "İçerik yok",
+    "subText": "Alt metin",
+    "summary": "Özet",
+    "textLines": "Çok satırlı metin",
+    "time": "Zaman",
+    "channelId": "Kanal ID'si",
+    "action": "Eylem",
+    "isInitialized": "Başlatıldı",
+    "readStatus": "Okuma durumu",
+    "unread": "Okunmadı",
+    "templateType": "Şablon türü",
+    "conversationTitle": "Konuşma başlığı",
+    "additionalInfo": "Ek bilgi",
+    "participants": "Katılımcılar",
+    "isResident": "Devam eden",
+    "priority": "Öncelik",
+    "importance": "Önem",
+    "addToBlacklist": "Kara listeye ekle",
+    "addToWhitelist": "Beyaz listeye ekle"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Filtreyi göster",
+      "hide": "🔽 Filtreyi gizle",
+      "addPattern": "Desen ekle",
+      "removePattern": "Kaldır",
+      "reset": "Varsayılana sıfırla",
+      "save": "Ayarları kaydet"
+    },
+    "title": "Filtreleme kuralları",
+    "basicRulesTitle": "Temel filtreleme kuralları",
+    "rules": {
+      "ongoing": "Devam eden bildirimler",
+      "ongoingDesc": "Devam eden bildirimleri filtrele (FLAG_ONGOING_EVENT)",
+      "system": "Sistem bildirimleri",
+      "systemDesc": "Android sistem bildirimlerini filtrele (android, com.android.*)",
+      "empty": "İçeriksiz bildirimler",
+      "emptyDesc": "Boş başlık ve içerikli bildirimleri filtrele",
+      "lowPriority": "Düşük öncelikli bildirimler",
+      "lowPriorityDesc": "Düşük öncelik ve önemdeki bildirimleri filtrele",
+      "foreground": "Ön plan hizmet bildirimleri",
+      "foregroundDesc": "channelId 'foreground' içeren bildirimleri filtrele",
+      "groupSummary": "Grup özetleri",
+      "groupSummaryDesc": "Başlıkta 'GroupSummary' içeren bildirimleri filtrele",
+      "runningService": "Çalışan bildirimler",
+      "runningServiceDesc": "'Çalışıyor' + 'Ayrıntılar için dokunun' bildirimlerini filtrele",
+      "packageBlacklist": "Paket adı kara listesi",
+      "packageBlacklistDesc": "Belirtilen paket adlarından gelen bildirimleri filtrele (regex desteği)",
+      "packageWhitelist": "Paket adı beyaz listesi",
+      "packageWhitelistDesc": "Yalnızca belirtilen paket adlarından gelen bildirimleri göster (regex desteği)",
+      "systemWhitelist": "Sistem uygulamaları beyaz listesi",
+      "systemWhitelistDesc": "com.android.* bile filtrelenmez"
+    },
+    "hint": {
+      "title": "İpucu:",
+      "exact": "Tam eşleşme: com.tencent.mm",
+      "wildcard": "Joker: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Kara liste modu",
+      "whitelist": "Beyaz liste modu"
+    },
+    "messages": {
+      "patternAdded": "Desen eklendi: {{pattern}}",
+      "patternRemoved": "Desen kaldırıldı: {{pattern}}",
+      "modeChanged": "{{mode}} moduna geçildi",
+      "configReset": "Varsayılan yapılandırmaya sıfMSıfırlandı",
+      "configSaved": "Ayarlar kaydedildi",
+      "configLoadError": "Yapılandırma yükleme hatası: {{error}}",
+      "configSaveError": "Yapılandırma kaydetme hatası: {{error}}"
+    },
+    "enterPackageOrRegex": "Paket adı veya regex girin",
+    "enterPackageOrRegexPlaceholder": "Paket adı veya regex girin",
+    "invalidRegex": "Geçersiz regex",
+    "confirmReset": "Varsayılan yapılandırmaya sıfırlamak istediğinizden emin misiniz?",
+    "confirmRemovePattern": "\"{{pattern}}\" desenini {{rule}}'dan kaldırmak istediğinizden emin misiniz?"
   },
   "errors": {
-    "minimizeWindowFailed": "Pencere küçültülemedi"
-  }
+    "connectionFailed": "Bağlantı başarısız",
+    "deleteFailed": "Silme başarısız",
+    "websocketNotConnected": "WebSocket bağlı değil",
+    "websocketNotInitialized": "WebSocket başlatılmadı",
+    "minimizeWindowFailed": "Pencere küçültme başarısız"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Geçersiz regex"
+    }
+  },
+  "login": "Giriş yap",
+  "request_token": "Jeton iste",
+  "clear_messages": "Mesajları temizle",
+  "get_package_icon": "Uygulama simgesini al"
 }

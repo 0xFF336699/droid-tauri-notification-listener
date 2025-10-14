@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 export function EmptyDeviceState() {
+  const { t } = useTranslation();
   return (
     <div style={{
       padding: '20px',
@@ -7,9 +10,9 @@ export function EmptyDeviceState() {
       textAlign: 'center',
       color: '#666'
     }}>
-      <p>暂无设备</p>
+      <p>{t('device.noDevices', '暂无设备')}</p>
       <p style={{ fontSize: '14px', marginTop: '8px' }}>
-        请点击"+ 添加连接"扫码添加设备
+        {t('device.clickToAddDevice', '请点击"+ 添加连接"扫码添加设备')}
       </p>
     </div>
   );

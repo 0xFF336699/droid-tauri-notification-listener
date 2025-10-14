@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useProxyWatch, useProxyWatchUpdates } from 'fanfanlo-deep-watcher';
 import { filterConfigController, FilterRule } from '../data/notification-filter-config';
+import { useTranslation } from 'react-i18next';
 
 // 基础过滤规则组件
 function BasicFilterRuleItem({ ruleId }: { ruleId: string }) {
@@ -37,6 +38,7 @@ function BasicFilterRuleItem({ ruleId }: { ruleId: string }) {
 
 // 包名过滤规则组件
 function PackageFilterRuleItem({ ruleId }: { ruleId: string }) {
+  const { t } = useTranslation();
   const rule = filterConfigController.config.rules.find(r => r.id === ruleId);
 
   // 监听该规则的 enabled 属性
@@ -74,12 +76,12 @@ function PackageFilterRuleItem({ ruleId }: { ruleId: string }) {
   function handleAddPattern() {
     const trimmed = input.trim();
     if (!trimmed) {
-      setInputError('请输入包名或正则表达式');
+      setInputError(t('filter.enterPackageOrRegex', '请输入包名或正则表达式'));
       return;
     }
 
     if (!validatePattern(trimmed)) {
-      setInputError('无效的正则表达式');
+      setInputError(t('filter.invalidRegex', '无效的正则表达式'));
       return;
     }
 
@@ -91,7 +93,7 @@ function PackageFilterRuleItem({ ruleId }: { ruleId: string }) {
   // 删除包名模式
   function handleRemovePattern(pattern: string) {
     const ruleName = rule.name;
-    if (window.confirm(`确定要从${ruleName}中删除 "${pattern}" 吗？`)) {
+    if (window.confirm(t('filter.confirmRemovePattern', { rule: ruleName, pattern }))) {
       filterConfigController.removePackagePattern(ruleId, pattern);
     }
   }
@@ -134,7 +136,7 @@ function PackageFilterRuleItem({ ruleId }: { ruleId: string }) {
                 <button
                   onClick={() => handleRemovePattern(pattern)}
                   style={styles.deleteButton}
-                  title="删除"
+                  title={t('common.delete', '删除')}
                 >
                   ×
                 </button>
@@ -152,23 +154,23 @@ function PackageFilterRuleItem({ ruleId }: { ruleId: string }) {
                     handleAddPattern();
                   }
                 }}
-                placeholder="输入包名或正则表达式"
+                placeholder={t('filter.enterPackageOrRegexPlaceholder', '输入包名或正则表达式')}
                 style={styles.input}
               />
               <button
                 onClick={handleAddPattern}
                 style={styles.addButton}
               >
-                添加
+                {t('filter.actions.addPattern', '添加模式')}
               </button>
             </div>
 
             {/* 输入提示 */}
             <div style={styles.hint}>
-              <div style={styles.hintTitle}>提示:</div>
-              <div style={styles.hintItem}>• 精确匹配: com.tencent.mm</div>
-              <div style={styles.hintItem}>• 通配符: com.jd.*, *.xiaomi.*</div>
-              <div style={styles.hintItem}>• 正则: ^com\.(jd|jingdong)\..*$</div>
+              <div style={styles.hintTitle}>{t('filter.hint.title', '提示:')}</div>
+              <div style={styles.hintItem}>• {t('filter.hint.exact', '精确匹配: com.tencent.mm')}</div>
+              <div style={styles.hintItem}>• {t('filter.hint.wildcard', '通配符: com.jd.*, *.xiaomi.*')}</div>
+              <div style={styles.hintItem}>• {t('filter.hint.regex', '正则: ^com\\.(jd|jingdong)\\..*$')}</div>
             </div>
 
             {inputError && <div style={styles.error}>{inputError}</div>}
@@ -181,25 +183,26 @@ function PackageFilterRuleItem({ ruleId }: { ruleId: string }) {
 
 // 主组件
 export function FilterSettings() {
+  const { t } = useTranslation();
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h3 style={styles.title}>📋 过滤器设置</h3>
+        <h3 style={styles.title}>📋 {t('filter.title', '过滤规则')}</h3>
         <button
           onClick={() => {
-            if (window.confirm('确定要重置为默认配置吗？')) {
+            if (window.confirm(t('filter.confirmReset', '确定要重置为默认配置吗？'))) {
               filterConfigController.resetConfig();
             }
           }}
           style={styles.resetButton}
         >
-          重置为默认
+          {t('filter.actions.reset', '重置为默认')}
         </button>
       </div>
 
       {/* 基础过滤规则 */}
       <div style={styles.section}>
-        <h4 style={styles.sectionTitle}>基础过滤规则</h4>
+        <h4 style={styles.sectionTitle}>{t('filter.basicRulesTitle', '基础过滤规则')}</h4>
 
         {/* ✅ 从 Android 端迁移的过滤规则 */}
         <BasicFilterRuleItem ruleId="ongoing-notification" />

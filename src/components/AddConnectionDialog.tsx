@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { invoke } from '@tauri-apps/api/core';
 import QRCodeMode from './QRCodeMode';
 import ManualInputMode from './ManualInputMode';
@@ -12,21 +13,24 @@ interface AddConnectionDialogProps {
 
 const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionAdded, onClose }) => {
   const [activeTab, setActiveTab] = useState<TabType>('qrcode');
-  const [serverPort, setServerPort] = useState<number | null>(null);
-  const [serverRunning, setServerRunning] = useState<boolean>(false);
+  
+  // 服务器相关状态已移至 QRCodeMode 组件中管理
 
+  const { t } = useTranslation();
+  
   // 组件挂载时启动服务器
   // useEffect(() => {
   //   const startServer = async () => {
   //     try {
-  //       console.log('[AddConnectionDialog] Starting server...');
+  //       console.log(t('connection.server.starting'));
   //       const port = 10035;
   //       const actualPort = await invoke<number>('start_temp_server', { port });
-  //       console.log('[AddConnectionDialog] Server started on port:', actualPort);
+  //       console.log(t('connection.server.started', { port: actualPort }));
   //       setServerPort(actualPort);
   //       setServerRunning(true);
   //     } catch (err) {
-  //       console.error('[AddConnectionDialog] Failed to start server:', err);
+  //       const errorMessage = err instanceof Error ? err.message : String(err);
+  //       console.error(t('connection.server.startFailed', { error: errorMessage }));
   //     }
   //   };
 
@@ -34,13 +38,14 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
 
   //   // 组件卸载时停止服务器
   //   return () => {
-  //     console.log('[AddConnectionDialog] Stopping server...');
+  //     console.log(t('connection.server.stopping'));
   //     invoke('stop_temp_server').catch(() => {
   //       // 忽略错误
   //     });
   //     setServerRunning(false);
+  //     console.log(t('connection.server.stopped'));
   //   };
-  // }, []);
+  // }, [t]);
 
   // 关闭按钮处理
   const handleClose = () => {
@@ -76,7 +81,7 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
           alignItems: 'center',
           marginBottom: '20px'
         }}>
-          <h2 style={{ margin: 0 }}>添加连接</h2>
+          <h2 style={{ margin: 0 }}>{t('connection.addTitle')}</h2>
           <button
             onClick={handleClose}
             style={{
@@ -110,7 +115,7 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
               color: activeTab === 'qrcode' ? '#007bff' : '#666'
             }}
           >
-            扫码添加
+            {t('connection.tabs.qrcode')}
           </button>
           <button
             onClick={() => setActiveTab('manual')}
@@ -125,7 +130,7 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
               color: activeTab === 'manual' ? '#007bff' : '#666'
             }}
           >
-            手动输入
+            {t('connection.tabs.manual')}
           </button>
         </div>
 
@@ -134,8 +139,6 @@ const AddConnectionDialog: React.FC<AddConnectionDialogProps> = ({ onConnectionA
           <div style={{ display: activeTab === 'qrcode' ? 'block' : 'none' }}>
             <QRCodeMode
               onConnectionAdded={onConnectionAdded}
-              serverPort={serverPort}
-              serverRunning={serverRunning}
             />
           </div>
           <div style={{ display: activeTab === 'manual' ? 'block' : 'none' }}>

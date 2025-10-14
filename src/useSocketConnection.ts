@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
+import i18n from './i18n';
 
 // 日志工具函数
 const log = {
@@ -132,13 +133,13 @@ export const useSocketConnection = () => {
         });
         return true;
       } else {
-        const errorMsg = 'Backend connection failed';
+        const errorMsg = i18n.t('connection.backendConnectionFailed', '后端连接失败');
         log.warn(errorMsg);
         setConnectionState(prev => {
           const newState = {
             ...prev,
             status: 'error' as const,
-            error: '连接失败'
+            error: i18n.t('connection.connectionFailed')
           };
           log.warn('Connection failed', { newState });
           return newState;
@@ -146,7 +147,7 @@ export const useSocketConnection = () => {
         return false;
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown connection error';
+      const errorMessage = error instanceof Error ? error.message : i18n.t('connection.unknownConnectionError', '未知连接错误');
       log.error('Connection error occurred', { error: errorMessage });
       setConnectionState(prev => {
         const newState = {

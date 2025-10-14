@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { invoke } from '@tauri-apps/api/core';
 import QRCode from 'qrcode';
 import { QRCodeData } from '../types/device';
 import { getDeviceInfo } from '../utils/deviceUtils';
 
-const LOG_TAG = '[QR-STABLE]';
 const SERVER_PORT = 10035; // 固定端口号
 
 interface QRCodeModeProps {
@@ -12,27 +12,29 @@ interface QRCodeModeProps {
 }
 
 const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectionAdded }) => {
-  console.log(`${LOG_TAG} 组件渲染`);
+  const { t } = useTranslation();
+  
+  console.log(t('connection.qrcode.logs.componentRendered'));
 
   const [status, setStatus] = useState<'waiting' | 'starting' | 'ready' | 'error'>('waiting');
-  const [statusMessage, setStatusMessage] = useState<string>('准备启动服务器...');
+  const [statusMessage, setStatusMessage] = useState<string>(t('connection.qrcode.status.preparing'));
   const [qrcodeUrl, setQrcodeUrl] = useState<string>('');
   const [serverPort, setServerPort] = useState<number>(0);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const isMountedRef = useRef<boolean>(true);
   const startTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 强制停止服务器
   const stopServer = useCallback(async () => {
-    console.log(`${LOG_TAG} 正在停止服务器...`);
-    setStatusMessage('正在停止服务器...');
+    console.log(t('connection.qrcode.logs.serverStopping'));
+    setStatusMessage(t('connection.server.stopping'));
     
     try {
       await invoke('stop_temp_server');
-      console.log(`${LOG_TAG} 服务器已停止`);
+      console.log(t('connection.qrcode.logs.serverStopped'));
       return true;
     } catch (error) {
-      console.error(`${LOG_TAG} 停止服务器时出错:`, error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(t('connection.qrcode.logs.serverError'), errorMessage);
       return false;
     } finally {
       if (isMountedRef.current) {
@@ -43,51 +45,51 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
 
   // 启动服务器
   const startServer = useCallback(async () => {
-    console.log(`${LOG_TAG} 开始启动服务器`);
+    console.log(t('connection.qrcode.logs.serverStarting'));
     
     if (!isMountedRef.current) {
-      console.log(`${LOG_TAG} 组件已卸载，取消启动服务器`);
+      console.log(t('connection.qrcode.logs.componentUnmounted'));
       return;
     }
 
     setStatus('starting');
-    setStatusMessage('正在准备启动服务器...');
+    setStatusMessage(t('connection.qrcode.status.startingServer', { port: SERVER_PORT }));
 
     try {
       // 1. 停止现有服务器
-      console.log(`${LOG_TAG} 步骤 1/4: 停止现有服务器`);
-      setStatusMessage('正在停止现有服务器...');
+      console.log(t('connection.qrcode.steps.stoppingServer'));
+      setStatusMessage(t('connection.qrcode.status.stoppingServer'));
       await stopServer();
 
       if (!isMountedRef.current) return;
 
       // 2. 启动新服务器
-      console.log(`${LOG_TAG} 步骤 2/4: 启动服务器`);
-      setStatusMessage(`正在启动服务器 (端口 ${SERVER_PORT})...`);
+      console.log(t('connection.qrcode.steps.startingServer'));
+      setStatusMessage(t('connection.qrcode.status.startingServer', { port: SERVER_PORT }));
       
       const port = await invoke<number>('start_temp_server', { port: SERVER_PORT });
-      console.log(`${LOG_TAG} 服务器已启动，端口:`, port);
+      console.log(t('connection.qrcode.logs.serverStarted'), port);
       setServerPort(port);
 
       if (!isMountedRef.current) return;
 
       // 3. 获取设备信息
-      console.log(`${LOG_TAG} 步骤 3/4: 获取设备信息`);
-      setStatusMessage('正在获取设备信息...');
+      console.log(t('connection.qrcode.steps.fetchingDeviceInfo'));
+      setStatusMessage(t('connection.qrcode.status.fetchingDeviceInfo'));
       const deviceInfo = await getDeviceInfo();
 
       if (!isMountedRef.current) return;
 
       // 4. 获取本机IP
-      console.log(`${LOG_TAG} 步骤 4/5: 获取本机IP`);
-      setStatusMessage('正在获取本机IP...');
+      console.log(t('connection.qrcode.steps.gettingLocalIp'));
+      setStatusMessage(t('connection.qrcode.status.gettingLocalIp'));
       const localIp = await invoke<string>('get_local_ip');
 
       if (!isMountedRef.current) return;
 
       // 5. 生成二维码
-      console.log(`${LOG_TAG} 步骤 5/5: 生成二维码`);
-      setStatusMessage('正在生成二维码...');
+      console.log(t('connection.qrcode.steps.generatingQrCode'));
+      setStatusMessage(t('connection.qrcode.status.generatingQrCode'));
 
       const qrData: QRCodeData = {
         url: `${localIp}:${port}`,
@@ -106,21 +108,22 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
       if (isMountedRef.current) {
         setQrcodeUrl(qrCodeDataUrl);
         setStatus('ready');
-        setStatusMessage('扫描二维码连接设备');
+        setStatusMessage(t('connection.qrcode.status.ready'));
       }
 
     } catch (error) {
-      console.error(`${LOG_TAG} 启动服务器时出错:`, error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(t('connection.qrcode.logs.startServerError'), errorMessage);
       if (isMountedRef.current) {
         setStatus('error');
-        setStatusMessage(`启动失败: ${error instanceof Error ? error.message : String(error)}`);
+        setStatusMessage(t('connection.qrcode.error.title'));
       }
     }
   }, [stopServer]);
 
   // 组件挂载时启动服务器
   useEffect(() => {
-    console.log(`${LOG_TAG} 组件挂载`);
+    console.log(t('connection.qrcode.logs.componentMounted'));
     isMountedRef.current = true;
 
     // 添加防抖延迟
@@ -132,7 +135,7 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
 
     // 清理函数
     return () => {
-      console.log(`${LOG_TAG} 组件卸载清理`);
+      console.log(t('connection.qrcode.logs.componentUnmounting'));
       isMountedRef.current = false;
 
       // 清除定时器
@@ -149,7 +152,7 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
   // 渲染UI
   return (
     <div className="qrcode-mode">
-      <h2>扫码连接</h2>
+      <h2>{t('connection.qrcode.title')}</h2>
       
       <div className="status-message">
         {statusMessage}
@@ -159,30 +162,30 @@ const QRCodeMode: React.FC<QRCodeModeProps> = ({ onConnectionAdded: _onConnectio
         <div className="qrcode-container">
           <img 
             src={qrcodeUrl} 
-            alt="设备连接二维码" 
+            alt={t('connection.qrcode.title')} 
             className="qrcode-image"
           />
           <p className="connection-info">
-            请使用手机扫描二维码连接
+            {t('connection.qrcode.connectionInfo')}
             <br />
-            服务器运行在端口: {serverPort}
+            {t('connection.qrcode.serverPort', { port: serverPort })}
           </p>
         </div>
       )}
 
       {status === 'error' && (
         <div className="error-container">
-          <p>启动服务器时出错，请重试</p>
+          <p>{t('connection.qrcode.error.title')}</p>
           <button 
             onClick={() => startServer()}
             className="retry-button"
           >
-            重试
+            {t('connection.qrcode.error.retryButton')}
           </button>
         </div>
       )}
 
-      <style jsx>{`
+      <style >{`
         .qrcode-mode {
           text-align: center;
           padding: 20px;

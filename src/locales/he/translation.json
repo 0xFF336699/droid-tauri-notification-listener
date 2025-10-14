@@ -1,76 +1,574 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "רשימה לבנה של אפליקציות מערכת",
+        "description": "התראות מאפליקציות אלה לא יסוננו, גם אם הן אפליקציות מערכת",
+        "items": {
+          "mms": "SMS",
+          "phone": "טלפון"
+        },
+        "addCustom": "הוסף אפליקציית מערכת מותאמת אישית לרשימה הלבנה",
+        "example": "לדוגמה: 'com.android.mms' יכול לסנן SMS"
+      },
+      "blacklist": {
+        "title": "רשימה שחורה של אפליקציות מערכת",
+        "description": "התראות מאפליקציות אלה יסוננו בכוח (עדיפות גבוהה ביותר)",
+        "addCustom": "הוסף אפליקציית מערכת מותאמת אישית לרשימה השחורה"
+      }
+    },
+    "actions": {
+      "show": "הצג הגדרות סינון",
+      "hide": "הסתר הגדרות סינון"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "סנן התראות מתמשכות (FLAG_ONGOING_EVENT)",
+        "system": "סנן התראות מערכת",
+        "emptyContent": "סנן התראות ללא תוכן",
+        "lowPriority": "סנן התראות בעדיפות נמוכה",
+        "runningService": "סנן התראות שירות פעיל"
+      },
+      "status": {
+        "filteringOngoing": "מסנן התראות מתמשכות...",
+        "filteringSystem": "מסנן התראות מערכת...",
+        "filteringEmptyContent": "מסנן התראות ללא תוכן...",
+        "filteringLowPriority": "מסנן התראות בעדיפות נמוכה...",
+        "filteringRunningService": "מסנן התראות שירות פעיל...",
+        "filteringForegroundService": "מסנן התראות שירות חזית...",
+        "filteringGroupSummary": "מסנן התראות סיכום קבוצה..."
+      },
+      "empty": "התראות ללא תוכן",
+      "emptyDesc": "סנן התראות עם כותרת ותוכן ריקים",
+      "foreground": "התראות שירות חזית",
+      "foregroundDesc": "סנן התראות שבהן channelId מכיל \"foreground\"",
+      "groupSummary": "התראות סיכום קבוצה",
+      "groupSummaryDesc": "סנן התראות שבהן הכותרת מכילה \"GroupSummary\"",
+      "lowPriority": "התראות בעדיפות נמוכה",
+      "lowPriorityDesc": "סנן התראות בעדיפות נמוכה וחשיבות",
+      "ongoing": "התראות מתמשכות",
+      "ongoingDesc": "סנן התראות מתמשכות (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "רשימה שחורה של שמות חבילות",
+      "packageBlacklistDesc": "סנן התראות משמות חבילות שצוינו (תומך regex)",
+      "packageWhitelist": "רשימה לבנה של שמות חבילות",
+      "packageWhitelistDesc": "הצג רק התראות משמות חבילות שצוינו (תומך regex)",
+      "runningService": "התראות פעילות",
+      "runningServiceDesc": "סנן התראות \"פועל\" + \"לחץ לפרטים\"",
+      "system": "התראות מערכת",
+      "systemDesc": "סנן התראות מערכת אנדרואיד (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "פועל",
+      "tapForDetails": "לחץ לפרטים"
+    },
+    "errors": {
+      "filterError": "שגיאה בסינון התראות: {{error}}",
+      "invalidRegex": "regex לא חוקי {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "שגיאה בטעינת תצורה: {{error}}",
+      "configReset": "איפוס להגדרות ברירת מחדל",
+      "configSaved": "ההגדרות נשמרו",
+      "configSaveError": "שגיאה בשמירת תצורה: {{error}}",
+      "modeChanged": "עבר ל{{mode}}",
+      "patternAdded": "דפוס הוסף: {{pattern}}",
+      "patternRemoved": "דפוס הוסר: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "האם אתה בטוח שברצונך למחוק את כל המכשירים?",
+      "confirmMessage": "זה ימחק את כל המכשירים השמורים אך ישמור על הגדרות חלון.",
+      "irreversible": "פעולה זו אינה ניתנת לביטול!",
+      "success": "נתוני מכשירים נמחקו!\nהאפליקציה תיטען מחדש.",
+      "error": "מחיקה נכשלה",
+      "logs": {
+        "clearing": "[appReset] מנקה נתוני מכשירים...",
+        "cleared": "[appReset] נתוני מכשירים נוקו"
+      }
+    },
+    "confirmTitle": "האם אתה בטוח שברצונך לאפס את האפליקציה למצב התחלתי?",
+    "confirmMessage": "זה ימחק:\n- את כל המכשירים השמורים\n- הגדרות מיקום וגודל חלון\n- את כל הגדרות הסינון\n- את כל הגדרות האפליקציה\n\nהאפליקציה תיסגר ותופעל מחדש כדי ליישם שינויים.\n\nפעולה זו אינה ניתנת לביטול!",
+    "confirmButton": "אישור",
+    "cancelButton": "ביטול",
+    "logs": {
+      "starting": "[appReset] מתחיל איפוס אפליקציה...",
+      "clearingLocalStorage": "[appReset] מנקה localStorage...",
+      "localStorageCleared": "[appReset] localStorage נוקה",
+      "creatingResetMarker": "[appReset] יוצר קובץ סמן איפוס...",
+      "resetMarkerCreated": "[appReset] קובץ סמן איפוס נוצר",
+      "resettingAppData": "[appReset] מאפס נתוני אפליקציה...",
+      "appDataReset": "[appReset] נתוני אפליקציה אופסו",
+      "exitingApp": "[appReset] יוצא מהאפליקציה...",
+      "error": "[appReset] שגיאה באיפוס אפליקציה:"
+    },
+    "comments": {
+      "resetFunction": "איפוס אפליקציה למצב ברירת מחדל",
+      "resetDescription": "מחק את כל הנתונים:\n- LocalStorage (רשימת מכשירים, תצורות סינון וכו' נתוני frontend)\n- תיקיית נתונים מקומית של Tauri (מצב חלון וכו' נתוני backend)",
+      "resetStrategy": "שימוש באסטרטגיית קובץ סמן לפתרון בעיות נעילת קבצים ב-Windows:\n1. נקה LocalStorage\n2. צור קובץ סמן איפוס\n3. צא מהאפליקציה\n4. בהפעלה הבאה, מחק אוטומטית קבצי נתונים"
+    }
+  },
   "app": {
     "title": "מאזין התראות",
-    "description": "האזן ונהל התראות ממכשירים"
+    "description": "האזן ונהל התראות ממכשירים",
+    "loading": "טוען..."
   },
   "common": {
+    "labels": {
+      "address": "כתובת"
+    },
+    "actions": {
+      "reconnect": "🔄 התחבר מחדש",
+      "manualReconnect": "התחברות מחדש ידנית",
+      "collapse": "כווץ",
+      "expandDetails": "הרחב פרטים",
+      "label": "פעולה",
+      "addToBlacklist": "הוסף לרשימה שחורה",
+      "addToWhitelist": "הוסף לרשימה לבנה"
+    },
+    "unknown": "לא ידוע",
+    "optional": "אופציונלי",
+    "unknownSender": "שולח לא ידוע",
+    "noTitle": "ללא כותרת",
+    "content": "תוכן",
+    "bigText": "טקסט גדול",
+    "textLines": "שורות טקסט",
+    "additionalInfo": "מידע נוסף",
+    "packageName": "שם חבילה",
+    "timeSent": "זמן שליחה",
+    "notificationId": "מזהה התראה",
+    "tag": "תגית",
+    "messages": "הודעות",
+    "sender": "שולח",
+    "time": "זמן",
     "save": "שמור",
     "cancel": "ביטול",
-    "back": "חזרה",
+    "back": "חזור",
     "delete": "מחק",
     "confirm": "אישור",
     "loading": "טוען...",
     "error": "אירעה שגיאה",
     "connect": "התחבר",
     "connecting": "מתחבר...",
-    "disconnect": "התנתק",
-    "disconnecting": "מתנתק...",
+    "disconnect": "נתק",
+    "disconnecting": "מנתק...",
     "connected": "מחובר",
-    "disconnected": "לא מחובר",
+    "disconnected": "מנותק",
     "connectionFailed": "החיבור נכשל",
     "minimize": "מזער",
     "unread": "לא נקרא",
-    "total": "סה\"כ",
+    "total": "סך הכל",
     "errorOccurred": "אירעה שגיאה",
     "retry": "נסה שוב",
     "settings": "הגדרות",
-    "close": "סגור",
     "maximize": "הגדל",
-    "restore": "שחזר"
+    "restore": "שחזר",
+    "enabled": "מופעל",
+    "disabled": "מושבת"
   },
   "settings": {
     "title": "הגדרות",
-    "language": "שפה",
-    "appearance": "מראה",
-    "theme": "ערכת נושא",
-    "light": "בהיר",
-    "dark": "כהה",
-    "system": "מערכת",
-    "notifications": "התראות",
-    "enableNotifications": "הפעל התראות",
-    "notificationSound": "צליל התראה",
+    "appearance": {
+      "title": "מראה",
+      "theme": "ערכת נושא",
+      "light": "בהיר",
+      "dark": "כהה",
+      "system": "מערכת",
+      "language": "שפה"
+    },
+    "notifications": {
+      "title": "התראות",
+      "enableNotifications": "הפעל התראות",
+      "enableSounds": "הפעל צלילים",
+      "enableBadge": "הצג תג"
+    },
+    "websocketDevices": "מכשירי WebSocket",
     "about": "אודות",
     "version": "גרסה",
-    "checkForUpdates": "בדוק עדכונים"
+    "checkForUpdates": "בדוק עדכונים",
+    "clearAllDevices": "נקה את כל המכשירים",
+    "language": "שפה",
+    "resetWarning": "איפוס ימחק מכשירים שמורים, מיקום וגודל חלון, תצורות סינון ונתוני אפליקציה. פעולה זו אינה ניתנת לביטול, היזהר."
+  },
+  "connection": {
+    "manager": {
+      "deleteConfirm": "האם אתה בטוח שברצונך למחוק את החיבור \"{{name}}\"?",
+      "noConnections": "אין חיבורים שמורים",
+      "addConnectionPrompt": "לחץ על כפתור \"הוסף חיבור\" כדי להתחיל",
+      "totalConnections": "{{count}} חיבורים בסך הכל",
+      "connectionDetails": {
+        "address": "כתובת",
+        "token": "אסימון",
+        "none": "אין",
+        "createdAt": "נוצר ב",
+        "lastConnected": "חיבור אחרון"
+      },
+      "actions": {
+        "enable": "הפעל",
+        "delete": "מחק",
+        "label": "פעולות חיבור"
+      }
+    },
+    "add": "הוסף חיבור",
+    "migratedConnection": "חיבור שהועבר",
+    "socketSettings": "הגדרות חיבור Socket",
+    "serverAddress": "כתובת שרת",
+    "serverAddressPlaceholder": "לדוגמה:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "הזן כתובת שרת",
+    "connectionFailedCheckAddress": "חיבור נכשל, בדוק כתובת שרת",
+    "supportedFormats": "תומך IP+פורט, ws://, wss:// דומיין וכו'.",
+    "authToken": "אסימון אימות",
+    "enterAuthToken": "הזן אסימון אימות",
+    "connecting": "מתחבר...",
+    "connect": "התחבר",
+    "connectionFailed": "חיבור נכשל",
+    "testing": "בודק...",
+    "startSocketTest": "התחל בדיקת Socket",
+    "socketTestTitle": "בדיקת Socket",
+    "clickToStartTest": "לחץ על הכפתור כדי להתחיל את הבדיקה...",
+    "disconnect": "נתק",
+    "connected": "מחובר",
+    "disconnected": "מנותק",
+    "failed": "חיבור נכשל",
+    "retry": "נסה שוב",
+    "lost": "חיבור אבד",
+    "reconnecting": "מתחבר מחדש...",
+    "reconnect": "התחבר מחדש",
+    "reconnectIn": "נסה שוב בעוד {{count}} שניות",
+    "reconnectNow": "נסה שוב עכשיו",
+    "reconnectFailed": "חיבור מחדש נכשל",
+    "reconnectSuccessful": "חיבור מחדש הצליח",
+    "reconnectAttempt": "ניסיון {{current}}/{{max}}",
+    "reconnectLimitReached": "הגעת למגבלת ניסיונות חיבור מחדש",
+    "timeout": "פסק זמן חיבור",
+    "refused": "חיבור נדחה",
+    "reset": "חיבור אופס",
+    "aborted": "חיבור בוטל",
+    "closed": "חיבור נסגר",
+    "error": "שגיאת חיבור",
+    "backendConnectionFailed": "חיבור backend נכשל",
+    "unknownConnectionError": "שגיאת חיבור לא ידועה",
+    "status": "מצב חיבור",
+    "type": "סוג חיבור",
+    "name": "שם חיבור",
+    "settings": "הגדרות חיבור",
+    "details": "פרטי חיבור",
+    "history": "היסטוריית חיבור",
+    "log": "יומן חיבור",
+    "stats": "סטטיסטיקות חיבור",
+    "test": "בדוק חיבור",
+    "testSuccessful": "בדיקת חיבור הצליחה",
+    "testFailed": "בדיקת חיבור נכשלה",
+    "edit": "ערוך חיבור",
+    "delete": "מחק חיבור",
+    "addTitle": "הוסף חיבור",
+    "tabs": {
+      "qrcode": "הוסף בסריקה",
+      "manual": "קלט ידני"
+    },
+    "server": {
+      "starting": "מתחיל שרת...",
+      "started": "שרת הופעל, פורט: {{port}}",
+      "startFailed": "הפעלת שרת נכשלה: {{error}}",
+      "stopping": "עוצר שרת...",
+      "stopped": "שרת נעצר"
+    },
+    "qrcode": {
+      "title": "התחבר בסריקת קוד",
+      "status": {
+        "preparing": "מכין להפעלת שרת...",
+        "stoppingServer": "עוצר שרת קיים...",
+        "startingServer": "מתחיל שרת (פורט {{port}})...",
+        "fetchingDeviceInfo": "שולף מידע מכשיר...",
+        "gettingLocalIp": "משיג IP מקומי...",
+        "generatingQrCode": "מייצר קוד QR...",
+        "ready": "סרוק קוד QR כדי להתחבר למכשיר"
+      },
+      "connectionInfo": "השתמש בטלפון שלך כדי לסרוק את קוד ה-QR ולהתחבר",
+      "serverPort": "שרת פועל על פורט: {{port}}",
+      "error": {
+        "title": "שגיאה בהפעלת שרת, נסה שוב",
+        "retryButton": "נסה שוב"
+      },
+      "steps": {
+        "stoppingServer": "שלב 1/4: עוצר שרת קיים",
+        "startingServer": "שלב 2/4: מתחיל שרת",
+        "fetchingDeviceInfo": "שלב 3/4: שולף מידע מכשיר",
+        "gettingLocalIp": "שלב 4/5: משיג IP מקומי",
+        "generatingQrCode": "שלב 5/5: מייצר קוד QR"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] רכיב הותקן",
+        "componentUnmounting": "[QR-STABLE] ניקוי פירוק רכיב",
+        "serverStarting": "[QR-STABLE] מתחיל שרת",
+        "serverStopping": "[QR-STABLE] עוצר שרת...",
+        "serverStopped": "[QR-STABLE] שרת נעצר",
+        "serverError": "[QR-STABLE] שגיאה בעצירת שרת:",
+        "serverStarted": "[QR-STABLE] שרת הופעל, פורט:",
+        "startServerError": "[QR-STABLE] שגיאה בהפעלת שרת:",
+        "componentUnmounted": "[QR-STABLE] רכיב פורק, בטל הפעלת שרת",
+        "componentRendered": "רכיב עובד"
+      }
+    },
+    "title": "חבר מכשיר",
+    "qrCode": "סרוק קוד QR",
+    "manualInput": "קלט ידני",
+    "scanQRCode": "סרוק קוד QR כדי להתחבר למכשיר",
+    "scanQRCodeDescription": "במכשיר האנדרואיד שלך, פתח את האפליקציה, לחץ על \"התחבר למחשב\", ואז סרוק קוד QR זה",
+    "enterIPAddress": "הזן כתובת IP של המכשיר",
+    "enterIPAddressDescription": "מצא את כתובת ה-IP במכשיר האנדרואיד שלך, הזן אותה כאן",
+    "ipAddress": "כתובת IP",
+    "port": "פורט",
+    "disconnecting": "מנתק...",
+    "connectionFailedDescription": "לא ניתן להתחבר למכשיר. ודא שהמכשיר והמחשב באותו רשת והאפליקציה אנדרואיד פועלת.",
+    "tryAgain": "נסה שוב",
+    "cancel": "ביטול",
+    "connectionSuccessful": "חיבור הצליח",
+    "connectionSuccessfulDescription": "התחברת בהצלחה למכשיר",
+    "continue": "המשך",
+    "noDevicesFound": "לא נמצאו מכשירים",
+    "searchingForDevices": "מחפש מכשירים...",
+    "selectDevice": "בחר מכשיר",
+    "selectDeviceDescription": "בחר את המכשיר להתחברות",
+    "refresh": "רענן",
+    "deviceName": "שם מכשיר",
+    "deviceStatus": "מצב",
+    "deviceLastConnected": "חיבור אחרון",
+    "deviceActions": "פעולות",
+    "deviceConnect": "התחבר",
+    "deviceDisconnect": "נתק",
+    "deviceRemove": "הסר",
+    "deviceEdit": "ערוך",
+    "deviceDetails": "פרטים",
+    "addDevice": "הוסף מכשיר",
+    "editDevice": "ערוך מכשיר",
+    "removeDevice": "הסר מכשיר",
+    "removeDeviceConfirmation": "האם אתה בטוח שברצונך להסיר מכשיר זה?",
+    "removeDeviceConfirmationDescription": "פעולה זו מסירה את המכשיר מרשימת המכשירים השמורים. עדיין תוכל להתחבר מחדש בסריקת קוד QR או הזנת IP ידנית.",
+    "remove": "הסר",
+    "keepDevice": "שמור",
+    "deviceRemoved": "מכשיר הוסר",
+    "deviceAdded": "מכשיר הוסף",
+    "deviceUpdated": "מכשיר עודכן",
+    "deviceConnected": "מכשיר מחובר",
+    "deviceDisconnected": "מכשיר מנותק",
+    "allDevicesDisconnected": "כל המכשירים מנותקים",
+    "connectionLost": "חיבור אבד",
+    "connectionHistory": "היסטוריית חיבור",
+    "connectionLog": "יומן חיבור",
+    "connectionStats": "סטטיסטיקות חיבור",
+    "connectionTest": "בדוק חיבור",
+    "connectionTestSuccessful": "בדיקת חיבור הצליחה",
+    "connectionTestFailed": "בדיקת חיבור נכשלה",
+    "connectionError": "שגיאת חיבור",
+    "requestingToken": "מבקש אסימון...",
+    "authFailed": "אימות נכשל",
+    "loginSuccess": "התחברות הצליחה",
+    "missingToken": "אסימון חסר",
+    "tokenReceived": "אסימון התקבל",
+    "loginFailed": "התחברות נכשלה"
   },
   "device": {
-    "connect": "התחברות מכשיר",
-    "disconnect": "התנתק",
-    "connected": "מחובר",
-    "disconnected": "לא מחובר",
-    "connectionFailed": "החיבור נכשל",
-    "retry": "נסה שוב",
-    "deviceInfo": "מידע על המכשיר",
-    "deviceName": "שם המכשיר",
-    "deviceModel": "דגם",
-    "deviceOS": "גרסת מערכת הפעלה",
-    "batteryLevel": "סוללה",
+    "title": "מכשירים",
+    "actions": {
+      "delete": "🗑️ מחק מכשיר",
+      "label": "פעולות מכשיר"
+    },
+    "confirmDelete": "האם אתה בטוח שברצונך למחוק את המכשיר \"{{name}}\"?",
+    "add": "הוסף מכשיר",
+    "edit": "ערוך מכשיר",
+    "tokenRequestFailed": "נכשל באחזור אסימון הרשאה",
+    "loginInProgress": "מתחבר...",
+    "loginSuccess": "התחברות הצליחה",
+    "disconnected": "מכשיר מנותק",
+    "allDevicesDisconnected": "כל המכשירים מנותקים",
+    "missingUuid": "ציין UUID של מכשיר",
+    "noDevices": "אין מכשירים",
+    "noEnabledDevices": "אין מכשירים מופעלים",
+    "notConnectedOrUnavailable": "מכשיר {{deviceUuid}} לא מחובר או לא זמין",
+    "clickToAddDevice": "לחץ \"+ הוסף חיבור\" כדי לסרוק ולהוסיף מכשיר",
+    "info": "מידע מכשיר",
+    "name": "שם מכשיר",
+    "model": "דגם",
+    "os": "גרסת מערכת",
+    "batteryLevel": "רמת סוללה",
     "storage": "אחסון",
     "memory": "זיכרון"
   },
+  "manualInput": {
+    "title": "קלט חיבור ידני",
+    "deviceName": {
+      "label": "שם מכשיר (אופציונלי):",
+      "placeholder": "לדוגמה: טלפון Xiaomi",
+      "hint": "אם לא מולא, ייווצר אוטומטית"
+    },
+    "socketAddress": {
+      "label": "כתובת Socket *: ",
+      "placeholder": "לדוגמה: 192.168.1.100:6001",
+      "hint": "פורמטים נתמכים: IP:פורט, דומיין:פורט"
+    },
+    "validation": {
+      "socketRequired": "הזן כתובת socket"
+    },
+    "status": {
+      "adding": "מוסיף מכשיר...",
+      "added": "מכשיר הוסף!"
+    },
+    "error": {
+      "addFailed": "הוספה נכשלה: {{error}}"
+    },
+    "hint": {
+      "title": "רמז:",
+      "description": "הזן את כתובת ה-socket של המכשיר, תומך בפורמטים הבאים:",
+      "formats": [
+        "IP:פורט, לדוגמה 127.0.0.1:10035",
+        "כתובת ws:// או wss:// מלאה, לדוגמה ws://localhost:10035",
+        "דומיין:פורט, לדוגמה example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "הוסף מכשיר",
+      "adding": "מוסיף..."
+    }
+  },
   "notification": {
+    "title": "התראות",
     "noNotifications": "אין התראות",
     "clearAll": "נקה הכל",
+    "clearAllConfirm": "האם אתה בטוח שברצונך לנקות את כל ההתראות?",
+    "clearAllSuccess": "כל ההתראות נוקו",
+    "clearAllFailed": "ניקוי התראות נכשל",
+    "delete": "מחק",
+    "deleteConfirm": "האם אתה בטוח שברצונך למחוק התראה זו?",
+    "deleteSuccess": "התראה נמחקה",
+    "deleteFailed": "מחיקת התראה נכשלה",
+    "copy": "העתק",
+    "copySuccess": "הועתק ללוח",
+    "copyFailed": "העתקה נכשלה",
+    "details": "פרטים",
+    "close": "סגור",
     "markAsRead": "סמן כנקרא",
     "markAsUnread": "סמן כלא נקרא",
-    "delete": "מחק",
+    "markAsReadSuccess": "סומן כנקרא",
+    "markAsReadFailed": "סימון כנקרא נכשל",
+    "markAsUnreadSuccess": "סומן כלא נקרא",
+    "markAsUnreadFailed": "סימון כלא נקרא נכשל",
+    "markAllAsRead": "סמן הכל כנקרא",
+    "markAllAsReadConfirm": "האם אתה בטוח שברצונך לסמן את כל ההתראות כנקראות?",
+    "markAllAsReadSuccess": "כל ההתראות סומנו כנקראות",
+    "markAllAsReadFailed": "סימון הכל כנקרא נכשל",
+    "filter": "סנן",
+    "filterByApp": "סנן לפי אפליקציה",
+    "filterByKeyword": "סנן לפי מילת מפתח",
+    "filterByTime": "סנן לפי זמן",
+    "filterByStatus": "סנן לפי מצב",
+    "filterByPriority": "סנן לפי עדיפות",
+    "filterByCategory": "סנן לפי קטגוריה",
+    "filterByChannel": "סנן לפי ערוץ",
+    "filterByDevice": "סנן לפי מכשיר",
     "reply": "השב",
-    "copy": "העתק",
     "copied": "הועתק!",
-    "expand": "הצג עוד",
-    "collapse": "הצג פחות"
+    "expand": "הצג יותר",
+    "collapse": "כווץ",
+    "totalCount": "{{count}} התראות בסך הכל",
+    "selectedCount": "(נבחרו {{count}})",
+    "markSelectedAsRead": "סמן כנקרא",
+    "selectToMarkAsRead": "בחר כדי לסמן כנקרא",
+    "noNotificationsMessage": "אין התראות",
+    "unknownSender": "שולח לא ידוע",
+    "noTitle": "ללא כותרת",
+    "noContent": "ללא תוכן",
+    "subText": "טקסט משנה",
+    "summary": "סיכום",
+    "textLines": "שורות טקסט",
+    "time": "זמן",
+    "channelId": "מזהה ערוץ",
+    "action": "פעולה",
+    "isInitialized": "מאותחל",
+    "readStatus": "מצב קריאה",
+    "unread": "לא נקרא",
+    "templateType": "סוג תבנית",
+    "conversationTitle": "כותרת שיחה",
+    "additionalInfo": "מידע נוסף",
+    "participants": "משתתפים",
+    "isResident": "מתמשך",
+    "priority": "עדיפות",
+    "importance": "חשיבות",
+    "addToBlacklist": "הוסף לרשימה שחורה",
+    "addToWhitelist": "הוסף לרשימה לבנה"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 הצג סינון",
+      "hide": "🔽 הסתר סינון",
+      "addPattern": "הוסף דפוס",
+      "removePattern": "הסר",
+      "reset": "אפס לברירת מחדל",
+      "save": "שמור הגדרות"
+    },
+    "title": "כללי סינון",
+    "basicRulesTitle": "כללי סינון בסיסיים",
+    "rules": {
+      "ongoing": "התראות מתמשכות",
+      "ongoingDesc": "סנן התראות מתמשכות (FLAG_ONGOING_EVENT)",
+      "system": "התראות מערכת",
+      "systemDesc": "סנן התראות מערכת אנדרואיד (android, com.android.*)",
+      "empty": "התראות ללא תוכן",
+      "emptyDesc": "סנן התראות עם כותרת ותוכן ריקים",
+      "lowPriority": "התראות בעדיפות נמוכה",
+      "lowPriorityDesc": "סנן התראות בעדיפות נמוכה וחשיבות",
+      "foreground": "התראות שירות חזית",
+      "foregroundDesc": "סנן התראות שבהן channelId מכיל \"foreground\"",
+      "groupSummary": "התראות סיכום קבוצה",
+      "groupSummaryDesc": "סנן התראות שבהן הכותרת מכילה \"GroupSummary\"",
+      "runningService": "התראות פעילות",
+      "runningServiceDesc": "סנן התראות \"פועל\" + \"לחץ לפרטים\"",
+      "packageBlacklist": "רשימה שחורה של שמות חבילות",
+      "packageBlacklistDesc": "סנן התראות משמות חבילות שצוינו (תומך regex)",
+      "packageWhitelist": "רשימה לבנה של שמות חבילות",
+      "packageWhitelistDesc": "הצג רק התראות משמות חבילות שצוינו (תומך regex)",
+      "systemWhitelist": "רשימה לבנה של אפליקציות מערכת",
+      "systemWhitelistDesc": "אפילו com.android.* לא מסונן"
+    },
+    "hint": {
+      "title": "רמז:",
+      "exact": "התאמה מדויקת: com.tencent.mm",
+      "wildcard": "תו כללי: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "מצב רשימה שחורה",
+      "whitelist": "מצב רשימה לבנה"
+    },
+    "messages": {
+      "patternAdded": "דפוס הוסף: {{pattern}}",
+      "patternRemoved": "דפוס הוסר: {{pattern}}",
+      "modeChanged": "עבר ל{{mode}}",
+      "configReset": "אופס לתצורה ברירת מחדל",
+      "configSaved": "הגדרות נשמרו",
+      "configLoadError": "שגיאה בטעינת תצורה: {{error}}",
+      "configSaveError": "שגיאה בשמירת תצורה: {{error}}"
+    },
+    "enterPackageOrRegex": "הזן שם חבילה או regex",
+    "enterPackageOrRegexPlaceholder": "הזן שם חבילה או regex",
+    "invalidRegex": "regex לא חוקי",
+    "confirmReset": "האם אתה בטוח שברצונך לאפס לתצורה ברירת מחדל?",
+    "confirmRemovePattern": "האם אתה בטוח שברצונך להסיר \"{{pattern}}\" מ{{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "אירעה שגיאה במזעור החלון"
-  }
+    "connectionFailed": "חיבור נכשל",
+    "deleteFailed": "מחיקה נכשלה",
+    "websocketNotConnected": "WebSocket לא מחובר",
+    "websocketNotInitialized": "WebSocket לא מאותחל",
+    "minimizeWindowFailed": "מזעור חלון נכשל"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "regex לא חוקי"
+    }
+  },
+  "login": "התחבר",
+  "request_token": "בקש אסימון",
+  "clear_messages": "נקה הודעות",
+  "get_package_icon": "קבל אייקון אפליקציה"
 }

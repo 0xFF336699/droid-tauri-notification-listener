@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Lista bianca delle app di sistema",
+        "description": "Le notifiche di queste app non verranno filtrate, anche se sono app di sistema",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telefono"
+        },
+        "addCustom": "Aggiungi app di sistema personalizzata alla lista bianca",
+        "example": "Ad esempio: 'com.android.mms' può filtrare gli SMS"
+      },
+      "blacklist": {
+        "title": "Lista nera delle app di sistema",
+        "description": "Le notifiche di queste app verranno filtrate forzatamente (priorità più alta)",
+        "addCustom": "Aggiungi app di sistema personalizzata alla lista nera"
+      }
+    },
+    "actions": {
+      "show": "Mostra impostazioni di filtro",
+      "hide": "Nascondi impostazioni di filtro"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filtra notifiche in corso (FLAG_ONGOING_EVENT)",
+        "system": "Filtra notifiche di sistema",
+        "emptyContent": "Filtra notifiche senza contenuto",
+        "lowPriority": "Filtra notifiche a bassa priorità",
+        "runningService": "Filtra notifiche servizio in esecuzione"
+      },
+      "status": {
+        "filteringOngoing": "Filtrando notifiche in corso...",
+        "filteringSystem": "Filtrando notifiche di sistema...",
+        "filteringEmptyContent": "Filtrando notifiche senza contenuto...",
+        "filteringLowPriority": "Filtrando notifiche a bassa priorità...",
+        "filteringRunningService": "Filtrando notifiche servizio in esecuzione...",
+        "filteringForegroundService": "Filtrando notifiche servizio in primo piano...",
+        "filteringGroupSummary": "Filtrando notifiche riepilogo gruppo..."
+      },
+      "empty": "Notifiche senza contenuto",
+      "emptyDesc": "Filtra notifiche con titolo e contenuto vuoti",
+      "foreground": "Notifiche servizio in primo piano",
+      "foregroundDesc": "Filtra notifiche dove channelId contiene \"foreground\"",
+      "groupSummary": "Notifiche riepilogo gruppo",
+      "groupSummaryDesc": "Filtra notifiche dove il titolo contiene \"GroupSummary\"",
+      "lowPriority": "Notifiche a bassa priorità",
+      "lowPriorityDesc": "Filtra notifiche a bassa priorità e importanza",
+      "ongoing": "Notifiche in corso",
+      "ongoingDesc": "Filtra notifiche in corso (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Lista nera nomi pacchetti",
+      "packageBlacklistDesc": "Filtra notifiche da nomi pacchetti specificati (supporta regex)",
+      "packageWhitelist": "Lista bianca nomi pacchetti",
+      "packageWhitelistDesc": "Mostra solo notifiche da nomi pacchetti specificati (supporta regex)",
+      "runningService": "Notifiche in esecuzione",
+      "runningServiceDesc": "Filtra notifiche \"In esecuzione\" + \"Tocca per dettagli\"",
+      "system": "Notifiche di sistema",
+      "systemDesc": "Filtra notifiche sistema Android (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "In esecuzione",
+      "tapForDetails": "Tocca per dettagli"
+    },
+    "errors": {
+      "filterError": "Errore nel filtraggio notifiche: {{error}}",
+      "invalidRegex": "Regex non valido {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Errore caricamento configurazione: {{error}}",
+      "configReset": "Ripristinato alle impostazioni predefinite",
+      "configSaved": "Impostazioni salvate",
+      "configSaveError": "Errore salvataggio configurazione: {{error}}",
+      "modeChanged": "Passato a {{mode}}",
+      "patternAdded": "Pattern aggiunto: {{pattern}}",
+      "patternRemoved": "Pattern rimosso: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Sei sicuro di voler eliminare tutti i dispositivi?",
+      "confirmMessage": "Questo eliminerà tutti i dispositivi salvati ma manterrà le impostazioni finestra.",
+      "irreversible": "Questa azione non può essere annullata!",
+      "success": "Dati dispositivi eliminati!\nL'app si ricaricherà.",
+      "error": "Eliminazione fallita",
+      "logs": {
+        "clearing": "[appReset] Eliminando dati dispositivi...",
+        "cleared": "[appReset] Dati dispositivi eliminati"
+      }
+    },
+    "confirmTitle": "Sei sicuro di voler ripristinare l'app allo stato iniziale?",
+    "confirmMessage": "Questo eliminerà:\n- Tutti i dispositivi salvati\n- Impostazioni posizione e dimensione finestra\n- Tutte le impostazioni filtro\n- Tutte le impostazioni app\n\nL'app si chiuderà e riavvierà per applicare le modifiche.\n\nQuesta azione non può essere annullata!",
+    "confirmButton": "Conferma",
+    "cancelButton": "Annulla",
+    "logs": {
+      "starting": "[appReset] Avvio ripristino app...",
+      "clearingLocalStorage": "[appReset] Pulendo localStorage...",
+      "localStorageCleared": "[appReset] localStorage pulito",
+      "creatingResetMarker": "[appReset] Creando file marcatore ripristino...",
+      "resetMarkerCreated": "[appReset] File marcatore ripristino creato",
+      "resettingAppData": "[appReset] Ripristinando dati app...",
+      "appDataReset": "[appReset] Dati app ripristinati",
+      "exitingApp": "[appReset] Uscendo dall'app...",
+      "error": "[appReset] Errore ripristino app:"
+    },
+    "comments": {
+      "resetFunction": "Ripristina app allo stato predefinito",
+      "resetDescription": "Elimina tutti i dati:\n- LocalStorage (lista dispositivi, configurazioni filtro ecc. dati frontend)\n- Cartella dati locale Tauri (stato finestra ecc. dati backend)",
+      "resetStrategy": "Usa strategia file marcatore per risolvere problemi blocco file Windows:\n1. Pulisci LocalStorage\n2. Crea file marcatore ripristino\n3. Esci dall'app\n4. Al prossimo avvio, elimina automaticamente file dati"
+    }
+  },
   "app": {
-    "title": "Ascoltatore di notifiche",
-    "description": "Ascolta e gestisci le notifiche del dispositivo"
+    "title": "Monitor Notifiche",
+    "description": "Ascolta e gestisci notifiche dispositivi",
+    "loading": "Caricamento..."
   },
   "common": {
+    "labels": {
+      "address": "Indirizzo"
+    },
+    "actions": {
+      "reconnect": "🔄 Riconnetti",
+      "manualReconnect": "Riconnessione manuale",
+      "collapse": "Comprimi",
+      "expandDetails": "Espandi dettagli",
+      "label": "Azione",
+      "addToBlacklist": "Aggiungi alla lista nera",
+      "addToWhitelist": "Aggiungi alla lista bianca"
+    },
+    "unknown": "Sconosciuto",
+    "optional": "Opzionale",
+    "unknownSender": "Mittente sconosciuto",
+    "noTitle": "Nessun titolo",
+    "content": "Contenuto",
+    "bigText": "Testo grande",
+    "textLines": "Righe testo",
+    "additionalInfo": "Informazioni aggiuntive",
+    "packageName": "Nome pacchetto",
+    "timeSent": "Ora invio",
+    "notificationId": "ID notifica",
+    "tag": "Etichetta",
+    "messages": "Messaggi",
+    "sender": "Mittente",
+    "time": "Ora",
     "save": "Salva",
     "cancel": "Annulla",
     "back": "Indietro",
@@ -12,69 +149,426 @@
     "loading": "Caricamento...",
     "error": "Si è verificato un errore",
     "connect": "Connetti",
-    "connecting": "Connessione in corso...",
+    "connecting": "Connessione...",
     "disconnect": "Disconnetti",
-    "disconnecting": "Disconnessione in corso...",
+    "disconnecting": "Disconnessione...",
     "connected": "Connesso",
     "disconnected": "Disconnesso",
     "connectionFailed": "Connessione fallita",
-    "minimize": "Riduci a icona",
-    "unread": "Non letto",
+    "minimize": "Minimizza",
+    "unread": "Non lette",
     "total": "Totale",
     "errorOccurred": "Si è verificato un errore",
     "retry": "Riprova",
     "settings": "Impostazioni",
-    "close": "Chiudi",
-    "maximize": "Ingrandisci",
-    "restore": "Ripristina"
+    "maximize": "Massimizza",
+    "restore": "Ripristina",
+    "enabled": "Abilitato",
+    "disabled": "Disabilitato"
   },
   "settings": {
     "title": "Impostazioni",
-    "language": "Lingua",
-    "appearance": "Aspetto",
-    "theme": "Tema",
-    "light": "Chiaro",
-    "dark": "Scuro",
-    "system": "Sistema",
-    "notifications": "Notifiche",
-    "enableNotifications": "Abilita notifiche",
-    "notificationSound": "Suono di notifica",
+    "appearance": {
+      "title": "Aspetto",
+      "theme": "Tema",
+      "light": "Chiaro",
+      "dark": "Scuro",
+      "system": "Sistema",
+      "language": "Lingua"
+    },
+    "notifications": {
+      "title": "Notifiche",
+      "enableNotifications": "Abilita notifiche",
+      "enableSounds": "Abilita suoni",
+      "enableBadge": "Mostra badge"
+    },
+    "websocketDevices": "Dispositivi WebSocket",
     "about": "Informazioni",
     "version": "Versione",
     "checkForUpdates": "Controlla aggiornamenti",
-    "clearAllDevices": "Cancella tutti i dispositivi"
+    "clearAllDevices": "Cancella tutti i dispositivi",
+    "language": "Lingua",
+    "resetWarning": "Il ripristino eliminerà dispositivi salvati, posizione e dimensione finestra, configurazioni filtro e dati app. Questa azione non può essere annullata, fai attenzione."
   },
   "connection": {
-    "add": "Aggiungi connessione"
-  },
-  "device": {
-    "connect": "Connetti dispositivo",
+    "manager": {
+      "deleteConfirm": "Sei sicuro di voler eliminare la connessione \"{{name}}\"?",
+      "noConnections": "Nessuna connessione salvata",
+      "addConnectionPrompt": "Clicca il pulsante \"Aggiungi connessione\" per iniziare",
+      "totalConnections": "Totale {{count}} connessioni",
+      "connectionDetails": {
+        "address": "Indirizzo",
+        "token": "Token",
+        "none": "Nessuno",
+        "createdAt": "Creato il",
+        "lastConnected": "Ultima connessione"
+      },
+      "actions": {
+        "enable": "Abilita",
+        "delete": "Elimina",
+        "label": "Azioni connessione"
+      }
+    },
+    "add": "Aggiungi connessione",
+    "migratedConnection": "Connessione migrata",
+    "socketSettings": "Impostazioni connessione Socket",
+    "serverAddress": "Indirizzo server",
+    "serverAddressPlaceholder": "Ad esempio:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Inserisci indirizzo server",
+    "connectionFailedCheckAddress": "Connessione fallita, controlla indirizzo server",
+    "supportedFormats": "Supporta IP+porta, ws://, wss:// dominio ecc.",
+    "authToken": "Token autenticazione",
+    "enterAuthToken": "Inserisci token autenticazione",
+    "connecting": "Connessione...",
+    "connect": "Connetti",
+    "connectionFailed": "Connessione fallita",
+    "testing": "Test in corso...",
+    "startSocketTest": "Avvia test Socket",
+    "socketTestTitle": "Test Socket",
+    "clickToStartTest": "Clicca il pulsante per avviare il test...",
     "disconnect": "Disconnetti",
     "connected": "Connesso",
     "disconnected": "Disconnesso",
-    "connectionFailed": "Connessione fallita",
+    "failed": "Connessione fallita",
     "retry": "Riprova",
-    "deviceInfo": "Informazioni dispositivo",
+    "lost": "Connessione persa",
+    "reconnecting": "Riconnessione...",
+    "reconnect": "Riconnetti",
+    "reconnectIn": "Riprova in {{count}} secondi",
+    "reconnectNow": "Riprova ora",
+    "reconnectFailed": "Riconnessione fallita",
+    "reconnectSuccessful": "Riconnessione riuscita",
+    "reconnectAttempt": "Tentativo {{current}}/{{max}}",
+    "reconnectLimitReached": "Limite tentativi riconnessione raggiunto",
+    "timeout": "Timeout connessione",
+    "refused": "Connessione rifiutata",
+    "reset": "Connessione ripristinata",
+    "aborted": "Connessione interrotta",
+    "closed": "Connessione chiusa",
+    "error": "Errore connessione",
+    "backendConnectionFailed": "Connessione backend fallita",
+    "unknownConnectionError": "Errore connessione sconosciuto",
+    "status": "Stato connessione",
+    "type": "Tipo connessione",
+    "name": "Nome connessione",
+    "settings": "Impostazioni connessione",
+    "details": "Dettagli connessione",
+    "history": "Cronologia connessione",
+    "log": "Log connessione",
+    "stats": "Statistiche connessione",
+    "test": "Test connessione",
+    "testSuccessful": "Test connessione riuscito",
+    "testFailed": "Test connessione fallito",
+    "edit": "Modifica connessione",
+    "delete": "Elimina connessione",
+    "addTitle": "Aggiungi connessione",
+    "tabs": {
+      "qrcode": "Aggiungi scansionando",
+      "manual": "Inserimento manuale"
+    },
+    "server": {
+      "starting": "Avvio server...",
+      "started": "Server avviato, porta: {{port}}",
+      "startFailed": "Avvio server fallito: {{error}}",
+      "stopping": "Arresto server...",
+      "stopped": "Server arrestato"
+    },
+    "qrcode": {
+      "title": "Connetti scansionando codice",
+      "status": {
+        "preparing": "Preparando avvio server...",
+        "stoppingServer": "Arrestando server esistente...",
+        "startingServer": "Avviando server (porta {{port}})...",
+        "fetchingDeviceInfo": "Recupero informazioni dispositivo...",
+        "gettingLocalIp": "Ottenendo IP locale...",
+        "generatingQrCode": "Generando codice QR...",
+        "ready": "Scansiona codice QR per connettere dispositivo"
+      },
+      "connectionInfo": "Usa il tuo telefono per scansionare il codice QR e connetterti",
+      "serverPort": "Server in esecuzione su porta: {{port}}",
+      "error": {
+        "title": "Errore avvio server, riprova",
+        "retryButton": "Riprova"
+      },
+      "steps": {
+        "stoppingServer": "Passo 1/4: Arrestando server esistente",
+        "startingServer": "Passo 2/4: Avviando server",
+        "fetchingDeviceInfo": "Passo 3/4: Recupero informazioni dispositivo",
+        "gettingLocalIp": "Passo 4/5: Ottenendo IP locale",
+        "generatingQrCode": "Passo 5/5: Generando codice QR"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Componente montato",
+        "componentUnmounting": "[QR-STABLE] Pulizia smontaggio componente",
+        "serverStarting": "[QR-STABLE] Avviando server",
+        "serverStopping": "[QR-STABLE] Arrestando server...",
+        "serverStopped": "[QR-STABLE] Server arrestato",
+        "serverError": "[QR-STABLE] Errore arresto server:",
+        "serverStarted": "[QR-STABLE] Server avviato, porta:",
+        "startServerError": "[QR-STABLE] Errore avvio server:",
+        "componentUnmounted": "[QR-STABLE] Componente smontato, annulla avvio server",
+        "componentRendered": "Componente renderizzato"
+      }
+    },
+    "title": "Connetti dispositivo",
+    "qrCode": "Scansiona codice QR",
+    "manualInput": "Inserimento manuale",
+    "scanQRCode": "Scansiona codice QR per connettere dispositivo",
+    "scanQRCodeDescription": "Sul tuo dispositivo Android, apri l'app, clicca \"Connetti al PC\", poi scansiona questo codice QR",
+    "enterIPAddress": "Inserisci indirizzo IP dispositivo",
+    "enterIPAddressDescription": "Trova l'indirizzo IP sul tuo dispositivo Android, inseriscilo qui",
+    "ipAddress": "Indirizzo IP",
+    "port": "Porta",
+    "disconnecting": "Disconnessione...",
+    "connectionFailedDescription": "Impossibile connettersi al dispositivo. Assicurati che dispositivo e computer siano sulla stessa rete e che l'app Android sia in esecuzione.",
+    "tryAgain": "Riprova",
+    "cancel": "Annulla",
+    "connectionSuccessful": "Connessione riuscita",
+    "connectionSuccessfulDescription": "Connesso con successo al dispositivo",
+    "continue": "Continua",
+    "noDevicesFound": "Nessun dispositivo trovato",
+    "searchingForDevices": "Ricerca dispositivi...",
+    "selectDevice": "Seleziona dispositivo",
+    "selectDeviceDescription": "Seleziona il dispositivo da connettere",
+    "refresh": "Aggiorna",
     "deviceName": "Nome dispositivo",
-    "deviceModel": "Modello",
-    "deviceOS": "Versione sistema operativo",
-    "batteryLevel": "Batteria",
+    "deviceStatus": "Stato",
+    "deviceLastConnected": "Ultima connessione",
+    "deviceActions": "Azioni",
+    "deviceConnect": "Connetti",
+    "deviceDisconnect": "Disconnetti",
+    "deviceRemove": "Rimuovi",
+    "deviceEdit": "Modifica",
+    "deviceDetails": "Dettagli",
+    "addDevice": "Aggiungi dispositivo",
+    "editDevice": "Modifica dispositivo",
+    "removeDevice": "Rimuovi dispositivo",
+    "removeDeviceConfirmation": "Sei sicuro di voler rimuovere questo dispositivo?",
+    "removeDeviceConfirmationDescription": "Questa azione rimuove il dispositivo dall'elenco dispositivi salvati. Puoi ancora riconnetterti scansionando il codice QR o inserendo IP manualmente.",
+    "remove": "Rimuovi",
+    "keepDevice": "Mantieni",
+    "deviceRemoved": "Dispositivo rimosso",
+    "deviceAdded": "Dispositivo aggiunto",
+    "deviceUpdated": "Dispositivo aggiornato",
+    "deviceConnected": "Dispositivo connesso",
+    "deviceDisconnected": "Dispositivo disconnesso",
+    "allDevicesDisconnected": "Tutti i dispositivi disconnessi",
+    "connectionLost": "Connessione persa",
+    "connectionHistory": "Cronologia connessione",
+    "connectionLog": "Log connessione",
+    "connectionStats": "Statistiche connessione",
+    "connectionTest": "Test connessione",
+    "connectionTestSuccessful": "Test connessione riuscito",
+    "connectionTestFailed": "Test connessione fallito",
+    "connectionError": "Errore connessione",
+    "requestingToken": "Richiesta token...",
+    "authFailed": "Autenticazione fallita",
+    "loginSuccess": "Login riuscito",
+    "missingToken": "Token mancante",
+    "tokenReceived": "Token ricevuto",
+    "loginFailed": "Login fallito"
+  },
+  "device": {
+    "title": "Dispositivi",
+    "actions": {
+      "delete": "🗑️ Elimina dispositivo",
+      "label": "Azioni dispositivo"
+    },
+    "confirmDelete": "Sei sicuro di voler eliminare il dispositivo \"{{name}}\"?",
+    "add": "Aggiungi dispositivo",
+    "edit": "Modifica dispositivo",
+    "tokenRequestFailed": "Errore recupero token autorizzazione",
+    "loginInProgress": "Login in corso...",
+    "loginSuccess": "Login riuscito",
+    "disconnected": "Dispositivo disconnesso",
+    "allDevicesDisconnected": "Tutti i dispositivi disconnessi",
+    "missingUuid": "Specifica UUID dispositivo",
+    "noDevices": "Nessun dispositivo",
+    "noEnabledDevices": "Nessun dispositivo abilitato",
+    "notConnectedOrUnavailable": "Dispositivo {{deviceUuid}} non connesso o non disponibile",
+    "clickToAddDevice": "Clicca \"+ Aggiungi connessione\" per scansionare e aggiungere dispositivo",
+    "info": "Informazioni dispositivo",
+    "name": "Nome dispositivo",
+    "model": "Modello",
+    "os": "Versione sistema",
+    "batteryLevel": "Livello batteria",
     "storage": "Archiviazione",
     "memory": "Memoria"
   },
+  "manualInput": {
+    "title": "Inserimento manuale connessione",
+    "deviceName": {
+      "label": "Nome dispositivo (opzionale):",
+      "placeholder": "Ad esempio: Telefono Xiaomi",
+      "hint": "Se non compilato, generato automaticamente"
+    },
+    "socketAddress": {
+      "label": "Indirizzo Socket *: ",
+      "placeholder": "Ad esempio: 192.168.1.100:6001",
+      "hint": "Formati supportati: IP:porta, dominio:porta"
+    },
+    "validation": {
+      "socketRequired": "Inserisci indirizzo socket"
+    },
+    "status": {
+      "adding": "Aggiungendo dispositivo...",
+      "added": "Dispositivo aggiunto!"
+    },
+    "error": {
+      "addFailed": "Aggiunta fallita: {{error}}"
+    },
+    "hint": {
+      "title": "Suggerimento:",
+      "description": "Inserisci indirizzo socket del dispositivo, supporta i seguenti formati:",
+      "formats": [
+        "IP:porta, es. 127.0.0.1:10035",
+        "Indirizzo ws:// o wss:// completo, es. ws://localhost:10035",
+        "Dominio:porta, es. example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Aggiungi dispositivo",
+      "adding": "Aggiungendo..."
+    }
+  },
   "notification": {
+    "title": "Notifiche",
     "noNotifications": "Nessuna notifica",
-    "clearAll": "Pulisci tutto",
-    "markAsRead": "Segna come letto",
-    "markAsUnread": "Segna come non letto",
+    "clearAll": "Cancella tutto",
+    "clearAllConfirm": "Sei sicuro di voler cancellare tutte le notifiche?",
+    "clearAllSuccess": "Tutte le notifiche cancellate",
+    "clearAllFailed": "Cancellazione notifiche fallita",
     "delete": "Elimina",
-    "reply": "Rispondi",
+    "deleteConfirm": "Sei sicuro di voler eliminare questa notifica?",
+    "deleteSuccess": "Notifica eliminata",
+    "deleteFailed": "Eliminazione notifica fallita",
     "copy": "Copia",
+    "copySuccess": "Copiato negli appunti",
+    "copyFailed": "Copia fallita",
+    "details": "Dettagli",
+    "close": "Chiudi",
+    "markAsRead": "Segna come letta",
+    "markAsUnread": "Segna come non letta",
+    "markAsReadSuccess": "Segnata come letta",
+    "markAsReadFailed": "Segnatura come letta fallita",
+    "markAsUnreadSuccess": "Segnata come non letta",
+    "markAsUnreadFailed": "Segnatura come non letta fallita",
+    "markAllAsRead": "Segna tutto come letto",
+    "markAllAsReadConfirm": "Sei sicuro di voler segnare tutte le notifiche come lette?",
+    "markAllAsReadSuccess": "Tutte le notifiche segnate come lette",
+    "markAllAsReadFailed": "Segnatura tutto come letto fallita",
+    "filter": "Filtra",
+    "filterByApp": "Filtra per app",
+    "filterByKeyword": "Filtra per parola chiave",
+    "filterByTime": "Filtra per ora",
+    "filterByStatus": "Filtra per stato",
+    "filterByPriority": "Filtra per priorità",
+    "filterByCategory": "Filtra per categoria",
+    "filterByChannel": "Filtra per canale",
+    "filterByDevice": "Filtra per dispositivo",
+    "reply": "Rispondi",
     "copied": "Copiato!",
-    "expand": "Mostra altro",
-    "collapse": "Mostra meno"
+    "expand": "Mostra di più",
+    "collapse": "Comprimi",
+    "totalCount": "Totale {{count}} notifiche",
+    "selectedCount": "(Selezionate {{count}})",
+    "markSelectedAsRead": "Segna come letta",
+    "selectToMarkAsRead": "Seleziona per segnare come letta",
+    "noNotificationsMessage": "Nessuna notifica",
+    "unknownSender": "Mittente sconosciuto",
+    "noTitle": "Nessun titolo",
+    "noContent": "Nessun contenuto",
+    "subText": "Sottotesto",
+    "summary": "Riepilogo",
+    "textLines": "Testo multi-riga",
+    "time": "Ora",
+    "channelId": "ID canale",
+    "action": "Azione",
+    "isInitialized": "Inizializzato",
+    "readStatus": "Stato lettura",
+    "unread": "Non lette",
+    "templateType": "Tipo template",
+    "conversationTitle": "Titolo conversazione",
+    "additionalInfo": "Informazioni aggiuntive",
+    "participants": "Partecipanti",
+    "isResident": "In corso",
+    "priority": "Priorità",
+    "importance": "Importanza",
+    "addToBlacklist": "Aggiungi alla lista nera",
+    "addToWhitelist": "Aggiungi alla lista bianca"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Mostra filtro",
+      "hide": "🔽 Nascondi filtro",
+      "addPattern": "Aggiungi pattern",
+      "removePattern": "Rimuovi",
+      "reset": "Ripristina al default",
+      "save": "Salva impostazioni"
+    },
+    "title": "Regole di filtro",
+    "basicRulesTitle": "Regole di filtro base",
+    "rules": {
+      "ongoing": "Notifiche in corso",
+      "ongoingDesc": "Filtra notifiche in corso (FLAG_ONGOING_EVENT)",
+      "system": "Notifiche di sistema",
+      "systemDesc": "Filtra notifiche sistema Android (android, com.android.*)",
+      "empty": "Notifiche senza contenuto",
+      "emptyDesc": "Filtra notifiche con titolo e contenuto vuoti",
+      "lowPriority": "Notifiche a bassa priorità",
+      "lowPriorityDesc": "Filtra notifiche a bassa priorità e importanza",
+      "foreground": "Notifiche servizio in primo piano",
+      "foregroundDesc": "Filtra notifiche dove channelId contiene \"foreground\"",
+      "groupSummary": "Notifiche riepilogo gruppo",
+      "groupSummaryDesc": "Filtra notifiche dove il titolo contiene \"GroupSummary\"",
+      "runningService": "Notifiche in esecuzione",
+      "runningServiceDesc": "Filtra notifiche \"In esecuzione\" + \"Tocca per dettagli\"",
+      "packageBlacklist": "Lista nera nomi pacchetti",
+      "packageBlacklistDesc": "Filtra notifiche da nomi pacchetti specificati (supporta regex)",
+      "packageWhitelist": "Lista bianca nomi pacchetti",
+      "packageWhitelistDesc": "Mostra solo notifiche da nomi pacchetti specificati (supporta regex)",
+      "systemWhitelist": "Lista bianca app di sistema",
+      "systemWhitelistDesc": "Anche com.android.* non filtrato"
+    },
+    "hint": {
+      "title": "Suggerimento:",
+      "exact": "Corrispondenza esatta: com.tencent.mm",
+      "wildcard": "Wildcard: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Modalità lista nera",
+      "whitelist": "Modalità lista bianca"
+    },
+    "messages": {
+      "patternAdded": "Pattern aggiunto: {{pattern}}",
+      "patternRemoved": "Pattern rimosso: {{pattern}}",
+      "modeChanged": "Passato a {{mode}}",
+      "configReset": "Ripristinato alla configurazione predefinita",
+      "configSaved": "Impostazioni salvate",
+      "configLoadError": "Errore caricamento configurazione: {{error}}",
+      "configSaveError": "Errore salvataggio configurazione: {{error}}"
+    },
+    "enterPackageOrRegex": "Inserisci nome pacchetto o regex",
+    "enterPackageOrRegexPlaceholder": "Inserisci nome pacchetto o regex",
+    "invalidRegex": "Regex non valido",
+    "confirmReset": "Sei sicuro di voler ripristinare alla configurazione predefinita?",
+    "confirmRemovePattern": "Sei sicuro di voler rimuovere \"{{pattern}}\" da {{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "Impossibile ridurre a icona la finestra"
-  }
+    "connectionFailed": "Connessione fallita",
+    "deleteFailed": "Eliminazione fallita",
+    "websocketNotConnected": "WebSocket non connesso",
+    "websocketNotInitialized": "WebSocket non inizializzato",
+    "minimizeWindowFailed": "Minimizzazione finestra fallita"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Regex non valido"
+    }
+  },
+  "login": "Accedi",
+  "request_token": "Richiedi token",
+  "clear_messages": "Cancella messaggi",
+  "get_package_icon": "Ottieni icona app"
 }

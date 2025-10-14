@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { filterConfigController } from '../data/notification-filter-config';
 import type { Notification, NotificationMessageItem } from '../types/notification';
 import { useProxyWatch } from 'fanfanlo-deep-watcher';
 import type { PropertiesChain } from 'fanfanlo-deep-watcher';
 import { mainModelController } from '../data/main-model-controller';
 import { getPackageIcon } from '../services/icon-service';
-import type { IconMap, IconData } from '../types/icon';
+import type { IconData } from '../types/icon';
 import type { AndroidDeviceInfo } from '../types/deviceStorage';
 
 interface NotificationListProps {
@@ -34,6 +35,7 @@ export function NotificationList({
   onDelete,
   device,
 }: NotificationListProps) {
+  const { t } = useTranslation();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   // 按时间戳降序排序（最新的在前）
@@ -100,14 +102,14 @@ export function NotificationList({
         <div className="toolbar" style={styles.toolbar}>
           <div style={styles.toolbarLeft}>
             <span style={styles.count}>
-              共 {sortedNotifications.length} 条通知
-              {selectedIds.size > 0 && ` (已选 ${selectedIds.size} 条)`}
+              {t('notification.totalCount', { count: sortedNotifications.length })}
+              {selectedIds.size > 0 && ` ${t('notification.selectedCount', { count: selectedIds.size })}`}
             </span>
           </div>
           <div style={styles.toolbarRight}>
             {selectedIds.size > 0 && (
               <button onClick={handleMarkReadSelected} style={styles.toolbarButton}>
-                标记为已读
+                {t('notification.markSelectedAsRead')}
               </button>
             )}
           </div>
@@ -117,7 +119,7 @@ export function NotificationList({
       {/* 通知列表 */}
       {sortedNotifications.length === 0 ? (
         <div style={styles.empty}>
-          <p>暂无通知</p>
+          <p>{t('notification.noNotificationsMessage')}</p>
         </div>
       ) : (
         <div className="notification-items" style={styles.items}>
@@ -162,6 +164,7 @@ function NotificationItem({
   console.log('[NotificationItem] device?.uuid:', device?.uuid);
 
   // 展开/折叠状态
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const packageName = notification.packageName;
@@ -292,7 +295,7 @@ function NotificationItem({
         <div style={styles.arrayContainer}>
           {messages.map((msg, index) => (
             <div key={index} style={styles.messageItem}>
-              <div style={styles.messageSender}>{msg.sender || '未知发送者'}</div>
+              <div style={styles.messageSender}>{msg.sender || t('notification.unknownSender', '未知发送者')}</div>
               <div style={styles.messageText}>{msg.text}</div>
               {msg.timestamp && (
                 <div style={styles.messageTime}>{formatTimestamp(msg.timestamp)}</div>
@@ -332,13 +335,8 @@ function NotificationItem({
                   src={`data:image/png;base64,${iconBase64}`}
                   alt="app icon"
                   style={styles.appIcon}
-                  onError={(e) => {
-                    console.error('[NotificationItem] IMG onError for:', packageName);
-                    console.error('[NotificationItem] Failed to load image, src length:', iconBase64?.length);
-                  }}
-                  onLoad={() => {
-                    console.log('[NotificationItem] IMG onLoad success for:', packageName);
-                  }}
+                  onError={(e) => console.error('[NotificationItem] IMG onError for:', packageName, e)}
+                  onLoad={() => console.log('[NotificationItem] IMG onLoad success for:', packageName)}
                 />
               </>
             )}
@@ -350,7 +348,7 @@ function NotificationItem({
             )}
 
             {!notification.read && <span style={styles.unreadDot}>●</span>}
-            <h4 style={styles.title}>{notification.title || '无标题'}</h4>
+            <h4 style={styles.title}>{notification.title || t('common.noTitle')}</h4>
             <span style={styles.expandIcon}>{expanded ? '▼' : '▶'}</span>
           </div>
           {!expanded && (
@@ -371,7 +369,7 @@ function NotificationItem({
         <button
           onClick={() => onDelete(notification.id)}
           style={styles.deleteButton}
-          title="删除"
+          title={t('common.delete', '删除')}
         >
           ✕
         </button>
@@ -383,23 +381,23 @@ function NotificationItem({
           {/* === 文本内容区 === */}
           {(notification.text || notification.subText || notification.summaryText || notification.bigText || notification.textLines) && (
             <>
-              <div style={styles.sectionTitle}>文本内容</div>
+              <div style={styles.sectionTitle}>{t('common.content')}</div>
               <div style={styles.itemMetaExpanded}>
                 {notification.text && (
                   <div style={styles.metaRow}>
-                    <span style={styles.detailLabel}>内容:</span>
+                    <span style={styles.detailLabel}>{t('common.content')}:</span>
                     <p style={styles.text}>{notification.text}</p>
                   </div>
                 )}
-                {renderField('子文本', notification.subText)}
-                {renderField('摘要', notification.summaryText)}
+                {renderField(t('notification.subText', '子文本'), notification.subText)}
+                {renderField(t('notification.summary', '摘要'), notification.summaryText)}
                 {notification.bigText && (
                   <div style={styles.metaRow}>
-                    <span style={styles.detailLabel}>大文本:</span>
+                    <span style={styles.detailLabel}>{t('common.bigText')}:</span>
                     <p style={styles.text}>{notification.bigText}</p>
                   </div>
                 )}
-                {renderArrayField('多行文本', notification.textLines)}
+                {renderArrayField(t('notification.textLines', '多行文本'), notification.textLines)}
               </div>
             </>
           )}
@@ -409,28 +407,28 @@ function NotificationItem({
           <div style={styles.itemMetaExpanded}>
             <div style={styles.metaRow}>
               <span style={styles.detailLabel}>包名:</span>
-              <span style={styles.packageName}>{packageName || '未知'}</span>
+              <span style={styles.packageName}>{packageName || t('common.unknown', '未知')}</span>
               {packageName && (
                 <div style={styles.filterButtons}>
                   <button
                     onClick={handleAddToBlacklist}
                     style={styles.blacklistButton}
-                    title="加入黑名单"
-                  >
-                    加入黑名单
+                    title={t('notification.addToBlacklist', '加入黑名单')}
+                    >
+                     {t('notification.addToBlacklist', '加入黑名单')}
                   </button>
                   <button
                     onClick={handleAddToWhitelist}
                     style={styles.whitelistButton}
-                    title="加入白名单"
-                  >
-                    加入白名单
+                    title={t('notification.addToWhitelist', '加入白名单')}
+                    >
+                     {t('notification.addToWhitelist', '加入白名单')}
                   </button>
                 </div>
               )}
             </div>
             {renderField('ID', notification.id)}
-            {renderField('时间', formatTimestamp(timestamp))}
+            {renderField(t('notification.time', '时间'), formatTimestamp(timestamp))}
             {renderField('通道ID', notification.channelId)}
             {renderField('动作', notification.action)}
             {renderField('是否初始化', notification.isInit ? '是' : undefined)}

@@ -1,8 +1,10 @@
 import { useProxyWatch } from 'fanfanlo-deep-watcher';
 import { mainModelController } from '../data/main-model-controller';
 import { DeviceCard } from './DeviceCard';
+import { useTranslation } from 'react-i18next';
 
 export function DeviceList() {
+  const { t } = useTranslation();
   const [enabledDevices] = useProxyWatch(
     mainModelController.data,
     'enabledDevices',
@@ -16,7 +18,7 @@ export function DeviceList() {
         textAlign: 'center',
         color: '#666'
       }}>
-        <p>暂无启用的设备</p>
+        <p>{t('device.noEnabledDevices')}</p>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SocketConfig {
   host: string;
@@ -11,6 +12,7 @@ interface SocketSettingsProps {
 }
 
 const SocketSettings: React.FC<SocketSettingsProps> = ({ onConnected, showTokenInput = false }) => {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<SocketConfig>({
     host: '',
   });
@@ -22,7 +24,7 @@ const SocketSettings: React.FC<SocketSettingsProps> = ({ onConnected, showTokenI
     e.preventDefault();
 
     if (!config.host.trim()) {
-      setError('请输入服务器地址');
+      setError(t('connection.serverAddressRequired', '请输入服务器地址'));
       return;
     }
 
@@ -32,7 +34,7 @@ const SocketSettings: React.FC<SocketSettingsProps> = ({ onConnected, showTokenI
     try {
       await onConnected(config);
     } catch (err) {
-      setError('连接失败，请检查服务器地址');
+      setError(t('connection.connectionFailedCheckAddress', '连接失败，请检查服务器地址'));
       setIsConnecting(false);
     }
   };
@@ -46,21 +48,17 @@ const SocketSettings: React.FC<SocketSettingsProps> = ({ onConnected, showTokenI
       borderRadius: '8px',
       border: '1px solid #ddd'
     }}>
-      <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>Socket连接设置</h3>
+      <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>{t('connection.socketSettings', 'Socket连接设置')}</h3>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '15px' }}>
           <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-            服务器地址:
+            {t('connection.serverAddress', '服务器地址')}:
           </label>
           <textarea
             value={config.host}
             onChange={(e) => setConfig(prev => ({ ...prev, host: e.target.value }))}
-            placeholder={`例如：
-192.168.1.100:8080
-ws://192.168.1.100:8080
-https://example.com
-wss://api.example.com/ws`}
+            placeholder={t('connection.serverAddressPlaceholder', '例如：\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws')}
             rows={8}
             style={{
               width: '100%',
@@ -80,20 +78,20 @@ wss://api.example.com/ws`}
             marginTop: '4px',
             lineHeight: '1.4'
           }}>
-            支持IP+端口、ws://、wss://域名等格式
+            {t('connection.supportedFormats', '支持IP+端口、ws://、wss://域名等格式')}
           </div>
         </div>
 
         {showTokenInput && (
           <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-              认证令牌 (可选):
+              {t('connection.authToken', '认证令牌')} ({t('common.optional', '可选')}):
             </label>
             <input
               type="password"
               value={config.token || ''}
               onChange={(e) => setConfig(prev => ({ ...prev, token: e.target.value }))}
-              placeholder="输入认证令牌"
+              placeholder={t('connection.enterAuthToken', '输入认证令牌')}
               style={{
                 width: '100%',
                 padding: '8px',
@@ -133,7 +131,7 @@ wss://api.example.com/ws`}
               fontSize: '16px'
             }}
           >
-            {isConnecting ? '连接中...' : '连接'}
+            {isConnecting ? t('connection.connecting', '连接中...') : t('connection.connect', '连接')}
           </button>
         </div>
       </form>

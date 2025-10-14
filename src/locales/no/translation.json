@@ -1,9 +1,146 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "Hvitliste for systemapper",
+        "description": "Varsler fra disse appene vil ikke filtreres, selv om de er systemapper",
+        "items": {
+          "mms": "SMS",
+          "phone": "Telefon"
+        },
+        "addCustom": "Legg til tilpasset systemapp i hvitlisten",
+        "example": "For eksempel: 'com.android.mms' kan filtrere SMS"
+      },
+      "blacklist": {
+        "title": "Svarteliste for systemapper",
+        "description": "Varsler fra disse appene vil bli tvunget filtrert (høyeste prioritet)",
+        "addCustom": "Legg til tilpasset systemapp i svartelisten"
+      }
+    },
+    "actions": {
+      "show": "Vis filterinnstillinger",
+      "hide": "Skjul filterinnstillinger"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "Filtrer pågående varsler (FLAG_ONGOING_EVENT)",
+        "system": "Filtrer systemvarsler",
+        "emptyContent": "Filtrer varsler uten innhold",
+        "lowPriority": "Filtrer lavprioriterte varsler",
+        "runningService": "Filtrer kjørende tjenestevarsler"
+      },
+      "status": {
+        "filteringOngoing": "Filtrerer pågående varsler...",
+        "filteringSystem": "Filtrerer systemvarsler...",
+        "filteringEmptyContent": "Filtrerer varsler uten innhold...",
+        "filteringLowPriority": "Filtrerer lavprioriterte varsler...",
+        "filteringRunningService": "Filtrerer kjørende tjenestevarsler...",
+        "filteringForegroundService": "Filtrerer forgrunnstjenestevarsler...",
+        "filteringGroupSummary": "Filtrerer gruppesammendragvarsler..."
+      },
+      "empty": "Varsler uten innhold",
+      "emptyDesc": "Filtrer varsler med tom tittel og innhold",
+      "foreground": "Forgrunnstjenestevarsler",
+      "foregroundDesc": "Filtrer varsler der channelId inneholder \"foreground\"",
+      "groupSummary": "Gruppesammendragvarsler",
+      "groupSummaryDesc": "Filtrer varsler der tittel inneholder \"GroupSummary\"",
+      "lowPriority": "Lavprioriterte varsler",
+      "lowPriorityDesc": "Filtrer lavprioriterte og lavviktige varsler",
+      "ongoing": "Pågående varsler",
+      "ongoingDesc": "Filtrer pågående varsler (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "Svarteliste pakkenavn",
+      "packageBlacklistDesc": "Filtrer varsler fra angitte pakkenavn (støtter regex)",
+      "packageWhitelist": "Hvitliste pakkenavn",
+      "packageWhitelistDesc": "Vis kun varsler fra angitte pakkenavn (støtter regex)",
+      "runningService": "Kjørende varsler",
+      "runningServiceDesc": "Filtrer \"Kjørende\" + \"Trykk for detaljer\" varsler",
+      "system": "Systemvarsler",
+      "systemDesc": "Filtrer Android systemvarsler (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "Kjørende",
+      "tapForDetails": "Trykk for detaljer"
+    },
+    "errors": {
+      "filterError": "Feil ved filtrering av varsler: {{error}}",
+      "invalidRegex": "Ugyldig regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "Feil ved lasting av konfigurasjon: {{error}}",
+      "configReset": "Tilbakestilt til standardinnstillinger",
+      "configSaved": "Innstillinger lagret",
+      "configSaveError": "Feil ved lagring av konfigurasjon: {{error}}",
+      "modeChanged": "Byttet til {{mode}}",
+      "patternAdded": "Mønster lagt til: {{pattern}}",
+      "patternRemoved": "Mønster fjernet: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "Er du sikker på at du vil slette alle enheter?",
+      "confirmMessage": "Dette vil slette alle lagrede enheter men beholde vinduinnstillinger.",
+      "irreversible": "Denne handlingen kan ikke angres!",
+      "success": "Enhetsdata slettet!\nAppen vil lastes inn på nytt.",
+      "error": "Sletting mislyktes",
+      "logs": {
+        "clearing": "[appReset] Sletter enhetsdata...",
+        "cleared": "[appReset] Enhetsdata slettet"
+      }
+    },
+    "confirmTitle": "Er du sikker på at du vil tilbakestille appen til initial tilstand?",
+    "confirmMessage": "Dette vil slette:\n- Alle lagrede enheter\n- Vindu posisjon og størrelsesinnstillinger\n- Alle filterinnstillinger\n- Alle appinnstillinger\n\nAppen vil lukkes og startes på nytt for å bruke endringer.\n\nDenne handlingen kan ikke angres!",
+    "confirmButton": "Bekreft",
+    "cancelButton": "Avbryt",
+    "logs": {
+      "starting": "[appReset] Starter app tilbakestilling...",
+      "clearingLocalStorage": "[appReset] Rydder localStorage...",
+      "localStorageCleared": "[appReset] localStorage ryddet",
+      "creatingResetMarker": "[appReset] Oppretter tilbakestillingsmarkørfil...",
+      "resetMarkerCreated": "[appReset] Tilbakestillingsmarkørfil opprettet",
+      "resettingAppData": "[appReset] Tilbakestiller appdata...",
+      "appDataReset": "[appReset] Appdata tilbakestilt",
+      "exitingApp": "[appReset] Avslutter app...",
+      "error": "[appReset] Feil ved tilbakestilling av app:"
+    },
+    "comments": {
+      "resetFunction": "Tilbakestill app til standardtilstand",
+      "resetDescription": "Slett alle data:\n- LocalStorage (enhetsliste, filterkonfigurasjoner etc. frontend data)\n- Tauri lokal data mappe (vindustilstand etc. backend data)",
+      "resetStrategy": "Bruk markørfilstrategi for å løse Windows fil-lås problemer:\n1. Rydd LocalStorage\n2. Opprett tilbakestillingsmarkørfil\n3. Avslutt app\n4. Ved neste start, slett datafiler automatisk"
+    }
+  },
   "app": {
     "title": "Varslingslytter",
-    "description": "Lytt til og håndter varsler fra enheter"
+    "description": "Lytt og administrer enhetsvarsler",
+    "loading": "Laster..."
   },
   "common": {
+    "labels": {
+      "address": "Adresse"
+    },
+    "actions": {
+      "reconnect": "🔄 Koble til igjen",
+      "manualReconnect": "Manuell tilkobling igjen",
+      "collapse": "Kollaps",
+      "expandDetails": "Utvid detaljer",
+      "label": "Handling",
+      "addToBlacklist": "Legg til i svarteliste",
+      "addToWhitelist": "Legg til i hvitliste"
+    },
+    "unknown": "Ukjent",
+    "optional": "Valgfri",
+    "unknownSender": "Ukjent avsender",
+    "noTitle": "Ingen tittel",
+    "content": "Innhold",
+    "bigText": "Stor tekst",
+    "textLines": "Tekstlinjer",
+    "additionalInfo": "Tilleggsinformasjon",
+    "packageName": "Pakkenavn",
+    "timeSent": "Sendetid",
+    "notificationId": "Varslings-ID",
+    "tag": "Merkelapp",
+    "messages": "Meldinger",
+    "sender": "Avsender",
+    "time": "Tid",
     "save": "Lagre",
     "cancel": "Avbryt",
     "back": "Tilbake",
@@ -19,58 +156,419 @@
     "disconnected": "Frakoblet",
     "connectionFailed": "Tilkobling mislyktes",
     "minimize": "Minimer",
-    "unread": "Ulest",
+    "unread": "Uleste",
     "total": "Totalt",
     "errorOccurred": "Det oppstod en feil",
     "retry": "Prøv igjen",
     "settings": "Innstillinger",
-    "close": "Lukk",
     "maximize": "Maksimer",
-    "restore": "Gjenopprett"
+    "restore": "Gjenopprett",
+    "enabled": "Aktivert",
+    "disabled": "Deaktivert"
   },
   "settings": {
     "title": "Innstillinger",
-    "language": "Språk",
-    "appearance": "Utseende",
-    "theme": "Tema",
-    "light": "Lyst",
-    "dark": "Mørkt",
-    "system": "System",
-    "notifications": "Varsler",
-    "enableNotifications": "Aktiver varsler",
-    "notificationSound": "Varsellyd",
+    "appearance": {
+      "title": "Utseende",
+      "theme": "Tema",
+      "light": "Lys",
+      "dark": "Mørk",
+      "system": "System",
+      "language": "Språk"
+    },
+    "notifications": {
+      "title": "Varsler",
+      "enableNotifications": "Aktiver varsler",
+      "enableSounds": "Aktiver lyder",
+      "enableBadge": "Vis merke"
+    },
+    "websocketDevices": "WebSocket enheter",
     "about": "Om",
     "version": "Versjon",
-    "checkForUpdates": "Se etter oppdateringer"
+    "checkForUpdates": "Sjekk for oppdateringer",
+    "clearAllDevices": "Slett alle enheter",
+    "language": "Språk",
+    "resetWarning": "Tilbakestilling vil slette lagrede enheter, vinduposisjon og størrelse, filterkonfigurasjoner og appdata. Denne handlingen kan ikke angres, vær forsiktig."
   },
-  "device": {
-    "connect": "Koble til enhet",
+  "connection": {
+    "manager": {
+      "deleteConfirm": "Er du sikker på at du vil slette tilkoblingen \"{{name}}\"?",
+      "noConnections": "Ingen lagrede tilkoblinger",
+      "addConnectionPrompt": "Klikk på \"Legg til tilkobling\"-knappen for å starte",
+      "totalConnections": "{{count}} tilkoblinger totalt",
+      "connectionDetails": {
+        "address": "Adresse",
+        "token": "Token",
+        "none": "Ingen",
+        "createdAt": "Opprettet den",
+        "lastConnected": "Sist tilkoblet"
+      },
+      "actions": {
+        "enable": "Aktiver",
+        "delete": "Slett",
+        "label": "Tilkoblingshandlinger"
+      }
+    },
+    "add": "Legg til tilkobling",
+    "migratedConnection": "Migrert tilkobling",
+    "socketSettings": "Socket tilkoblingsinnstillinger",
+    "serverAddress": "Serveradresse",
+    "serverAddressPlaceholder": "For eksempel:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "Angi serveradresse",
+    "connectionFailedCheckAddress": "Tilkobling mislyktes, sjekk serveradresse",
+    "supportedFormats": "Støtter IP+port, ws://, wss:// domene etc.",
+    "authToken": "Autentiseringstoken",
+    "enterAuthToken": "Angi autentiseringstoken",
+    "connecting": "Kobler til...",
+    "connect": "Koble til",
+    "connectionFailed": "Tilkobling mislyktes",
+    "testing": "Tester...",
+    "startSocketTest": "Start Socket-test",
+    "socketTestTitle": "Socket-test",
+    "clickToStartTest": "Klikk på knappen for å starte testen...",
     "disconnect": "Koble fra",
     "connected": "Tilkoblet",
     "disconnected": "Frakoblet",
-    "connectionFailed": "Tilkobling mislyktes",
+    "failed": "Tilkobling mislyktes",
     "retry": "Prøv igjen",
-    "deviceInfo": "Enhetsinformasjon",
+    "lost": "Tilkobling tapt",
+    "reconnecting": "Kobler til igjen...",
+    "reconnect": "Koble til igjen",
+    "reconnectIn": "Prøv igjen om {{count}} sekunder",
+    "reconnectNow": "Prøv igjen nå",
+    "reconnectFailed": "Tilkobling igjen mislyktes",
+    "reconnectSuccessful": "Tilkobling igjen vellykket",
+    "reconnectAttempt": "Forsøk {{current}}/{{max}}",
+    "reconnectLimitReached": "Nådd grense for tilkoblingsforsøk igjen",
+    "timeout": "Tilkobling timeout",
+    "refused": "Tilkobling nektet",
+    "reset": "Tilkobling tilbakestilt",
+    "aborted": "Tilkobling avbrutt",
+    "closed": "Tilkobling lukket",
+    "error": "Tilkoblingsfeil",
+    "backendConnectionFailed": "Backend tilkobling mislyktes",
+    "unknownConnectionError": "Ukjent tilkoblingsfeil",
+    "status": "Tilkoblingsstatus",
+    "type": "Tilkoblingstype",
+    "name": "Tilkoblingsnavn",
+    "settings": "Tilkoblingsinnstillinger",
+    "details": "Tilkoblingsdetaljer",
+    "history": "Tilkoblingshistorikk",
+    "log": "Tilkoblingslogg",
+    "stats": "Tilkoblingsstatistikk",
+    "test": "Test tilkobling",
+    "testSuccessful": "Tilkoblingstest vellykket",
+    "testFailed": "Tilkoblingstest mislyktes",
+    "edit": "Rediger tilkobling",
+    "delete": "Slett tilkobling",
+    "addTitle": "Legg til tilkobling",
+    "tabs": {
+      "qrcode": "Legg til ved skanning",
+      "manual": "Manuell inndata"
+    },
+    "server": {
+      "starting": "Starter server...",
+      "started": "Server startet, port: {{port}}",
+      "startFailed": "Serverstart mislyktes: {{error}}",
+      "stopping": "Stopper server...",
+      "stopped": "Server stoppet"
+    },
+    "qrcode": {
+      "title": "Koble til ved skanning av kode",
+      "status": {
+        "preparing": "Forbereder serverstart...",
+        "stoppingServer": "Stopper eksisterende server...",
+        "startingServer": "Starter server (port {{port}})...",
+        "fetchingDeviceInfo": "Henter enhetsinformasjon...",
+        "gettingLocalIp": "Henter lokal IP...",
+        "generatingQrCode": "Genererer QR-kode...",
+        "ready": "Skann QR-kode for å koble enhet"
+      },
+      "connectionInfo": "Bruk telefonen din til å skanne QR-koden og koble til",
+      "serverPort": "Server kjører på port: {{port}}",
+      "error": {
+        "title": "Feil ved serverstart, prøv igjen",
+        "retryButton": "Prøv igjen"
+      },
+      "steps": {
+        "stoppingServer": "Trinn 1/4: Stopper eksisterende server",
+        "startingServer": "Trinn 2/4: Starter server",
+        "fetchingDeviceInfo": "Trinn 3/4: Henter enhetsinformasjon",
+        "gettingLocalIp": "Trinn 4/5: Henter lokal IP",
+        "generatingQrCode": "Trinn 5/5: Genererer QR-kode"
+      },
+      "logs": {
+        "componentMounted": "[QR-STABLE] Komponent montert",
+        "componentUnmounting": "[QR-STABLE] Komponent avmontering opprydding",
+        "serverStarting": "[QR-STABLE] Starter server",
+        "serverStopping": "[QR-STABLE] Stopper server...",
+        "serverStopped": "[QR-STABLE] Server stoppet",
+        "serverError": "[QR-STABLE] Feil ved stopping av server:",
+        "serverStarted": "[QR-STABLE] Server startet, port:",
+        "startServerError": "[QR-STABLE] Feil ved starting av server:",
+        "componentUnmounted": "[QR-STABLE] Komponent avmontert, avbryt serverstart",
+        "componentRendered": "Komponent renderet"
+      }
+    },
+    "title": "Koble til enhet",
+    "qrCode": "Skann QR-kode",
+    "manualInput": "Manuell inndata",
+    "scanQRCode": "Skann QR-kode for å koble enhet",
+    "scanQRCodeDescription": "På din Android-enhet, åpne appen, klikk \"Koble til PC\", skann deretter denne QR-koden",
+    "enterIPAddress": "Angi enhetens IP-adresse",
+    "enterIPAddressDescription": "Finn IP-adressen på din Android-enhet, angi den her",
+    "ipAddress": "IP-adresse",
+    "port": "Port",
+    "disconnecting": "Kobler fra...",
+    "connectionFailedDescription": "Kan ikke koble til enheten. Sørg for at enheten og datamaskinen er på samme nettverk, og at Android-appen kjører.",
+    "tryAgain": "Prøv igjen",
+    "cancel": "Avbryt",
+    "connectionSuccessful": "Tilkobling vellykket",
+    "connectionSuccessfulDescription": "Vellykket tilkoblet enheten",
+    "continue": "Fortsett",
+    "noDevicesFound": "Ingen enheter funnet",
+    "searchingForDevices": "Søker etter enheter...",
+    "selectDevice": "Velg enhet",
+    "selectDeviceDescription": "Velg enheten å koble til",
+    "refresh": "Oppdater",
     "deviceName": "Enhetsnavn",
-    "deviceModel": "Modell",
-    "deviceOS": "OS-versjon",
+    "deviceStatus": "Status",
+    "deviceLastConnected": "Sist tilkoblet",
+    "deviceActions": "Handlinger",
+    "deviceConnect": "Koble til",
+    "deviceDisconnect": "Koble fra",
+    "deviceRemove": "Fjern",
+    "deviceEdit": "Rediger",
+    "deviceDetails": "Detaljer",
+    "addDevice": "Legg til enhet",
+    "editDevice": "Rediger enhet",
+    "removeDevice": "Fjern enhet",
+    "removeDeviceConfirmation": "Er du sikker på at du vil fjerne denne enheten?",
+    "removeDeviceConfirmationDescription": "Denne handlingen fjerner enheten fra lagrede enheter listen. Du kan fortsatt koble til igjen ved å skanne QR-kode eller angi IP manuelt.",
+    "remove": "Fjern",
+    "keepDevice": "Behold",
+    "deviceRemoved": "Enhet fjernet",
+    "deviceAdded": "Enhet lagt til",
+    "deviceUpdated": "Enhet oppdatert",
+    "deviceConnected": "Enhet tilkoblet",
+    "deviceDisconnected": "Enhet frakoblet",
+    "allDevicesDisconnected": "Alle enheter frakoblet",
+    "connectionLost": "Tilkobling tapt",
+    "connectionHistory": "Tilkoblingshistorikk",
+    "connectionLog": "Tilkoblingslogg",
+    "connectionStats": "Tilkoblingsstatistikk",
+    "connectionTest": "Test tilkobling",
+    "connectionTestSuccessful": "Tilkoblingstest vellykket",
+    "connectionTestFailed": "Tilkoblingstest mislyktes",
+    "connectionError": "Tilkoblingsfeil",
+    "requestingToken": "Ber om token...",
+    "authFailed": "Autentisering mislyktes",
+    "loginSuccess": "Innlogging vellykket",
+    "missingToken": "Manglende token",
+    "tokenReceived": "Token mottatt",
+    "loginFailed": "Innlogging mislyktes"
+  },
+  "device": {
+    "title": "Enheter",
+    "actions": {
+      "delete": "🗑️ Slett enhet",
+      "label": "Enhetshandlinger"
+    },
+    "confirmDelete": "Er du sikker på at du vil slette enheten \"{{name}}\"?",
+    "add": "Legg til enhet",
+    "edit": "Rediger enhet",
+    "tokenRequestFailed": "Feil ved henting av autorisasjonstoken",
+    "loginInProgress": "Logger inn...",
+    "loginSuccess": "Innlogging vellykket",
+    "disconnected": "Enhet frakoblet",
+    "allDevicesDisconnected": "Alle enheter frakoblet",
+    "missingUuid": "Angi enhets UUID",
+    "noDevices": "Ingen enheter",
+    "noEnabledDevices": "Ingen aktiverte enheter",
+    "notConnectedOrUnavailable": "Enhet {{deviceUuid}} ikke tilkoblet eller utilgjengelig",
+    "clickToAddDevice": "Klikk \"+ Legg til tilkobling\" for å skanne og legge til enhet",
+    "info": "Enhetsinformasjon",
+    "name": "Enhetsnavn",
+    "model": "Modell",
+    "os": "Systemversjon",
     "batteryLevel": "Batterinivå",
     "storage": "Lagring",
     "memory": "Minne"
   },
+  "manualInput": {
+    "title": "Manuell tilkoblingsinndata",
+    "deviceName": {
+      "label": "Enhetsnavn (valgfritt):",
+      "placeholder": "For eksempel: Xiaomi telefon",
+      "hint": "Hvis ikke fylt ut, genereres automatisk"
+    },
+    "socketAddress": {
+      "label": "Socket adresse *: ",
+      "placeholder": "For eksempel: 192.168.1.100:6001",
+      "hint": "Støttede formater: IP:port, domene:port"
+    },
+    "validation": {
+      "socketRequired": "Angi socket adresse"
+    },
+    "status": {
+      "adding": "Legger til enhet...",
+      "added": "Enhet lagt til!"
+    },
+    "error": {
+      "addFailed": "Legg til mislyktes: {{error}}"
+    },
+    "hint": {
+      "title": "Hint:",
+      "description": "Angi enhetens socket adresse, støtter følgende formater:",
+      "formats": [
+        "IP:port, f.eks. 127.0.0.1:10035",
+        "Full ws:// eller wss:// adresse, f.eks. ws://localhost:10035",
+        "Domene:port, f.eks. example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "Legg til enhet",
+      "adding": "Legger til..."
+    }
+  },
   "notification": {
+    "title": "Varsler",
     "noNotifications": "Ingen varsler",
-    "clearAll": "Tøm alle",
+    "clearAll": "Slett alle",
+    "clearAllConfirm": "Er du sikker på at du vil slette alle varsler?",
+    "clearAllSuccess": "Alle varsler slettet",
+    "clearAllFailed": "Sletting av varsler mislyktes",
+    "delete": "Slett",
+    "deleteConfirm": "Er du sikker på at du vil slette denne varslingen?",
+    "deleteSuccess": "Varsling slettet",
+    "deleteFailed": "Sletting av varsling mislyktes",
+    "copy": "Kopier",
+    "copySuccess": "Kopiert til utklippstavle",
+    "copyFailed": "Kopiering mislyktes",
+    "details": "Detaljer",
+    "close": "Lukk",
     "markAsRead": "Merk som lest",
     "markAsUnread": "Merk som ulest",
-    "delete": "Slett",
+    "markAsReadSuccess": "Merket som lest",
+    "markAsReadFailed": "Merking som lest mislyktes",
+    "markAsUnreadSuccess": "Merket som ulest",
+    "markAsUnreadFailed": "Merking som ulest mislyktes",
+    "markAllAsRead": "Merk alle som lest",
+    "markAllAsReadConfirm": "Er du sikker på at du vil merke alle varsler som lest?",
+    "markAllAsReadSuccess": "Alle varsler merket som lest",
+    "markAllAsReadFailed": "Merking av alle som lest mislyktes",
+    "filter": "Filter",
+    "filterByApp": "Filter etter app",
+    "filterByKeyword": "Filter etter nøkkelord",
+    "filterByTime": "Filter etter tid",
+    "filterByStatus": "Filter etter status",
+    "filterByPriority": "Filter etter prioritet",
+    "filterByCategory": "Filter etter kategori",
+    "filterByChannel": "Filter etter kanal",
+    "filterByDevice": "Filter etter enhet",
     "reply": "Svar",
-    "copy": "Kopier",
     "copied": "Kopiert!",
     "expand": "Vis mer",
-    "collapse": "Vis mindre"
+    "collapse": "Kollaps",
+    "totalCount": "{{count}} varsler totalt",
+    "selectedCount": "(Valgt {{count}})",
+    "markSelectedAsRead": "Merk som lest",
+    "selectToMarkAsRead": "Velg for å merke som lest",
+    "noNotificationsMessage": "Ingen varsler",
+    "unknownSender": "Ukjent avsender",
+    "noTitle": "Ingen tittel",
+    "noContent": "Ingen innhold",
+    "subText": "Undertekst",
+    "summary": "Sammendrag",
+    "textLines": "Multi-linje tekst",
+    "time": "Tid",
+    "channelId": "Kanal ID",
+    "action": "Handling",
+    "isInitialized": "Initialisert",
+    "readStatus": "Lesestatus",
+    "unread": "Ulest",
+    "templateType": "Maltype",
+    "conversationTitle": "Samtale tittel",
+    "additionalInfo": "Tilleggsinformasjon",
+    "participants": "Deltakere",
+    "isResident": "Pågående",
+    "priority": "Prioritet",
+    "importance": "Viktighet",
+    "addToBlacklist": "Legg til i svarteliste",
+    "addToWhitelist": "Legg til i hvitliste"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 Vis filter",
+      "hide": "🔽 Skjul filter",
+      "addPattern": "Legg til mønster",
+      "removePattern": "Fjern",
+      "reset": "Tilbakestill til standard",
+      "save": "Lagre innstillinger"
+    },
+    "title": "Filtreringsregler",
+    "basicRulesTitle": "Grunnleggende filtreringsregler",
+    "rules": {
+      "ongoing": "Pågående varsler",
+      "ongoingDesc": "Filtrer pågående varsler (FLAG_ONGOING_EVENT)",
+      "system": "Systemvarsler",
+      "systemDesc": "Filtrer Android systemvarsler (android, com.android.*)",
+      "empty": "Varsler uten innhold",
+      "emptyDesc": "Filtrer varsler med tom tittel og innhold",
+      "lowPriority": "Lavprioriterte varsler",
+      "lowPriorityDesc": "Filtrer lavprioriterte og lavviktige varsler",
+      "foreground": "Forgrunnstjenestevarsler",
+      "foregroundDesc": "Filtrer varsler der channelId inneholder \"foreground\"",
+      "groupSummary": "Gruppesammendragvarsler",
+      "groupSummaryDesc": "Filtrer varsler der tittel inneholder \"GroupSummary\"",
+      "runningService": "Kjørende varsler",
+      "runningServiceDesc": "Filtrer \"Kjørende\" + \"Trykk for detaljer\" varsler",
+      "packageBlacklist": "Svarteliste pakkenavn",
+      "packageBlacklistDesc": "Filtrer varsler fra angitte pakkenavn (støtter regex)",
+      "packageWhitelist": "Hvitliste pakkenavn",
+      "packageWhitelistDesc": "Vis kun varsler fra angitte pakkenavn (støtter regex)",
+      "systemWhitelist": "Hvitliste systemapper",
+      "systemWhitelistDesc": "Selv com.android.* ikke filtrert"
+    },
+    "hint": {
+      "title": "Hint:",
+      "exact": "Eksakt treff: com.tencent.mm",
+      "wildcard": "Wildcard: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "Svarteliste modus",
+      "whitelist": "Hvitliste modus"
+    },
+    "messages": {
+      "patternAdded": "Mønster lagt til: {{pattern}}",
+      "patternRemoved": "Mønster fjernet: {{pattern}}",
+      "modeChanged": "Byttet til {{mode}}",
+      "configReset": "Tilbakestilt til standardkonfigurasjon",
+      "configSaved": "Innstillinger lagret",
+      "configLoadError": "Feil ved lasting av konfigurasjon: {{error}}",
+      "configSaveError": "Feil ved lagring av konfigurasjon: {{error}}"
+    },
+    "enterPackageOrRegex": "Angi pakkenavn eller regex",
+    "enterPackageOrRegexPlaceholder": "Angi pakkenavn eller regex",
+    "invalidRegex": "Ugyldig regex",
+    "confirmReset": "Er du sikker på at du vil tilbakestille til standardkonfigurasjon?",
+    "confirmRemovePattern": "Er du sikker på at du vil fjerne \"{{pattern}}\" fra {{rule}}?"
   },
   "errors": {
-    "minimizeWindowFailed": "Kunne ikke minimere vinduet"
-  }
+    "connectionFailed": "Tilkobling mislyktes",
+    "deleteFailed": "Sletting mislyktes",
+    "websocketNotConnected": "WebSocket ikke tilkoblet",
+    "websocketNotInitialized": "WebSocket ikke initialisert",
+    "minimizeWindowFailed": "Minimere vindu mislyktes"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "Ugyldig regex"
+    }
+  },
+  "login": "Logg inn",
+  "request_token": "Be om token",
+  "clear_messages": "Slett meldinger",
+  "get_package_icon": "Hent app ikon"
 }

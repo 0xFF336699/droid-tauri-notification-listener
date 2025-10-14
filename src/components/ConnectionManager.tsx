@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { invoke } from '@tauri-apps/api/core';
 import { Connection } from '../types/connection';
 import { ConnectionStorage } from '../types/connectionStorage';
@@ -8,6 +9,7 @@ interface ConnectionManagerProps {
 }
 
 const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChange }) => {
+  const { t } = useTranslation();
   const [connections, setConnections] = useState<Connection[]>([]);
 
   const loadConnections = () => {
@@ -34,7 +36,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChan
   };
 
   const handleDelete = async (connection: Connection) => {
-    if (!confirm(`确定要删除连接 "${connection.name}" 吗？`)) {
+    if (!confirm(t('connection.manager.deleteConfirm', { name: connection.name }))) {
       return;
     }
 
@@ -60,9 +62,9 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChan
         color: '#999'
       }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>📱</div>
-        <div style={{ fontSize: '16px' }}>暂无已保存的连接</div>
+        <div style={{ fontSize: '16px' }}>{t('connection.manager.noConnections')}</div>
         <div style={{ fontSize: '14px', marginTop: '8px' }}>
-          点击"添加连接"按钮开始
+          {t('connection.manager.addConnectionPrompt')}
         </div>
       </div>
     );
@@ -75,7 +77,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChan
         fontSize: '14px',
         color: '#666'
       }}>
-        共 {connections.length} 个连接
+        {t('connection.manager.totalConnections', { count: connections.length })}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -111,14 +113,14 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChan
               </div>
 
               <div style={{ fontSize: '13px', color: '#666', marginLeft: '22px' }}>
-                <div>地址: {conn.host}</div>
+                <div>{t('connection.manager.connectionDetails.address')}: {conn.host}</div>
                 <div>
-                  Token: {conn.token ? `${conn.token.substring(0, 20)}...` : '无'}
+                  {t('connection.manager.connectionDetails.token')}: {conn.token ? `${conn.token.substring(0, 20)}...` : t('connection.manager.connectionDetails.none')}
                 </div>
                 <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
-                  创建于: {new Date(conn.createdAt).toLocaleString('zh-CN')}
+                  {t('connection.manager.connectionDetails.createdAt')}: {new Date(conn.createdAt).toLocaleString('zh-CN')}
                   {conn.lastConnected && (
-                    <span> · 最后连接: {new Date(conn.lastConnected).toLocaleString('zh-CN')}</span>
+                    <span> · {t('connection.manager.connectionDetails.lastConnected')}: {new Date(conn.lastConnected).toLocaleString('zh-CN')}</span>
                   )}
                 </div>
               </div>
@@ -138,7 +140,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChan
                   onChange={() => handleToggleEnabled(conn)}
                   style={{ cursor: 'pointer' }}
                 />
-                启用
+                {t('connection.manager.actions.enable')}
               </label>
 
               <button
@@ -153,7 +155,7 @@ const ConnectionManager: React.FC<ConnectionManagerProps> = ({ onConnectionsChan
                   fontSize: '14px'
                 }}
               >
-                删除
+                {t('connection.manager.actions.delete')}
               </button>
             </div>
           </div>

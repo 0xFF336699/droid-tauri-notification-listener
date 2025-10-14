@@ -1,80 +1,576 @@
 {
+  "notificationFilter": {
+    "systemApps": {
+      "whitelist": {
+        "title": "시스템 앱 화이트리스트",
+        "description": "이 앱들의 알림은 시스템 앱이라도 필터링되지 않습니다",
+        "items": {
+          "mms": "SMS",
+          "phone": "전화"
+        },
+        "addCustom": "커스텀 시스템 앱을 화이트리스트에 추가",
+        "example": "예: 'com.android.mms'는 SMS를 필터링할 수 있습니다"
+      },
+      "blacklist": {
+        "title": "시스템 앱 블랙리스트",
+        "description": "이 앱들의 알림은 강제로 필터링됩니다 (최고 우선순위)",
+        "addCustom": "커스텀 시스템 앱을 블랙리스트에 추가"
+      }
+    },
+    "actions": {
+      "show": "필터 설정 표시",
+      "hide": "필터 설정 숨기기"
+    },
+    "rules": {
+      "comments": {
+        "ongoing": "진행 중 알림 필터 (FLAG_ONGOING_EVENT)",
+        "system": "시스템 알림 필터",
+        "emptyContent": "콘텐츠 없는 알림 필터",
+        "lowPriority": "저 우선순위 알림 필터",
+        "runningService": "실행 중 서비스 알림 필터"
+      },
+      "status": {
+        "filteringOngoing": "진행 중 알림 필터링 중...",
+        "filteringSystem": "시스템 알림 필터링 중...",
+        "filteringEmptyContent": "콘텐츠 없는 알림 필터링 중...",
+        "filteringLowPriority": "저 우선순위 알림 필터링 중...",
+        "filteringRunningService": "실행 중 서비스 알림 필터링 중...",
+        "filteringForegroundService": "포그라운드 서비스 알림 필터링 중...",
+        "filteringGroupSummary": "그룹 요약 알림 필터링 중..."
+      },
+      "even": "콘텐츠 없는 알림",
+      "emptyDesc": "제목과 콘텐츠가 빈 알림 필터",
+      "foreground": "포그라운드 서비스 알림",
+      "foregroundDesc": "channelId에 \"foreground\"를 포함한 알림 필터",
+      "groupSummary": "그룹 요약 알림",
+      "groupSummaryDesc": "제목에 \"GroupSummary\"를 포함한 알림 필터",
+      "lowPriority": "저 우선순위 알림",
+      "lowPriorityDesc": "저 우선순위 및 중요도 알림 필터",
+      "ongoing": "진행 중 알림",
+      "ongoingDesc": "진행 중 알림 필터 (FLAG_ONGOING_EVENT)",
+      "packageBlacklist": "패키지 이름 블랙리스트",
+      "packageBlacklistDesc": "지정된 패키지 이름의 알림 필터 (regex 지원)",
+      "packageWhitelist": "패키지 이름 화이트리스트",
+      "packageWhitelistDesc": "지정된 패키지 이름의 알림만 표시 (regex 지원)",
+      "runningService": "실행 중 알림",
+      "runningServiceDesc": "\"실행 중\" + \"자세히 보려면 탭\" 알림 필터",
+      "system": "시스템 알림",
+      "systemDesc": "Android 시스템 알림 필터 (android, com.android.*)"
+    },
+    "ui": {
+      "runningService": "실행 중",
+      "tapForDetails": "자세히 보려면 탭"
+    },
+    "errors": {
+      "filterError": "알림 필터링 오류: {{error}}",
+      "invalidRegex": "유효하지 않은 regex {{pattern}}: {{error}}"
+    },
+    "messages": {
+      "configLoadError": "구성 로드 오류: {{error}}",
+      "configReset": "기본 설정으로 재설정",
+      "configSaved": "설정이 저장되었습니다",
+      "configSaveError": "구성 저장 오류: {{error}}",
+      "modeChanged": "{{mode}}로 전환",
+      "patternAdded": "패턴 추가: {{pattern}}",
+      "patternRemoved": "패턴 제거: {{pattern}}"
+    }
+  },
+  "appReset": {
+    "devices": {
+      "confirmTitle": "모든 기기를 삭제하시겠습니까?",
+      "confirmMessage": "이 작업은 저장된 모든 기기를 삭제하지만 창 설정은 유지합니다.",
+      "irreversible": "이 작업은 취소할 수 없습니다!",
+      "success": "기기 데이터가 삭제되었습니다!\n앱을 다시 로드합니다.",
+      "error": "삭제 실패",
+      "logs": {
+        "clearing": "[appReset] 기기 데이터 지우는 중...",
+        "cleared": "[appReset] 기기 데이터 지워짐"
+      }
+    },
+    "confirmTitle": "앱을 초기 상태로 재설정하시겠습니까?",
+    "confirmMessage": "이 작업은 삭제합니다:\n- 모든 저장 기기\n- 창 위치 및 크기 설정\n- 모든 필터 설정\n- 모든 앱 설정\n\n앱을 종료하고 변경을 적용하기 위해 재시작합니다.\n\n이 작업은 취소할 수 없습니다!",
+    "confirmButton": "확인",
+    "cancelButton": "취소",
+    "logs": {
+      "starting": "[appReset] 앱 재설정 시작...",
+      "clearingLocalStorage": "[appReset] localStorage 지우는 중...",
+      "localStorageCleared": "[appReset] localStorage 지워짐",
+      "creatingResetMarker": "[appReset] 재설정 마커 파일 생성 중...",
+      "resetMarkerCreated": "[appReset] 재설정 마커 파일 생성됨",
+      "resettingAppData": "[appReset] 앱 데이터 재설정 중...",
+      "appDataReset": "[appReset] 앱 데이터 재설정됨",
+      "exitingVtApp": "[appReset] 앱 종료 중...",
+      "error": "[appReset] 앱 재설정 오류:"
+    },
+    "comments": {
+      "resetFunction": "앱을 기본 상태로 재설정",
+      "resetDescription": "모든 데이터 삭제:\n- LocalStorage (기기 목록, 필터 구성 등 프론트엔드 데이터)\n- Tauri 로컬 데이터 폴더 (창 상태 등 백엔드 데이터)",
+      "resetStrategy": "Windows 파일 잠금 문제를 해결하기 위한 마커 파일 전략 사용:\n1. LocalStorage 지우기\n2. 재설정 마커 파일 생성\n3. 앱 종료\n4. 다음 시작 시 데이터 파일 자동 삭제"
+    }
+  },
   "app": {
-    "title": "알림 수신기",
-    "description": "기기 알림 듣기 및 관리"
+    "title": "알림 리스너",
+    "description": "기명 알림을 듣고 관리",
+    "loading": "로딩 중..."
   },
   "common": {
+    "labels": {
+      "address": "주소"
+    },
+    "actions": {
+      "reconnect": "🔄 재연결",
+      "manualReconnect": "수동 재연결",
+      "collapse": "접기",
+      "expandDetails": "자세히 펼치기",
+      "label": "작업",
+      "addToBlacklist": "블랙리스트에 추가",
+      "addToWhitelist": "화이트리스트에 추가"
+    },
+    "unknown": "알 수 없음",
+    "optional": "선택 사항",
+    "unknownSender": "알 수 없는 발신자",
+    "noTitle": "제목 없음",
+    "content": "콘텐츠",
+    "bigText": "큰 텍스트",
+    "textLines": "텍스트 줄",
+    "additionalInfo": "추가 정보",
+    "packageName": "패키지 이름",
+    "timeSent": "보낸 시간",
+    "notificationId": "알림 ID",
+    "tag": "태그",
+    "messages": "메시지",
+    "sender": "발신자",
+    "time": "시간",
     "save": "저장",
     "cancel": "취소",
     "back": "뒤로",
     "delete": "삭제",
     "confirm": "확인",
-    "loading": "로드 중...",
+    "loading": "로딩 중...",
     "error": "오류가 발생했습니다",
     "connect": "연결",
     "connecting": "연결 중...",
-    "disconnect": "연결 해제",
-    "disconnecting": "연결 해제 중...",
+    "disconnect": "연결 끊기",
+    "disconnecting": "연결 끊는 중...",
     "connected": "연결됨",
-    "disconnected": "연결 해제됨",
+    "disconnected": "연결 끊김",
     "connectionFailed": "연결 실패",
     "minimize": "최소화",
     "unread": "읽지 않음",
     "total": "총",
     "errorOccurred": "오류가 발생했습니다",
-    "retry": "다시 시도",
+    "retry": "재시도",
     "settings": "설정",
-    "close": "닫기",
     "maximize": "최대화",
-    "restore": "복원"
+    "restore": "복원",
+    "enabled": "활성화됨",
+    "disabled": "비활성화됨"
   },
   "settings": {
     "title": "설정",
-    "language": "언어",
-    "appearance": "모양",
-    "theme": "테마",
-    "light": "밝게",
-    "dark": "어둡게",
-    "system": "시스템",
-    "notifications": "알림",
-    "enableNotifications": "알림 사용",
-    "notificationSound": "알림음",
+    "appearance": {
+      "title": "모양",
+      "theme": "테마",
+      "light": "밝음",
+      "dark": "어두움",
+      "system": "시스템",
+      "language": "언어"
+    },
+    "notifications": {
+      "title": "알림",
+      "enableNotifications": "알림 활성화",
+      "enableSounds": "소리 활성화",
+      "enableBadge": "배지 표시"
+    },
+    "websocketDevices": "WebSocket 기기",
     "about": "정보",
     "version": "버전",
     "checkForUpdates": "업데이트 확인",
-    "clearAllDevices": "모든 기기 지우기"
+    "clearAllDevices": "모든 기기 지우기",
+    "language": "언어",
+    "resetWarning": "재설정하면 저장된 기기, 창 위치 및 크기, 필터 구성, 앱 데이터가 삭제됩니다. 이 작업은 취소할 수 없으니 주의하세요."
   },
   "connection": {
-    "add": "연결 추가"
+    "manager": {
+      "deleteConfirm": "연결 \"{{name}}\"을 삭제하시겠습니까?",
+      "noConnections": "저장된 연결 없음",
+      "addConnectionPrompt": "\"연결 추가\" 버튼을 클릭하여 시작하세요",
+      "totalConnections": "총 {{count}} 연결",
+      "connectionDetails": {
+        "address": "주소",
+        "token": "토큰",
+        "none": "없음",
+        "createdAt": "생성됨",
+        "lastConnected": "마지막 연결"
+      },
+      "actions": {
+        "enable": "활성화",
+        "delete": "삭제",
+        "label": "연결 작업"
+      }
+    },
+    "add": "연결 추가",
+    "migratedConnection": "마이그레이션된 연결",
+    "socketSettings": "소켓 연결 설정",
+    "serverAddress": "서버 주소",
+    "serverAddressPlaceholder": "예:\n192.168.1.100:8080\nws://192.168.1.100:8080\nhttps://example.com\nwss://api.example.com/ws",
+    "serverAddressRequired": "서버 주소 입력",
+    "connectionFailedCheckAddress": "연결 실패, 서버 주소 확인",
+    "supportedFormats": "IP+포트, ws://, wss:// 도메인 등 지원",
+    "authToken": "인증 토큰",
+    "enterAuthToken": "인증 토큰 입력",
+    "connecting": "연결 중...",
+    "connect": "연결",
+    "connectionFailed": "연결 실패",
+    "testing": "테스트 중...",
+    "startSocketTest": "소켓 테스트 시작",
+    "socketTestTitle": "소켓 테스트",
+    "clickToStartTest": "테스트 시작을 위해 버튼 클릭...",
+    "disconnect": "연결 끊기",
+    "connected": "연결됨",
+    "disconnected": "연결 끊김",
+    "failed": "연결 실패",
+    "retry": "재시도",
+    "lost": "연결 끊김",
+    "reconnecting": "재연결 중...",
+    "reconnect": "재연결",
+    "reconnectIn": "{{count}}초 후 재시도",
+    "reconnectNow": "지금 재시도",
+    "reconnectFailed": "재연결 실패",
+    "reconnectSuccessful": "재연결 성공",
+    "reconnectAttempt": "시도 {{current}}/{{max}}",
+    "reconnectLimitReached": "재연결 시도 제한 도달",
+    "timeout": "연결 타임아웃",
+    "refused": "연결 거부",
+    "reset": "연결 재설정",
+    "aborted": "연결 중단",
+    "closed": "연결 닫힘",
+    "error": "연결 오류",
+    "backendConnectionFailed": "백엔드 연결 실패",
+    "unknownConnectionError": "알 수 없는 연결 오류",
+    "status": "연결 상태",
+    "type": "연결 유형",
+    "name": "연결 이름",
+    "settings": "연결 설정",
+    "details": "연결 세부사항",
+    "history": "연결 기록",
+    "log": "연결 로그",
+    "stats": "연결 통계",
+    "test": "연결 테스트",
+    "testSuccessful": "연결 테스트 성공",
+    "testFailed": "연결 테스트 실패",
+    "edit": "연결 편집",
+    "delete": "연결 삭제",
+    "addTitle": "연결 추가",
+    "tabs": {
+      "qrcode": "스캔으로 추가",
+      "manual": "수동 입력"
+    },
+    "server": {
+      "starting": "서버 시작 중...",
+      "started": "서버 시작됨, 포트: {{port}}",
+      "startFailed": "서버 시작 실패: {{error}}",
+      "stopping": "서버 중지 중...",
+      "stopped": "서버 중지됨"
+    },
+    "qrcode": {
+      "title": "코드 스캔으로 연결",
+      "status": {
+        "preparing": "서버 시작 준비 중...",
+        "stoppingServer": "기존 서버 중지 중...",
+        "startingServer": "서버 시작 중 (포트 {{port}})...",
+        "fetchingDeviceInfo": "기기 정보 가져오는 중...",
+        "gettingLocalIp": "로컬 IP 가져오는 중...",
+        "generatingQrCode": "QR 코드 생성 중...",
+        "ready": "기기 연결을 위해 QR 코드 스캔"
+      },
+      "connectionInfo": "휴대폰으로 QR 코드를 스캔하여 연결하세요",
+      "serverPort": "서버가 포트에서 실행 중: {{port}}",
+      "error": {
+        "title": "서버 시작 오류, 재시도",
+        "retryButton": "재시도"
+      },
+      "steps": {
+        "stoppingServer": "단계 1/4: 기존 서버 중지",
+        "startingServer": "단계 2/4: 서버 시작",
+        "fetchingDeviceInfo": "단계 3/4: 기기 정보 가져오기",
+        "gettingLocalIp": "단계 4/5: 로컬 IP 가져오기",
+        "generatingQrCode": "단계 5/5: QR 코드 생성"
+      },
+      
+      
+      "logs": {
+        "componentMounted": "[QR-STABLE] 컴포넌트 마운트",
+        "componentUnmounting": "[QR-STABLE] 컴포넌트 언마운트 정리",
+        "serverStarting": "[QR-STABLE] 서버 시작",
+        "serverStopping": "[QR-STABLE] 서버 중지 중...",
+        "serverStopped": "[QR-STABLE] 서버 중지됨",
+        "serverError": "[QR-STABLE] 서버 중지 오류:",
+        "serverStarted": "[QR-STABLE] 서버 시작됨, 포트:",
+        "startServerError": "[QR-STABLE] 서버 시작 오류:",
+        "componentUnmounted": "[QR-STABLE] 컴포넌트 언마운트, 서버 시작 취소",
+        "componentRendered": "컴포넌트 렌더링됨"
+      }
+    },
+    "title": "기기 연결",
+    "qrCode": "QR 코드 스캔",
+    "manualInput": "수동 입력",
+    "scanQRCode": "기기 연결을 위해 QR 코드 스캔",
+    "scanQRCodeDescription": "Android 기기에서 앱을 열고 \"PC에 연결\"을 클릭한 후 이 QR 코드를 스캔하세요",
+    "enterIPAddress": "기기 IP 주소 입력",
+    "enterIPAddressDescription": "Android 기기에서 IP 주소를 찾아 여기 입력하세요",
+    "ipAddress": "IP 주소",
+    "port": "포트",
+    "disconnecting": "연결 끊는 중...",
+    "connectionFailedDescription": "기기에 연결할 수 없습니다. 기기와 컴퓨터가 같은 네트워크에 있고 Android 앱이 실행 중인지 확인하세요.",
+    "tryAgain": "재시도",
+    "cancel": "취소",
+    "connectionSuccessful": "연결 성공",
+    "connectionSuccessfulDescription": "기기에 성공적으로 연결되었습니다",
+    "continue": "계속",
+    "noDevicesFound": "기기 발견되지 않음",
+    "searchingForDevices": "기기 검색 중...",
+    "selectDevice": "기기 선택",
+    "selectDeviceDescription": "연결할 기기 선택",
+    "refresh": "새로 고침",
+    "deviceName": "기기 이름",
+    "deviceStatus": "상태",
+    "deviceLastConnected": "마지막 연결",
+    "deviceActions": "작업",
+    "deviceConnect": "연결",
+    "deviceDisconnect": "연결 끊기",
+    "deviceRemove": "제거",
+    "deviceEdit": "편집",
+    "deviceDetails": "세부사항",
+    "addDevice": "기기 추가",
+    "editDevice": "기기 편집",
+    "removeDevice": "기기 제거",
+    "removeDeviceConfirmation": "이 기기를 제거하시겠습니까?",
+    "removeDeviceConfirmationDescription": "이 작업은 기기를 저장된 기기 목록에서 제거합니다. QR 코드 스캔 또는 수동 IP 입력으로 재연결할 수 있습니다.",
+    "remove": "제거",
+    "keepDevice": "유지",
+    "deviceRemoved": "기기 제거됨",
+    "deviceAdded": "기기 추가됨",
+    "deviceUpdated": "기기 업데이트됨",
+    "deviceConnected": "기기 연결됨",
+    "deviceDisconnected": "기기 연결 끊김",
+    "allDevicesDisconnected": "모든 기기 연결 끊김",
+    "connectionLost": "연결 끊김",
+    "connectionHistory": "연결 기록",
+    "connectionLog": "연결 로그",
+    "connectionStats": "연결 통계",
+    "connectionTest": "연결 테스트",
+    "connectionTestSuccessful": "연결 테스트 성공",
+    "connectionTestFailed": "연결 테스트 실패",
+    "connectionError": "연결 오류",
+    "requestingToken": "토큰 요청 중...",
+    "authFailed": "인증 실패",
+    "loginSuccess": "로그인 성공",
+    "missingToken": "토큰 누락",
+    "tokenReceived": "토큰 수신",
+    "loginFailed": "로그인 실패"
   },
   "device": {
-    "connect": "기기 연결",
-    "disconnect": "연결 해제",
-    "connected": "연결됨",
-    "disconnected": "연결 해제됨",
-    "connectionFailed": "연결 실패",
-    "retry": "다시 시도",
-    "deviceInfo": "기기 정보",
-    "deviceName": "기기 이름",
-    "deviceModel": "모델",
-    "deviceOS": "OS 버전",
-    "batteryLevel": "배터리",
-    "storage": "저장공간",
+    "title": "기기",
+    "actions": {
+      "delete": "🗑️ 기기 삭제",
+      "label": "기기 작업"
+    },
+    "confirmDelete": "기기 \"{{name}}\"을 삭제하시겠습니까?",
+    "add": "기기 추가",
+    "edit": "기기 편집",
+    "tokenRequestFailed": "권한 토큰 가져오기 실패",
+    "loginInProgress": "로그인 중...",
+    "loginSuccess": "로그인 성공",
+    "disconnected": "기기 연결 끊김",
+    "allDevicesDisconnected": "모든 기기 연결 끊김",
+    "missingUuid": "기기 UUID 지정",
+    "noDevices": "기기 없음",
+    "noEnabledDevices": "활성화된 기기 없음",
+    "notConnectedOrUnavailable": "기기 {{deviceUuid}}가 연결되지 않았거나 사용할 수 없음",
+    "clickToAddDevice": "\"+ 연결 추가\"를 클릭하여 스캔하고 기기 추가",
+    "info": "기기 정보",
+    "name": "기기 이름",
+    "model": "모델",
+    "os": "시스템 버전",
+    "batteryLevel": "배터리 수준",
+    "storage": "저장소",
     "memory": "메모리"
   },
+  "manualInput": {
+    "title": "수동 연결 입력",
+    "deviceName": {
+      "label": "기기 이름 (선택 사항):",
+      "placeholder": "예: Xiaomi 폰",
+      "hint": "입력하지 않으면 자동 생성"
+    },
+    "socketAddress": {
+      "label": "소켓 주소 *: ",
+      "placeholder": "예: 192.168.1.100:6001",
+      "hint": "지원 형식: IP:포트, 도메인:포트"
+    },
+    "validation": {
+      "socketRequired": "소켓 주소 입력"
+    },
+    "status": {
+      "adding": "기기 추가 중...",
+      "added": "기기 추가됨!"
+    },
+    "error": {
+      "addFailed": "추가 실패: {{error}}"
+    },
+    "hint": {
+      "title": "힌트:",
+      "description": "기기의 소켓 주소를 입력하세요, 다음 형식을 지원:",
+      "formats": [
+        "IP:포트, 예 127.0.0.1:10035",
+        "완전 ws:// 또는 wss:// 주소, 예 ws://localhost:10035",
+        "도메인:포트, 예 example.com:10035"
+      ]
+    },
+    "button": {
+      "add": "기기 추가",
+      "adding": "추가 중..."
+    }
+  },
   "notification": {
+    "title": "알림",
     "noNotifications": "알림 없음",
     "clearAll": "모두 지우기",
+    "clearAllConfirm": "모든 알림을 지우시겠습니까?",
+    "clearAllSuccess": "모든 알림 지워짐",
+    "clearAllFailed": "알림 지우기 실패",
+    "delete": "삭제",
+    "deleteConfirm": "이 알림을 삭제하시겠습니까?",
+    "deleteSuccess": "알림 삭제됨",
+    "deleteFailed": "알림 삭제 실패",
+    "copy": "복사",
+    "copySuccess": "클립보드에 복사됨",
+    "copyFailed": "복사 실패",
+    "details": "세부사항",
+    "close": "닫기",
     "markAsRead": "읽음으로 표시",
     "markAsUnread": "읽지 않음으로 표시",
-    "delete": "삭제",
+    "markAsReadSuccess": "읽음으로 표시됨",
+    "markAsReadFailed": "읽음 표시 실패",
+    "markAsUnreadSuccess": "읽지 않음으로 표시됨",
+    "markAsUnreadFailed": "읽지 않음 표시 실패",
+    "markAllAsRead": "모두 읽음으로 표시",
+    "markAllAsReadConfirm": "모든 알림을 읽음으로 표시하시겠습니까?",
+    "markAllAsReadSuccess": "모든 알림 읽음으로 표시됨",
+    "markAllAsReadFailed": "모두 읽음 표시 실패",
+    "filter": "필터",
+    "filterByApp": "앱별 필터",
+    "filterByKeyword": "키워드별 필터",
+    "filterByTime": "시간별 필터",
+    "filterByStatus": "상태별 필터",
+    "filterByPriority": "우선순위별 필터",
+    "filterByCategory": "카테고리별 필터",
+    "filterByChannel": "채널별 필터",
+    "filterByDevice": "기기별 필터",
     "reply": "답장",
-    "copy": "복사",
     "copied": "복사됨!",
     "expand": "더 보기",
-    "collapse": "접기"
+    "collapse": "접기",
+    "totalCount": "총 {{count}} 알림",
+    "selectedCount": "({{count}} 선택됨)",
+    "markSelectedAsRead": "읽음으로 표시",
+    "selectToMarkAsRead": "읽음 표시를 위해 선택",
+    "noNotificationsMessage": "알림 없음",
+    "unknownSender": "알 수 없는 발신자",
+    "noTitle": "제목 없음",
+    "noContent": "콘텐츠 없음",
+    "subText": "하위 텍스트",
+    "summary": "요약",
+    "textLines": "다중 줄 텍스트",
+    "time": "시간",
+    "channelId": "채널 ID",
+    "action": "작업",
+    "isInitialized": "초기화됨",
+    "readStatus": "읽기 상태",
+    "unread": "읽지 않음",
+    "templateType": "템플릿 유형",
+    "conversationTitle": "대화 제목",
+    "additionalInfo": "추가 정보",
+    "participants": "참가자",
+    "isResident": "진행 중",
+    "priority": "우선순위",
+    "importance": "중요도",
+    "addToBlacklist": "블랙리스트에 추가",
+    "addToWhitelist": "화이트리스트에 추가"
+  },
+  "filter": {
+    "actions": {
+      "show": "🔼 필터 표시",
+      "hide": "🔽 필터 숨기기",
+      "addPattern": "패턴 추가",
+      "removePattern": "제거",
+      "reset": "기본으로 재설정",
+      "save": "설정 저장"
+    },
+    "title": "필터링 규칙",
+    "basicRulesTitle": "기본 필74터링 규칙",
+    "rules": {
+      "ongoing": "진행 중 알림",
+      "ongoingDesc": "진행 중 알림 필터 (FLAG_ONGOING_EVENT)",
+      "system": "시스템 알림",
+      "systemDesc": "Android 시스템 알림 필터 (android, com.android.*)",
+      "empty": "콘텐츠 없는 알림",
+      "emptyDesc": "제목과 콘텐츠가 빈 알림 필터",
+      "lowPriority": "저 우선순위 알림",
+      "lowPriorityDesc": "저 우선순위 및 중요도 알림 필터",
+      "foreground": "포그라운드 서비스 알림",
+      "foregroundDesc": "channelId에 \"foreground\"를 포함한 알림 필터",
+      "groupSummary": "그룹 요약 알림",
+      "groupSummaryDesc": "제목에 \"GroupSummary\"를 포함한 알림 필터",
+      "runningService": "실행 중 알림",
+      "runningServiceDesc": "\"실행 중\" + \"자세히 보려면 탭\" 알림 필터",
+      "packageBlacklist": "패키지 이름 블랙리스트",
+      "packageBlacklistDesc": "지정된 패키지 이름의 알림 필터 (regex 지원)",
+      "packageWhitelist": "패키지 이름 화이트리스트",
+      "packageWhitelistDesc": "지정된 패키지 이름의 알림만 표시 (regex 지원)",
+      "systemWhitelist": "시스템 앱 화이트리스트",
+      "systemWhitelistDesc": "com.android.*도 필터링되지 않음"
+    },
+    "hint": {
+      "title": "힌트:",
+      "exact": "정확 일치: com.tencent.mm",
+      "wildcard": "와일드카드: com.jd.*, *.xiaomi.*",
+      "regex": "Regex: ^com\\.(jd|jingdong)\\..*$"
+    },
+    "modes": {
+      "blacklist": "블랙리스트 모드",
+      "whitelist": "화이트리스트 모드"
+    },
+    "messages": {
+      "patternAdded": "패턴 추가됨: {{pattern}}",
+      "patternRemoved": "패턴 제거됨: {{pattern}}",
+      "modeChanged": "{{mode}}로 전환",
+      "configReset": "기본 구성으로 재설정",
+      "configSaved": "설정이 저장되었습니다",
+      "configLoadError": "구성 로드 오류: {{error}}",
+      "configSaveError": "구성 저장 오류: {{error}}"
+    },
+    "enterPackageOrRegex": "패키지 이름 또는 regex 입력",
+    "enterPackageOrRegexPlaceholder": "패키지 이름 또는 regex 입력",
+    "invalidRegex": "유효하지 않은 regex",
+    "confirmReset": "기본 구성으로 재설정하시겠습니까?",
+    "confirmRemovePattern": "{{rule}}에서 \"{{pattern}}\"을 제거하시겠습니까?"
   },
   "errors": {
-    "minimizeWindowFailed": "창 최소화에 실패했습니다"
-  }
+    "connectionFailed": "연결 실패",
+    "deleteFailed": "삭제 실패",
+    "websocketNotConnected": "WebSocket 연결되지 않음",
+    "websocketNotInitialized": "WebSocket 초기화되지 않음",
+    "minimizeWindowFailed": "창 최소화 실패"
+  },
+  "filtering": {
+    "errors": {
+      "invalidRegex": "유효하지 않은 regex"
+    }
+  },
+  "login": "로그인",
+  "request_token": "토큰 요청",
+  "clear_messages": "메시지 지우기",
+  "get_package_icon": "앱 아이콘 가져오기"
 }

@@ -1,6 +1,7 @@
 import { mainModelController } from '../data/main-model-controller';
 import { getClientByUuid } from '../data/device-connection-handler';
 import { IconData } from '../types/icon';
+import i18n from '../i18n';
 
 const ICON_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24小时
 
@@ -65,7 +66,7 @@ export async function getPackageIcon(
     // 4. 必须提供 deviceUuid
     if (!deviceUuid) {
       console.error('[icon-service] ERROR: No deviceUuid provided');
-      const errorMsg = '请指定设备 UUID';
+      const errorMsg = i18n.t('device.missingUuid', 'Please specify device UUID');
       alert(errorMsg);
       const errorData: IconData = {
         packageName,
@@ -84,7 +85,7 @@ export async function getPackageIcon(
 
     if (!client || !client.isConnected()) {
       console.error('[icon-service] ERROR: Client not found or not connected');
-      const errorMsg = `设备 ${deviceUuid} 未连接或不可用`;
+      const errorMsg = i18n.t('device.notConnectedOrUnavailable', { deviceUuid });
       alert(errorMsg);
       const errorData: IconData = {
         packageName,
