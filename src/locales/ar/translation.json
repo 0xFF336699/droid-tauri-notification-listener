@@ -545,7 +545,8 @@
       "patternRemoved": "تم إزالة النمط: {{pattern}}",
       "modeChanged": "تم التبديل إلى {{mode}}",
       "configReset": "تم إعادة التعيين إلى التكوين الافتراضي",
-      "configSaved": "تم حفظ الإ1. configLoadError": "فشل تحميل التكوين: {{error}}",
+      "configSaved": "تم حفظ الإ1.",
+      "configLoadError": "فشل تحميل التكوين: {{error}}",
       "configSaveError": "فشل حفظ التكوين: {{error}}"
     },
     "enterPackageOrRegex": "أدخل اسم الحزمة أو التعبير النمطي",

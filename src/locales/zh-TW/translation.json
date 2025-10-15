@@ -103,7 +103,7 @@
       "error": "[appReset] 重設應用程式錯誤："
     },
     "comments": {
-      ": "將應用程式重設為預設狀態",
+      "resetFunction": "將應用程式重設為預設狀態",
       "resetDescription": "刪除所有資料：\n- LocalStorage (裝置清單、過濾設定等 前端資料)\n- Tauri 本機資料資料夾 (視窗狀態等 後端資料)",
       "resetStrategy": "使用標記檔案策略解決 Windows 檔案鎖定問題：\n1. 清除 LocalStorage\n2. 建立重設標記檔案\n3. 關閉應用程式\n4. 下次啟動時自動刪除資料檔案"
     }
@@ -450,7 +450,7 @@
     "markAsRead": "標記為已讀",
     "markAsUnread": "標記為未讀",
     "markAsReadSuccess": "已標記為已讀",
-, "markAsReadFailed": "標記為已讀失敗",
+ "markAsReadFailed": "標記為已讀失敗",
     "markAsUnreadSuccess": "已標記為未讀",
     "markAsUnreadFailed": "標記為未讀失敗",
     "markAllAsRead": "全部標記為已讀",

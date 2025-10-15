@@ -203,7 +203,6 @@
         "createdAt": "作成日",
         "lastConnected": "最終接続"
       },
-,
       "actions": {
         "enable": "有効化",
         "delete": "削除",

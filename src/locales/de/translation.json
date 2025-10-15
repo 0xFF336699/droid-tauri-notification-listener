@@ -486,7 +486,6 @@
     "action": "Aktion",
     "isInitialized": "Initialisiert",
     "readStatus": "Lesestatus",
- (unread)",
     "unread": "Ungelesen",
     "templateType": "Vorlagentyp",
     "conversationTitle": "Gesprächstitle",
@@ -527,7 +526,7 @@
       "packageBlacklist": "Paketnamen-Blacklist",
       "packageBlacklistDesc": "Benachrichtigungen von angegebenen Paketnamen filtern (unterstützt Regex)",
       "packageWhitelist": "Paketnamen-Whitelist",
-      "package, unterstützt Regex)",
+      "package": "unterstützt Regex",
       "systemWhitelist": "System-Apps-Whitelist",
       "systemWhitelistDesc": "Auch com.android.* nicht filtern"
     },

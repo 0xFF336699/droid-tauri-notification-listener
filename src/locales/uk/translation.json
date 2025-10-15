@@ -32,7 +32,7 @@
       "status": {
         "filteringOngoing": "Фільтрація поточних сповіщень...",
         "filteringSystem": "Фільтрація системних сповіщень...",
-       。"filteringEmptyContent": "Фільтрація сповіщень без вмісту...",
+       "filteringEmptyContent": "Фільтрація сповіщень без вмісту...",
         "filteringLowPriority": "Фільтрація сповіщень низького пріоритету...",
         "filteringRunningService": "Фільтрація сповіщень запущеної служби...",
         "filteringForegroundService": "Фільтрація сповіщень служби переднього плану...",

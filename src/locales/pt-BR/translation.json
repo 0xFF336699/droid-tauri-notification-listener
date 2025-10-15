@@ -310,7 +310,7 @@
         "componentRendered": "Componente renderizado"
       }
     },
-    //"title": "Conectar dispositivo",
+    "title": "Conectar dispositivo",
     "qrCode": "Escanear código QR",
     "manualInput": "Entrada manual",
     "scanQRCode": "Escanear código QR para conectar dispositivo",
